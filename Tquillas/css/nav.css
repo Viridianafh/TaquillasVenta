@@ -1,0 +1,161 @@
+﻿body {
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos generales del cuerpo */
+body {
+    background-attachment: fixed;
+    background-size: contain;
+}
+
+/* Cabecera */
+.cabecera {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    ;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.logo img {
+    width: 120px;
+    height: auto;
+    margin: 15px;
+}
+
+
+.cabecera .checkbox {
+    position: absolute;
+    height: 32px;
+    width: 32px;
+    top: 20px;
+    right: 2rem;
+    z-index: 3;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.hamburger .hamburger__lines {
+    display: block;
+    height: 26px;
+    width: 32px;
+    position: absolute;
+    top: 20px;
+    right: 2rem;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+    .hamburger .hamburger__lines .line {
+        display: block;
+        height: 4px;
+        width: 100%;
+        border-radius: 10px;
+        background: #ffffff;
+    }
+
+    .hamburger .hamburger__lines .line1 {
+        transform-origin: 0% 0%;
+        transition: transform 0.4s ease-in-out;
+    }
+
+    .hamburger .hamburger__lines .line2 {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .hamburger .hamburger__lines .line3 {
+        transform-origin: 0% 100%;
+        transition: transform 0.4s ease-in-out;
+    }
+
+.header__info ul {
+    list-style: none; /* Esto quitará los iconos de la lista */
+}
+
+    .header__info ul li {
+        padding: 5px;
+        margin: 13PX 0;
+        cursor: pointer;
+        color: #fff;
+        font-size: 18px;
+    }
+
+      
+
+.header__info {
+    padding-top: 300px;
+    border-radius: 10px;
+    height: 100%;
+    background-size: cover;
+    width: 200px;
+    position: fixed;
+    overflow-y: auto;
+    top: 0;
+    right: 0;
+    overflow: auto;
+    transform: translate(150%);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.9s ease-in-out;
+    padding: 20px;
+    background-blend-mode: multiply; /* Mezcla el color de fondo con la imagen */
+    z-index: 1;
+}
+
+    .header__info::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* Coloca el fondo detrás del contenido real */
+    }
+
+.hamburger input[type="checkbox"]:checked ~ .header__info {
+    transform: translateX(0);
+}
+
+.hamburger input[type="checkbox"]:checked ~ .hamburger__lines .line1 {
+    transform: rotate(45deg);
+}
+
+.hamburger input[type="checkbox"]:checked ~ .hamburger__lines .line2 {
+    transform: scaleY(0);
+}
+
+.hamburger input[type="checkbox"]:checked ~ .hamburger__lines .line3 {
+    transform: rotate(-45deg);
+}
+
+/* Botón en la tarjeta */
+
+
+
+@keyframes shine {
+    0% {
+        left: -100px;
+    }
+
+    60% {
+        left: 100%;
+    }
+
+    to {
+        left: 100%;
+    }
+}
+
+a {
+    text-decoration: none; /* Quita el subrayado */
+    color: inherit; /* Hereda el color del texto de su elemento contenedor */
+    /* Otros estilos que quieras eliminar o modificar */
+}
