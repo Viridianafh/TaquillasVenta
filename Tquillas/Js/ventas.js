@@ -1,6 +1,8 @@
 ﻿document.addEventListener('DOMContentLoaded', (event) => {
 
 
+
+
     const btnIniciar = document.getElementById("button_iniciar")
 
     btnIniciar.addEventListener('click', () => {
@@ -115,7 +117,13 @@
 
     btn_trip.addEventListener('click', () => {
 
-       
+        btn_trip.textContent = ""
+        btn_trip.textContent = "Buscando..."
+        btn_trip.classList.remove('btn-primary')
+        btn_trip.classList.add('btn-success')
+
+
+        limpiarTabla()
 
         const row = document.getElementsByTagName('tbody')
 
@@ -147,6 +155,9 @@
         })
             .then(response => response.json())
             .then(data => {
+
+
+
                 var tbody = document.getElementsByTagName('tbody')[0]; // Get the first tbody element
 
 
@@ -159,36 +170,70 @@
                     var tr = document.createElement('tr');
 
 
-                   tr.innerHTML = `
+                    tr.innerHTML = `
                            <td>${alldata[i].Corrida}</td>
                            <td>${alldata[i].Tipo}</td>
                            <td>${alldata[i].Origen}</td>
                            <td>${alldata[i].Destino}</td>
                            <td>${alldata[i].Bus}</td>
                            <td>${alldata[i].DepartingOrigen}</td>
-                            <td>${alldata[i].DepartingDestino}</td>
+                           <td>${alldata[i].DepartingDestino}</td>
                            <td>${alldata[i].Precio} $ </td>
-                           <td><button class="btn btn-primary">Comprar</button></td>
+                           <td><button class="btn btn-primary" id="btn-send" value="${alldata.TripId}"  onclick="Comprar(${this.row})">Comprar</button></td>
                        `;
 
-                   tbody.appendChild(tr);
+                    tbody.appendChild(tr);
 
                 }
-                   
+
 
 
                 const liquidname = document.getElementById('table');
-               
+
 
                 document.getElementById('section-boletos').style.display = 'block';
                 btn_trip.textContent = "Busar viaje"
+
+                btn_trip.classList.remove('btn-success')
+                btn_trip.classList.add('btn-primary')
             })
             .catch(error => console.error('Error al obtener o procesar los datos:', error));
 
 
-        
+
     })
-})
+
+
+    function limpiarTabla() {
+        var tabla = document.getElementById('tabla-viajes');
+
+        // Eliminar todas las filas excepto la primera (encabezados)
+        while (tabla.rows.length > 1) {
+            tabla.deleteRow(1);
+        }
+    }
+
+
+
+
+
+
+    
+
+    })
+
+
+
+
+
+
+   
+
+
+
+
+
+
 
 
 

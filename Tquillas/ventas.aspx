@@ -64,7 +64,7 @@
             <h2>Nuestros viajes</h2>
             <hr />
 
-                <table class="table table-hover">
+                <table class="table table-hover" id="tabla-viajes">
                     <thead >
                         <tr>
                             <td><h4>Corrida</h4></td>
@@ -96,7 +96,7 @@
 
 
 
-    <div class="parent" style="display: none;">
+    <div class="parent" style="display:none;">
 
 
 
@@ -119,7 +119,7 @@
 
 
 
-<div class="div2 container" id="content">
+<div class="div2 container" id="content" style="display: none;">
     <button class="btn btn-primary" id="asiento" style="width: 100px; height: 100px; display: flex; align-items: flex-start; justify-content: center; padding: 5px;">
 
           
@@ -132,7 +132,7 @@
 </div>
 
 
-        <div class="div3 container" id="content">
+        <div class="div3 container" id="content" style="display:none;">
     <button class="btn btn-primary" id="asiento" style="width: 100px; height: 100px; display: flex; align-items: flex-start; justify-content: center; padding: 5px;">
 
           
@@ -145,7 +145,7 @@
 </div>
 
 
-             <div class="div4 container" id="content">
+             <div class="div4 container" id="content" style="display: none;">
     <button class="btn btn-success" id="asiento" style="width: 100px; height: 100px; display: flex; align-items: flex-start; justify-content: center; padding: 5px;">
 
           
