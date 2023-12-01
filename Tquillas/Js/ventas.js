@@ -21,7 +21,7 @@
         var content_buscador = document.getElementById('content-buscador').style.display = "block"
 
 
-        var selectOrigen = document.getElementById("origen");
+        var selectOrigen = document.getElementById("origen");   
 
         fetch('http://192.168.0.245:82/Home/Origen', {
             method: 'POST',

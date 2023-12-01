@@ -7,7 +7,6 @@
   <header>
           <script src="Js/ventas.js"></script>
       <link  rel="stylesheet" href="css/ventas.css"/>
-
   </header>
  
     <div class="container mt-5" id="content-button">
@@ -41,8 +40,10 @@
                     </select>
                 </div>
                 <div class="container m-3">
+                    
                     <label for="fecha">Fecha de viaje: </label>
                     <input type="date" id="fecha" class="form form-control" style="width: 160px;">
+                        
                 </div>
                 <div class="container m-3">
                     <button class="btn btn-primary w-100" id="btn-trip">
@@ -89,17 +90,7 @@
     </section>
 
 
-
-   
-
-
-
-
-
     <div class="parent" style="display:none;">
-
-
-
         <h2>Selecciona tus asientos</h2>
 <div class="div1 container" id="content"> 
 
