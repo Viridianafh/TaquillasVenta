@@ -155,7 +155,5 @@ body {
 }
 
 a {
-    text-decoration: none; /* Quita el subrayado */
-    color: inherit; /* Hereda el color del texto de su elemento contenedor */
-    /* Otros estilos que quieras eliminar o modificar */
+    
 }

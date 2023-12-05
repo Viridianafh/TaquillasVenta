@@ -1,4 +1,5 @@
-﻿.parent {
+﻿/* En este css solo se establecen grid que son cajas con cierta orientacion y tamaño para que sea mas facil de controlar el contenido*/
+.parent {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: repeat(5, 1fr);

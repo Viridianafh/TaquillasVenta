@@ -22,12 +22,12 @@
          <div class="container mt-5" id="content-button">
 <button class="btn btn-primary " id="button_Buscar" >Buscar</button>
 </div>
-             </center>
+             </center>  
     <br />
 
   <table class="table table-hover" id="listadeabordar">
                     <thead >
-                        <tr class="table-success">
+                        <tr class="table table-striped table-dark" >
                             <td><h4>Ruta</h4></td>
                             <td><h4>Autobus</h4></td>
                             <td><h4>Origen</h4></td>

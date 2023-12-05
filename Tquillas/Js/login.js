@@ -18,12 +18,13 @@ button_login.addEventListener('click', () => {
         headers: {
             "Content-Type": "application/json"
         },
+//stringify convierte un objeto o valor de JavaScript en una cadena de texto JSON
         body: JSON.stringify(user)
     })
         .then(response => response.text())
         .then(data => {
 
-        
+ //Mediante la toma de desicion establece el tipo de alertas que va a recibir el usuario en dado caso que no coincida con la contraseña correcta  
 
             if (data === "error al cambiar el log") {
                 alert("Correo o contraseña erroneos");
@@ -35,7 +36,7 @@ button_login.addEventListener('click', () => {
                 alert("El usuario ya se encuentra logueado en otra parte")
             } else {
 
-
+//de no ser necesaria la correccion de los datos se hara la conversion a JSON
                 var datas = JSON.parse(data)
                     var id =  datas[0].id
                     var name =  datas[0].name
@@ -59,7 +60,7 @@ button_login.addEventListener('click', () => {
                     var office_name = datas[0].office_name
                     var pass = document.getElementById('text_password').value
                 
-
+//setItem se usa para crear nuevos datos como para actualizar valores existentes
                     localStorage.setItem("id", id)
                     localStorage.setItem("name", name)
                     localStorage.setItem("last_name", last_name )
@@ -84,7 +85,7 @@ button_login.addEventListener('click', () => {
 
 
 
-
+//se usa para redirigir el navegador a una nueva página
                 window.location.replace("Views/loader.html")
             }
         });

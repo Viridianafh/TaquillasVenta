@@ -21,9 +21,10 @@
             },
             body: JSON.stringify(user)
         })
+//then se utiliza para que se guarde la conversion del json y nuevamente lo devueleve en data 
             .then(res => res.text())
             .then(data => {
-
+//si la traduccion que esta en dasta es igual a lo que el usuario ingrese la sesion debe cerrarce 
                 if (data == "Session_Colsed") {
 
                     localStorage.clear();
@@ -31,6 +32,7 @@
                 }
 
             })
+
             .catch(error => {
                 alert("error en el cierre de sesion")
             })

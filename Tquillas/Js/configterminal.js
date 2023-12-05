@@ -8,8 +8,7 @@
     var minombre = localStorage.getItem('name');
     var usuario = document.getElementById('usuario')
     usuario.textContent = minombre
-
-
+    // localStorage es utilizada para almacenar informacion de forma indefinida hasta que se pueda limpiar la caja 
     var mi_terminal = localStorage.getItem('terminal_name');
 
     if (mi_terminal === null || mi_terminal === "") {
@@ -33,7 +32,7 @@
         .then(data => {
             var select_terminal_crear = document.getElementById('select_terminal_crear')
             var select_terminal_cambiar = document.getElementById('select_terminal_cambiar')
-
+//forEach() ejecuta la función indicada una vez por cada elemento
             data.forEach(e => {
                 const crearoptions = document.createElement('option')
                 crearoptions.value = e.id_terminal

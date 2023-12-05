@@ -26,6 +26,7 @@ window.addEventListener('load', () => {
         .catch(error => {
 
             console.log("error")
+//replace() busca una cadena o un valor especificado y devuelve una cadena con los valores especificados reemplazados.
             window.location.replace('/index.aspx')
         })
 

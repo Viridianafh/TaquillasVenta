@@ -1,7 +1,7 @@
 ﻿document.addEventListener('DOMContentLoaded', (event) => {
-
+    
     const button_Buscar = document.getElementById('button_Buscar')
-
+    
     button_Buscar.addEventListener('click', () => {
 
         button_Buscar.textContent = ""
@@ -16,7 +16,7 @@
 
         var Fecha_entrada= document.getElementById('fecha').value
         var Fecha_salida = document.getElementById('fecha2').value
-        
+
         fetch(`http://192.168.0.245:82/Home/ListaDeViajes?fechainicio=${Fecha_entrada}&fechafinal=${Fecha_salida}`, {
         })
             .then(response => response.json())
@@ -37,15 +37,15 @@
                            <td>${alldata[i].Bus}</td>
                            <td>${alldata[i].origen_viaje}</td>
                            <td>${alldata[i].Destino}</td>
-                           <td>${alldata[i].Departure}</td>
-
-                           <div class=".boton-descarga">
+                           <td>${alldata[i].Departure}</td>    
+                           
+                           <div class=".boton-descarga" role="status">
 
   <a href="http://192.168.0.245:82/Home/MostrarListaAbordar?trip_id=3053f4f408046"  download="id.pdf" class="boton-descarga"> Descargar </a>
-  
-</div>
-                       `;
 
+</div>
+                   `;   
+                   
                     tbody.appendChild(tr);
 
                 }
