@@ -8,21 +8,49 @@
     var minombre = localStorage.getItem('name');
     var usuario = document.getElementById('usuario')
     usuario.textContent = minombre
-
-
+    // localStorage es utilizada para almacenar informacion de forma indefinida hasta que se pueda limpiar la caja 
     var mi_terminal = localStorage.getItem('terminal_name');
+    var role = localStorage.getItem('rol')
 
     if (mi_terminal === null || mi_terminal === "") {
-        alert("no hay una terminal asignada debes crear una para poder acceder a ventas")
+
+
+        Swal.fire({
+            title: "Mensaje!",
+            text: `No hay una terminal asignada`,
+            icon: "info"
+        });
+
     } else {
+
+
+
         var miElemento = document.getElementById('Terminals');
         miElemento.textContent = mi_terminal;
         var buttonCrear = document.getElementById('btncreate')
         buttonCrear.disabled = true
         var miSelect = document.getElementById('select_terminal_crear');
         miSelect.disabled = true;
+
+        if (role != "admin-role") {
+
+            Swal.fire({
+                title: "Mensaje!",
+                text: "No tienes los permisos suficientes para acceder a esta sección, serás redirigido a la página principal",
+                icon: "error",
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location.href = "/dash.aspx";
+            });
+           
+        } else {
+
+        }
+
+
     }
-   
+
+
 
 
 
@@ -33,7 +61,7 @@
         .then(data => {
             var select_terminal_crear = document.getElementById('select_terminal_crear')
             var select_terminal_cambiar = document.getElementById('select_terminal_cambiar')
-
+//forEach() ejecuta la función indicada una vez por cada elemento
             data.forEach(e => {
                 const crearoptions = document.createElement('option')
                 crearoptions.value = e.id_terminal
@@ -56,7 +84,7 @@
 
         })
         .catch(error => {
-            console.log(error)
+            alert(error)
         })
 
 
@@ -93,7 +121,13 @@
                 var miElemento = document.getElementById('Terminals');
                 miElemento.textContent = mi_terminal;
 
-                alert("Terminal asignada con exito")
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Your work has been saved",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 var buttonCrear = document.getElementById('btncreate')
                 buttonCrear.disabled = true
                 var miSelect = document.getElementById('select_terminal_crear');
@@ -144,7 +178,12 @@
             })
             .catch(error => {
 
-                alert("error " + error)
+                Swal.fire({
+                    title: "Error!",
+                    text: `Error inesperado: ${error}`,
+                    icon: "error",
+                    confirmButtonText: 'OK'
+                });
             })
 
 

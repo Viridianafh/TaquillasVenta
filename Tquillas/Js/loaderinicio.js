@@ -18,15 +18,16 @@ window.addEventListener('load', () => {
             localStorage.setItem('terminal_name', terminal_name)
 
 
-                window.location.replace('/index.aspx')
-  
-            
+                window.location.replace('/dash.aspx')
+
+           
         })
 
         .catch(error => {
 
             console.log("error")
-            window.location.replace('/index.aspx')
+//replace() busca una cadena o un valor especificado y devuelve una cadena con los valores especificados reemplazados.
+            window.location.replace('/dash.aspx')
         })
 
 

@@ -2,7 +2,7 @@
 
 button_login.addEventListener('click', () => {
 
-
+    button_login.textContent = "Espere..."
     var text_user = document.getElementById('text_user').value;
     var text_password = document.getElementById('text_password').value;
 
@@ -13,29 +13,61 @@ button_login.addEventListener('click', () => {
     }
 
 
-    fetch('http://192.168.0.245:82/Home/Login', {
+    fetch('https://localhost:5001/Home/Login', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
+//stringify convierte un objeto o valor de JavaScript en una cadena de texto JSON
         body: JSON.stringify(user)
     })
         .then(response => response.text())
         .then(data => {
 
-        
+ //Mediante la toma de desicion establece el tipo de alertas que va a recibir el usuario en dado caso que no coincida con la contraseña correcta  
 
             if (data === "error al cambiar el log") {
-                alert("Correo o contraseña erroneos");
+                Swal.fire({
+                    title: 'Error al iniciar sesion!',
+                    text: `Usuario/Contraseña incorrectos`,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+
             } else if (data === 'INVALIDHOST') {
-                alert("El equipo no cuenta con los permisos necesarios");
+
+                Swal.fire({
+                    title: 'Error al iniciar sesion!',
+                    text: `El Equipo no pertenece a un equio dado de alta para terminal`,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+
+
             } else if (data === 'INVALID_CREDENTIALS') {
-                alert("Contraseña o Usuario incorrectos. Por favor, verifica tus credenciales.");
+
+
+                Swal.fire({
+                    title: 'Error al iniciar sesion!',
+                    text: `Usuario/Contraseña incorrectos`,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+
+
+
+
             } else if (data === 'user_is_log') {
-                alert("El usuario ya se encuentra logueado en otra parte")
+
+                Swal.fire({
+                    title: 'Error al iniciar sesion!',
+                    text: `El usuario ha iniciado sesion en otro equipo, cierre sesion para iniciar una nueva en este equipo`,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
             } else {
 
-
+//de no ser necesaria la correccion de los datos se hara la conversion a JSON
                 var datas = JSON.parse(data)
                     var id =  datas[0].id
                     var name =  datas[0].name
@@ -59,7 +91,7 @@ button_login.addEventListener('click', () => {
                     var office_name = datas[0].office_name
                     var pass = document.getElementById('text_password').value
                 
-
+//setItem se usa para crear nuevos datos como para actualizar valores existentes
                     localStorage.setItem("id", id)
                     localStorage.setItem("name", name)
                     localStorage.setItem("last_name", last_name )
@@ -84,9 +116,21 @@ button_login.addEventListener('click', () => {
 
 
 
-
+//se usa para redirigir el navegador a una nueva página
                 window.location.replace("Views/loader.html")
             }
-        });
+        })
+        .catch(error => {
+
+
+            Swal.fire({
+                title: 'Error al iniciar sesion!',
+                text: `Ocurrio un error: (mensaje de error: ${error})`,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            })
+
+        })
+       
 
 })
