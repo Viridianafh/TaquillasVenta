@@ -13,7 +13,9 @@
 </head>
 
     <style>
-        #logg{
+
+        #logg
+        {
            
         background: rgba(255, 255, 255, 0.2);
         border-radius: 16px;
@@ -21,7 +23,7 @@
         backdrop-filter: blur(5px);
         -webkit-backdrop-filter: blur(5px);
         border: 1px solid rgba(255, 255, 255, 0.3);
-                }
+        }
     </style>
 
 <body>
@@ -41,7 +43,9 @@
 
             <div class="container" style="width:100%; display:flex; align-items: center; justify-content:center; flex-direction: column; gap: 30px;">
                    <h2>Inicio De Sesion</h2>
+
                 <div class="container w-100" style="display: flex; align-items: center; justify-content: center; flex-direction:column; ">
+
                     <label>Usuario</label>
                     <input id="text_user" type="text" class="form-control m-3" style="width:80%"/>
 
@@ -49,6 +53,7 @@
                     <input id="text_password" type="password" class="form-control m-3" style="width:80%"/>
 
                     <button class="btn btn-primary" id="button_login" style="width:150px;">Ingresar</button>
+
                 </div>
             </div>
          

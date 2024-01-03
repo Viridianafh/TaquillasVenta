@@ -794,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("spantotaltotal").innerHTML = totalapagar
         }
 
-        // Añadir la tabla al contenedor
+        
     })
 
 
@@ -864,21 +864,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-            
-            //console.log(jsonLimpio)
+      
 
             var res = monto_recibido - totalapagar
 
 
 
 
-            // Supongamos que rows es tu objeto JSON
+     
             const json = JSON.stringify(rows);
 
-            // Parsear el JSON
+       
             const jsonObj = JSON.parse(json);
 
-            // Mapear los campos a nombres en inglés
+          
             const nuevoJson = jsonObj.map(item => {
                 var tipo = ""
                 switch (item.Tipo) {
@@ -915,15 +914,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     "OriginalPrice": parseFloat(item.costo),
                     "Trip_ID": id,
                     "UserId": userid
-                    // Agrega otras propiedades según sea necesario
+                   
                 };
             });
 
-            // Convertir el nuevo objeto a JSON
-            const nuevoJsonString = JSON.stringify(nuevoJson, null, 2); // El tercer parámetro es para el formato, 2 para la indentación de 2 espacios
+           
+            const nuevoJsonString = JSON.stringify(nuevoJson, null, 2); 
 
-            // Imprimir o hacer lo que necesites con el nuevo JSON
-            //console.log("json trip seat: " + nuevoJsonString);
+          
 
 
 
@@ -935,6 +933,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 "totalAmount": parseFloat(totalapagar),
                 "changeAmount": 0.00,
+                "PaymentMethod": "cash",
                 "payedAmount": parseFloat(precio_base),
                 "salesTerminalId": terminalid,
                 "salesmanId": ticketuserid,
@@ -951,6 +950,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+
+
             fetch('https://localhost:5001/Home/VerIS', {
                 method: 'POST',
                 headers: {
@@ -958,41 +960,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(InternetSale)
             })
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(data => {
 
                     console.log(data)
+
+
+
+                    var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
+
+
+                    if (elementoEnLocalStorage !== null) {
+                        console.log('El elemento existe en local storage:', elementoEnLocalStorage);
+
+                        var ventatotal = parseFloat(elementoEnLocalStorage);
+
+                        ventatotal = ventatotal + parseFloat(totalapagar);
+
+                        localStorage.setItem('venta_reciente', ventatotal.toString());
+
+                    } else {
+                        console.log('El elemento no existe en local storage');
+
+                        localStorage.setItem('venta_reciente', totalapagar.toString());
+                    }
+
+                    Swal.fire({
+                        title: "pago realizado!",
+                        text: `Cambio:  $ ${res}`,
+                        icon: "success"
+                    });
                 })               
 
-
-
            
-
-
-            var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
-
-
-            if (elementoEnLocalStorage !== null) {
-                console.log('El elemento existe en local storage:', elementoEnLocalStorage);
-
-                var ventatotal = parseFloat(elementoEnLocalStorage);
-
-                ventatotal = ventatotal + parseFloat(totalapagar);
-
-                localStorage.setItem('venta_reciente', ventatotal.toString());
-
-            } else {
-                console.log('El elemento no existe en local storage');
-
-                localStorage.setItem('venta_reciente', totalapagar.toString());
-            }
-
-
-            Swal.fire({
-                title: "pago realizado!",
-                text: `Cambio:  $ ${res}`,
-                icon: "success"
-            });
         }
 
     })
@@ -1165,32 +1165,31 @@ function procesardatosViaje() {
 
     var filas = tabla.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 
-    // Array para almacenar los datos
+
     var datos = [];
 
-    // Iterar sobre las filas
     for (var i = 0; i < filas.length; i++) {
         var fila = filas[i];
         var celdas = fila.getElementsByTagName('td');
 
-        // Objeto para almacenar los datos de una fila
+       
         var filaDatos = {};
 
-        // Iterar sobre las celdas
+      
         for (var j = 0; j < celdas.length; j++) {
-            // Las columnas deben coincidir con las del encabezado
+           
             var columna = tabla.rows[0].cells[j].innerHTML;
             var valor = celdas[j].innerHTML;
 
-            // Agregar al objeto de datos
+           
             filaDatos[columna.toLowerCase()] = valor;
         }
 
-        // Agregar el objeto de datos al array
+     
         datos.push(filaDatos);
     }
 
-    // Convertir el array de datos a JSON
+ 
     var jsonDatos = JSON.stringify(datos, null, 2);
     localStorage.setItem('datosInternetsale', jsonDatos)
 
@@ -1216,16 +1215,11 @@ function iniciarturno() {
     var selectOrigen = document.getElementById("origen");
 
 
-    // Supongamos que la clave que deseas verificar es "miClave"
     var clave = "shift_number";
 
-    // Verificar si la clave existe en localStorage
+   
     if (localStorage.getItem(clave) == null) {
 
-        // La clave NO existe
-        // consumir api de iniciar turno
-        //imprimir pdf
-        // guardar prefix  o shift number
 
 
         fetch(`https://localhost:5001/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeLocationId}&terminal=${id_terminal}&office_name=${oficina}&terminal_name=${nombre_terminal}`)
@@ -1236,44 +1230,43 @@ function iniciarturno() {
                 localStorage.setItem('shift_number', data.shift)
                 localStorage.setItem('saleshift_id', data.saleShift)
 
-                // Abre una nueva pestaña con la URL proporcionada
+             
 
                 const url = `https://localhost:5001/Home/descargar?url=${data.url}`;
 
-                // Realiza una solicitud fetch a la URL
+              
                 fetch(url)
                     .then(response => {
-                        // Verifica si la solicitud fue exitosa (código de estado 200)
+                        
                         if (!response.ok) {
                             throw new Error(`Error al descargar el archivo. Código de estado: ${response.status}`);
                         }
 
-                        // Convierte la respuesta a un blob (objeto binario)
+                     
                         return response.blob();
                     })
                     .then(blob => {
-                        // Crea un objeto URL para el blob
+                      
                         const blobUrl = URL.createObjectURL(blob);
 
-                        // Crea un elemento <a> para simular un enlace de descarga
+                      
                         const link = document.createElement('a');
                         link.href = blobUrl;
 
-                        // Especifica el nombre del archivo (puedes ajustarlo según tus necesidades)
                         link.download = 'apertura de caja';
 
-                        // Agrega el enlace al documento
+                  
                         document.body.appendChild(link);
 
-                        // Simula un clic en el enlace para iniciar la descarga
+                  
                         link.click();
 
-                        // Elimina el elemento <a> después de la descarga
+                    
                         document.body.removeChild(link);
                     })
                     .catch(error => {
                         console.error(error);
-                        // Maneja errores de descarga aquí
+                       
                     });
 
 
@@ -1290,7 +1283,7 @@ function iniciarturno() {
 
     }
 
-    // Primera llamada a la API para cargar las opciones de origen
+
     fetch('https://localhost:5001/Home/Origen', {
         method: 'POST',
         headers: {
@@ -1302,12 +1295,11 @@ function iniciarturno() {
         .then(data => {
             var selectOrigen = document.getElementById('origen');
 
-            // Limpiar opciones anteriores
+          
             while (selectOrigen.options.length > 1) {
                 selectOrigen.remove(1);
             }
 
-            // Agregar nuevas opciones
             data.forEach(option => {
                 var newOption = document.createElement("option");
                 newOption.value = option.id;
@@ -1323,7 +1315,7 @@ function iniciarturno() {
             });
         });
 
-    // Manejar el evento de cambio en el select de origen
+
     var selectOrigen = document.getElementById('origen');
     selectOrigen.addEventListener('change', () => {
         var IDOrigen = selectOrigen.value;
@@ -1331,7 +1323,7 @@ function iniciarturno() {
 
         var data = { origen: Origen };
 
-        // Segunda llamada a la API para cargar las opciones de destino
+   
         fetch('https://localhost:5001/Home/Destino', {
             method: 'POST',
             headers: {
@@ -1343,12 +1335,12 @@ function iniciarturno() {
             .then(responseData => {
                 var selectDestino = document.getElementById('destino');
 
-                // Limpiar opciones anteriores
+         
                 while (selectDestino.options.length > 1) {
                     selectDestino.remove(1);
                 }
 
-                // Agregar nuevas opciones
+
                 responseData.forEach(option => {
                     var newOption = document.createElement("option");
                     newOption.value = option.id;
@@ -1365,14 +1357,14 @@ function iniciarturno() {
             });
     });
 
-    // Función para buscar opciones de destino
+
     function searchDestiny() {
         var selectOrigenUs = document.getElementById('origen');
         var selectDestino = document.getElementById('destino');
 
         var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
 
-        // Tercera llamada a la API para buscar opciones de destino
+
         fetch('https://localhost:5001/Home/Destino', {
             method: 'POST',
             headers: {
@@ -1382,12 +1374,11 @@ function iniciarturno() {
         })
             .then(response => response.json())
             .then(responseData => {
-                // Limpiar opciones anteriores
+            
                 while (selectDestino.options.length > 1) {
                     selectDestino.remove(1);
                 }
 
-                // Agregar nuevas opciones
                 responseData.forEach(option => {
                     var newOption = document.createElement("option");
                     newOption.value = option.id;
@@ -1422,7 +1413,7 @@ function convertirAMayusculas(input) {
 
 
 function validarNumero(input) {
-    // Eliminar caracteres no numéricos
+
     input.value = input.value.replace(/[^0-9]/g, '');
 }
 
