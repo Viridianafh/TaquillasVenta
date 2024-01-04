@@ -45,6 +45,15 @@
                <div class="card-footer"><a href="listadeabordar.aspx">Ver</a></div>
             </div>
 
+          <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
+            
+                <div class="card-body">
+                <h5 class="card-title">Buscar un Boletos</h5>
+                       <p class="card-text">busca un boleto consultando nombre, correo, o codigo de compra </p>
+                </div>
+               <div class="card-footer"><a href="Busqueda.aspx">Ver</a></div>
+            </div>
+
            <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
             
                 <div class="card-body">
