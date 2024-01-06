@@ -380,22 +380,56 @@
     <section id="pago-tarjeta" style="display: none;">
 
 
-            <div class="container">
+
             <div class="container">
 
 
-                 <h2>Total: <span id="spantotal"></span></h2>
+
+                
+        <h1>Resumen:</h1>
+        <h5>(resumen de la compra)</h5>
+
+        <div class="container">
+
+            <table class="table table-hover" id="tablacardresume" >
+                <thead>
+                    <tr>
+                        <td>Origen</td>
+                        <td>Destino</td>
+                        <td>Fecha de salida</td>
+                        <td>Bus</td>
+                        <td>Pasajero</td>
+                        <td>Tipo</td>
+                        <td>Asiento</td>
+                        <td>costo</td>
+
+                    </tr>
+                </thead>
+               <tbody id="tbl-card-resume">
+
+                   
+                       
+               </tbody>
+            </table>
+
+
+        </div>
+
+
+            <div class="container">
+
+
+                 <h2>Total: <span id="spantotalcard"></span></h2>
             </div>
 
             <div class="container m-4">
-                   <h3>datos de tarjeta</h3>
 
                 <!--revisar para pinpadweb-->
 
             </div>
 
             <div class="container m-4">
-                 <button class="btn btn-success"  style="width: 320px; ">Procesar pago</button>
+                 <button class="btn btn-success" id="btn-pagar-tarjeta"  style="width: 320px; ">Procesar pago</button>
 
             </div>
          

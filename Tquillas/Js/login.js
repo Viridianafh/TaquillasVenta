@@ -1,4 +1,5 @@
-﻿const button_login = document.getElementById('button_login')
+﻿
+const button_login = document.getElementById('button_login')
 
 button_login.addEventListener('click', () => {
 
@@ -84,7 +85,6 @@ button_login.addEventListener('click', () => {
                     var venta_reciente = ""
                     var employee_type = datas[0].employee_type
                     var shift_prefix = ""
-                    var current_shift = 0
                     var rol = datas[0].rol
                     var nombreequipo = datas[0].nombreequipo
                     var office_location_id = datas[0].office_location_id
@@ -92,14 +92,14 @@ button_login.addEventListener('click', () => {
                     var pass = document.getElementById('text_password').value
                 
 //setItem se usa para crear nuevos datos como para actualizar valores existentes
-                    localStorage.setItem("id", id)
-                    localStorage.setItem("name", name)
+                localStorage.setItem("id", id)
+                localStorage.setItem("name", name + " " + last_name + " " + second_last_name)
                     localStorage.setItem("last_name", last_name )
                     localStorage.setItem("second_last_name", second_last_name )
                     localStorage.setItem("email", email)
                     localStorage.setItem("username", username )
                     localStorage.setItem("password", password )
-                    localStorage.setItem("isloged", isloged )
+                    localStorage.setItem("isloged", "true" )
                     localStorage.setItem("terminal_id", terminal_id)
                     localStorage.setItem("terminal_name", terminal_name)
                     localStorage.setItem("sales_terminal", sales_terminal)

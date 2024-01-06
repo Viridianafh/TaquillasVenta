@@ -69,7 +69,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btn_retirar_precorte = document.getElementById('btn-retirar-precorte')
     btn_retirar_precorte.addEventListener('click', () => {
-        alert("Works")
+
+        var saleshift = localStorage.getItem('saleshift_id')
+        var monto = document.getElementById('monto-precorte').value
+        var monto_retirar = parseFloat(monto)
+
+        var venta = localStorage.getItem('venta_reciente')
+        var venta_reciente = parseFloat(venta)
+
+        var sobrante = venta_reciente - monto_retirar
+
+
+        const CashCheckpoint = {
+
+            sale_shift_id: saleshift,
+            previous_amount: monto_retirar,
+            new_amount: sobrante
+
+        }
+
+
+        fetch('https://localhost:5001/Home/Precorte', {
+
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(CashCheckpoint)
+
+        })
+            .then(response => response.text())
+            .then(data => {
+
+                if (data != "prtc_save") {
+
+
+                    Swal.fire({
+                        title: "Error!",
+                        text: `${error}`,
+                        icon: "error"
+                    });
+
+
+
+
+                    window.locarion.reload()
+
+                } else {
+
+
+                    Swal.fire({
+                        title: "Puedes Continuar!",
+                        text: `se abre de nevo la caja`,
+                        icon: "success"
+                    });
+
+
+                    document.getElementById("section-precorte").style.display = "none"
+                    document.getElementById("section-iniciar").style.display = "block"
+
+
+                    localStorage.setItem('venta_reciente', sobrante.toString())
+                }
+
+
+
+            })
+
+
+
     })
 
 
@@ -799,6 +867,245 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    const btn_pagar_tarjeta = document.getElementById('btn-pagar-tarjeta')
+    btn_pagar_tarjeta.addEventListener('click', () => {
+
+
+
+        var datosViajeString = localStorage.getItem("datos_viaje");
+        var datosViajeObj = JSON.parse(datosViajeString);
+        var tipo = datosViajeObj.tipo;
+        var id = datosViajeObj.id
+        var table = document.getElementById("tablacardresume");
+        var header = [];
+        var rows = [];
+        var ticketuserid = localStorage.getItem('id')
+        var saleshiftid = localStorage.getItem('saleshift')
+        var officelocationid = localStorage.getItem('office_location_id')
+        var terminalid = localStorage.getItem('terminal_id')
+        var monto_recibido = parseFloat(document.getElementById("txtmonto").value).toFixed(2)
+        var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
+        var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
+        var userid = localStorage.getItem('id')
+
+
+
+
+
+
+        if (monto_recibido < totalapagar) {
+
+            Swal.fire({
+                title: "mensaje!",
+                text: `Debes realizar un monto mayor`,
+                icon: "info"
+            });
+
+
+        } else {
+
+            var shiftnumber = localStorage.getItem('shift_number')
+
+            var num_ventas = localStorage.getItem('num_ventas')
+
+            var numero = parseInt(num_ventas)
+
+            numero = numero + 1
+
+
+
+
+            localStorage.setItem('num_ventas', numero.toString())
+
+            for (var i = 0; i < table.rows[0].cells.length; i++) {
+                header.push(table.rows[0].cells[i].innerHTML);
+            }
+
+            for (var i = 1; i < table.rows.length; i++) {
+                var row = {};
+                for (var j = 0; j < table.rows[i].cells.length; j++) {
+                    row[header[j]] = table.rows[i].cells[j].innerHTML;
+                }
+                rows.push(row);
+            }
+
+
+
+
+
+
+       //     var res = monto_recibido - totalapagar
+
+
+
+
+
+            const json = JSON.stringify(rows);
+
+
+            const jsonObj = JSON.parse(json);
+
+
+            const nuevoJson = jsonObj.map(item => {
+                var tipo = ""
+                switch (item.Tipo) {
+                    case "Adulto":
+                        tipo = "ADULT"
+                        break;
+
+                    case "Niño":
+                        tipo = "CHILD"
+                        break;
+
+                    case "OLDER_ADULT":
+                        console.log("Seleccionaste la opción 3");
+                        break;
+
+                    case "Estudiante":
+                        tipo = "STUDENT"
+                        break;
+
+                    default:
+                        console.log("Opción no válida");
+                }
+
+                return {
+
+                    "Name": item.nombre,
+                    "Origin": item.Origen,
+                    "Destination": item.Destino,
+                    "Bus": item.Bus,
+                    "PassengerName": item.Pasajero,
+                    "PassengerType": tipo,
+                    "SeatName": item.Asiento,
+                    "SoldPrice": parseFloat(item.costo),
+                    "PayedPrice": parseFloat(item.costo),
+                    "OriginalPrice": parseFloat(item.costo),
+                    "Trip_ID": id,
+                    "UserId": userid,
+                    "Ticket_id": generarID()
+
+                };
+            });
+
+
+            const nuevoJsonString = JSON.stringify(nuevoJson, null, 2);
+
+            var shift_number_to_is = shiftnumber + "-" + numero
+            alert(shift_number_to_is)
+
+
+
+         
+
+           var lista_ventas = localStorage.getItem("array_ventas")
+
+            var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
+
+            // Añadir el nuevo valor al array
+            lista_ventasstr.push(shift_number_to_is);
+
+            // Convertir la lista actualizada a cadena y almacenarla en localStorage
+            localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
+            
+
+       
+
+            const InternetSale =
+            {
+                "totalAmount": parseFloat(totalapagar),
+                "changeAmount": tipo != "ADULT" ? (parseFloat(totalapagar) - parseFloat(precio_base)) : 0.00,
+
+                "PaymentMethod": "card",
+                "payedAmount": parseFloat(precio_base),
+                "salesTerminalId": terminalid,
+                "salesmanId": ticketuserid,
+                "salesShiftId": localStorage.getItem('saleshift_id'),
+                "saleNumber": shift_number_to_is,
+                "short_id": generarID(),
+                "tripseatlist": nuevoJson
+            }
+
+
+            console.log(InternetSale)
+
+
+
+
+
+            fetch('https://localhost:5001/Home/VerIS', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(InternetSale)
+            })
+                .then(response => response.text())
+                .then(data => {
+
+                    console.log(data)
+
+
+
+                    var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
+
+
+                    if (elementoEnLocalStorage != "") {
+                        console.log('El elemento existe en local storage:', elementoEnLocalStorage);
+
+                        var ventatotal = parseFloat(elementoEnLocalStorage);
+
+
+
+                        ventatotal = ventatotal + parseFloat(totalapagar);
+
+
+
+                        localStorage.setItem('venta_reciente', ventatotal.toString());
+
+                    } else {
+                        console.log('El elemento no existe en local storage');
+
+                        localStorage.setItem('venta_reciente', totalapagar.toString());
+                    }
+
+                    Swal.fire({
+                        title: "pago realizado!",
+                        text: `se ha capturado exitosamente`,
+                        icon: "success"
+                    });
+
+                    
+               
+
+
+                }).catch(error => {
+
+
+                    Swal.fire({
+                        title: "Ocurrio Un error !",
+                        text: `No se Pudo capturar Exitosamente el pago`,
+                        icon: "error"
+                    });
+
+                })
+
+
+        }
+
+
+
+
+    })
+
+
+
+
+
+
+
+    //pagos en efectivo
+
 
     const btnpagar_efectivo = document.getElementById('btnpagar-efectivo')
 
@@ -929,6 +1236,17 @@ document.addEventListener('DOMContentLoaded', () => {
             var shift_number_to_is = shiftnumber + "-" + numero
             alert(shift_number_to_is)
 
+
+            var lista_ventas = localStorage.getItem("array_ventas")
+
+            var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
+
+            // Añadir el nuevo valor al array
+            lista_ventasstr.push(shift_number_to_is);
+
+            // Convertir la lista actualizada a cadena y almacenarla en localStorage
+            localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
+
             const InternetSale =
             {
                 "totalAmount": parseFloat(totalapagar),
@@ -939,16 +1257,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 "salesmanId": ticketuserid,
                 "salesShiftId": localStorage.getItem('saleshift_id'),
                 "saleNumber": shift_number_to_is,
-
                 "tripseatlist": nuevoJson
             }
 
 
             console.log(InternetSale)
-
-
-
-
 
 
 
@@ -963,36 +1276,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(response => response.text())
                 .then(data => {
 
-                    console.log(data)
+                    if (data.length == 8) {
+
+                        localStorage.setItem('folio', data)
+
+                        var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
 
 
+                        if (elementoEnLocalStorage !== null) {
+                            console.log('El elemento existe en local storage:', elementoEnLocalStorage);
 
-                    var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
+                            var ventatotal = parseFloat(elementoEnLocalStorage);
 
+                            ventatotal = ventatotal + parseFloat(totalapagar);
 
-                    if (elementoEnLocalStorage !== null) {
-                        console.log('El elemento existe en local storage:', elementoEnLocalStorage);
+                            localStorage.setItem('venta_reciente', ventatotal.toString());
 
-                        var ventatotal = parseFloat(elementoEnLocalStorage);
+                        } else {
+                            console.log('El elemento no existe en local storage');
 
-                        ventatotal = ventatotal + parseFloat(totalapagar);
+                            localStorage.setItem('venta_reciente', totalapagar.toString());
+                        }
 
-                        localStorage.setItem('venta_reciente', ventatotal.toString());
+                        Swal.fire({
+                            title: "pago realizado!",
+                            text: `Cambio:  $ ${res}`,
+                            icon: "success"
+                        });
 
-                    } else {
-                        console.log('El elemento no existe en local storage');
-
-                        localStorage.setItem('venta_reciente', totalapagar.toString());
+                        window.location.href = 'Boletos.aspx'
                     }
 
-                    Swal.fire({
-                        title: "pago realizado!",
-                        text: `Cambio:  $ ${res}`,
-                        icon: "success"
-                    });
-                })               
+                    
+                    else{
+                        Swal.fire({
+                            title: "Erroro!",
+                            text: `Ocurrio un error`,
+                            icon: "error"
+                        });
+                    }
 
-           
+                })
+                .catch(error => {
+
+                    Swal.fire({
+                        title: "No se Pudo realizar el pago!",
+                        text: `mensaje de error ${error}`,
+                        icon: "error"
+                    });
+
+                })
+
         }
 
     })
@@ -1000,11 +1334,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
     const btn_tarjeta = document.getElementById('btn-tarjeta')
     btn_tarjeta.addEventListener('click', () => {
 
-        alert("works")
+
+
+        document.getElementById("pago-tarjeta").style.display = 'block'
+        document.getElementById("section-tipo-pago").style.display = "none"
+
+        const datosviaje = localStorage.getItem("datos_viaje")
+        const datosInternetsale = localStorage.getItem("datosInternetsale")
+
+        var tbodyrsumeefectiivo = document.getElementById("tbl-card-resume");
+
+        var datais = localStorage.getItem("datosInternetsale")
+        datais = JSON.parse(datais)
+
+        var dataviaje = localStorage.getItem("datos_viaje");
+        var datosCombinados = JSON.parse(dataviaje);
+
+        for (var i = 0; i < datais.length; i++) {
+
+
+            var tr = document.createElement("tr");
+            var tipo = datais[i].tipo
+            if (tipo.includes("adulto")) {
+                tipo = "Adulto"
+            } else if (tipo.includes("nino")) {
+                tipo = "Niño"
+
+            } else if (tipo.includes("inapam")) {
+                tipo = "Adulto mayor"
+
+            } else if (tipo.includes("estudiante")) {
+                tipo = "Estudiante"
+
+            }
+
+            tr.innerHTML = `
+
+                          <td>${datosCombinados.origen}</td>
+                          <td>${datosCombinados.destino}</td>
+                          <td>${datosCombinados.departingOrigen}
+                          <td>${datosCombinados.bus}</td> 
+                          <td>${datais[i].pasajero}</td>
+                          <td>${tipo}</td>
+                          <td>${datais[i].asiento}</td>
+                          <td>${datais[i].precio}</td>
+                         
+                        `;
+
+            tbodyrsumeefectiivo.appendChild(tr);
+
+
+            var totalapagar = localStorage.getItem("Total_compra")
+
+            document.getElementById("spantotalcard").innerHTML = totalapagar
+        }
+
+
+
+
     })
 
 
@@ -1205,6 +1595,7 @@ function procesardatosViaje() {
 
 function iniciarturno() {
 
+
     var userId = localStorage.getItem('id');
     var userName = localStorage.getItem('name');
     var lastname = localStorage.getItem('last_name')
@@ -1278,6 +1669,12 @@ function iniciarturno() {
             text: `puedes iniciar con la venta`,
             icon: "success"
         });
+
+        var arrayventas = []
+
+        localStorage.setItem("array_ventas", arrayventas)
+
+        localStorage.setItem('venta_reciente', 0)
 
     } else {
 
@@ -1416,4 +1813,18 @@ function validarNumero(input) {
 
     input.value = input.value.replace(/[^0-9]/g, '');
 }
+
+
+function generarID() {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let id = '';
+
+    for (let i = 0; i < 8; i++) {
+        const indice = Math.floor(Math.random() * caracteres.length);
+        id += caracteres.charAt(indice);
+    }
+
+    return id;
+}
+
 
