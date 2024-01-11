@@ -61,14 +61,6 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
     try {
 
 
-        //console.log(pasajero)
-        //console.log(origen)
-        //console.log(destino)
-        //console.log(departingOrigen)
-        //console.log(bus)
-        //console.log(tipo)
-        //console.log(asiento)
-        //console.log(precio)
 
   
 
@@ -144,7 +136,7 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         // Crear un enlace y hacer clic en él para iniciar la descarga
         const link = document.createElement('a');
         link.href = urlObject;
-        link.download = 'formulario_lleno.pdf';
+        link.download = `${folio}.pdf`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

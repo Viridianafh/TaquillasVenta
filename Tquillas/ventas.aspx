@@ -7,7 +7,7 @@
   <header>
           <script src="Js/ventas.js"></script>
       <link  rel="stylesheet" href="css/ventas.css"/>
-
+      <script src="Js/islog.js"></script>
      
   </header>
 

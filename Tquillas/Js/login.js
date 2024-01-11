@@ -62,7 +62,7 @@ button_login.addEventListener('click', () => {
 
                 Swal.fire({
                     title: 'Error al iniciar sesion!',
-                    text: `El usuario ha iniciado sesion en otro equipo, cierre sesion para iniciar una nueva en este equipo`,
+                    text: `El usuario ha iniciado sesion en otro equipo o navegador,\n cierre sesion para iniciar una nueva en este navegador o dispositivo`,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 })

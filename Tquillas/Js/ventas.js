@@ -14,13 +14,16 @@ var countpasajero = 1;
 var countpasajerofinal = 1
 precio_base = 0;
 
+localStorage.setItem("array_checkpoints", [])
 
 
 
 
 document.addEventListener('DOMContentLoaded', () => {
 
-
+    localStorage.setItem('datos_viaje', "")
+    localStorage.setItem('datosInternetsale', "")
+    localStorage.setItem('pasajeros', "")
 
 
 
@@ -70,72 +73,165 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_retirar_precorte = document.getElementById('btn-retirar-precorte')
     btn_retirar_precorte.addEventListener('click', () => {
 
+
+
         var saleshift = localStorage.getItem('saleshift_id')
         var monto = document.getElementById('monto-precorte').value
         var monto_retirar = parseFloat(monto)
 
-        var venta = localStorage.getItem('venta_reciente')
-        var venta_reciente = parseFloat(venta)
-
-        var sobrante = venta_reciente - monto_retirar
 
 
-        const CashCheckpoint = {
+        if (monto_retirar <= 0) {
 
-            sale_shift_id: saleshift,
-            previous_amount: monto_retirar,
-            new_amount: sobrante
+            alert("no puedes  retirar esta cantidad")
+            var ventas = localStorage.getItem('array_ventas')
+            var arrayventas = JSON.parse(ventas)
+            console.log(arrayventas)
 
-        }
+
+        } else {
 
 
-        fetch('https://localhost:5001/Home/Precorte', {
+            var venta = localStorage.getItem('venta_reciente')
+            var venta_reciente = parseFloat(venta)
 
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(CashCheckpoint)
+            var sobrante = venta_reciente - monto_retirar
 
-        })
-            .then(response => response.text())
-            .then(data => {
 
-                if (data != "prtc_save") {
+            const CashCheckpoint = {
 
+                sale_shift_id: saleshift,
+                previous_amount: monto_retirar,
+                new_amount: sobrante
+
+            }
+
+
+            fetch('https://localhost:5001/Home/Precorte', {
+
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(CashCheckpoint)
+
+            })
+                .then(response => response.text())
+                .then(data => {
+
+                    if (data.length <= 6) {
+
+
+
+                        Swal.fire({
+                            title: "Error!",
+                            text: `${error}`,
+                            icon: "error"
+                        });
+
+
+
+
+                        window.locarion.reload()
+
+                    } else {
+
+
+                        
+                        // Obtener el valor de 'cashcheckpoint' desde localStorage
+                        // Obtener el valor de 'cashcheckpoint' desde localStorage
+                        localStorage.setItem('cashcheckpoint', data);
+
+                        var cashcheckpoint = localStorage.getItem('cashcheckpoint');
+
+                        // Verificar si 'cashcheckpoint' tiene un valor antes de proceder
+                 
+                    
+
+                        // Obtener el array almacenado en localStorage ('array_ventas')
+                        var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
+
+                        // Crear un nuevo objeto en el formato deseado
+                        let Saleshift = salesnumberArray.map(salesnumber => {
+                            return {
+                                salesnumber: salesnumber
+                            };
+                        });
+
+                        console.log(Saleshift);
+
+
+
+
+                        fetch(`https://localhost:5001/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
+
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'text/plain',
+                                'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
+                            },
+                            body: JSON.stringify(Saleshift)
+
+                        })
+                            .then(response => response.text())
+                            .then(data => {
+
+
+
+                                if (data == "Operación exitosa") {
+                                    Swal.fire({
+                                        title: "Puedes Continuar!",
+                                        text: `se abre de nevo la caja`,
+                                        icon: "success"
+                                    });
+
+                                    localStorage.setItem("array_ventas", [])
+
+                                   
+                                        location.reload();
+
+
+
+                                    localStorage.setItem('venta_reciente', sobrante.toString())
+
+                                } else {
+
+
+
+                                    Swal.fire({
+                                        title: "Error!",
+                                        text: `Hubo un error`,
+                                        icon: "error"
+                                    });
+
+                                }
+
+                            }).catch(error => {
+
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: `Hubo un error: mensaje ${error}`,
+                                    icon: "error"
+                                });
+
+                            })
+                       
+                    }
+
+
+                }).catch(error => {
 
                     Swal.fire({
                         title: "Error!",
-                        text: `${error}`,
+                        text: `Hubo un error: mensaje ${error}`,
                         icon: "error"
                     });
 
+                })
 
+        }
 
-
-                    window.locarion.reload()
-
-                } else {
-
-
-                    Swal.fire({
-                        title: "Puedes Continuar!",
-                        text: `se abre de nevo la caja`,
-                        icon: "success"
-                    });
-
-
-                    document.getElementById("section-precorte").style.display = "none"
-                    document.getElementById("section-iniciar").style.display = "block"
-
-
-                    localStorage.setItem('venta_reciente', sobrante.toString())
-                }
-
-
-
-            })
-
+      
 
 
     })
@@ -157,6 +253,155 @@ document.addEventListener('DOMContentLoaded', () => {
         iniciarturno()
      
     })
+
+
+
+
+
+
+
+
+    const button_cerrar_caja = document.getElementById('button_cerrar_caja')
+    button_cerrar_caja.addEventListener('click', () => {
+
+        var saleshiftid = localStorage.getItem('saleshift_id')
+        var montoprevio = localStorage.getItem('venta_reciente')
+        var monto = parseFloat(montoprevio)
+
+        var CashCheckpoint = {
+
+            sale_shift_id: saleshiftid,
+            previous_amount: monto,
+            new_amount: 0.0
+        };
+
+
+
+        fetch('https://localhost:5001/Home/CerrarTurno', {
+
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(CashCheckpoint)
+
+        })
+            .then(response => response.text())
+            .then(data => {
+
+                if (data.length <= 6) {
+
+
+
+
+                    alert("hubo un error")
+                    
+
+                } else {
+
+
+
+                    // Obtener el valor de 'cashcheckpoint' desde localStorage
+                    // Obtener el valor de 'cashcheckpoint' desde localStorage
+                    localStorage.setItem('cashcheckpoint', data);
+
+                    var cashcheckpoint = localStorage.getItem('cashcheckpoint');
+
+                    var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
+
+                    // Crear un nuevo objeto en el formato deseado
+                    let Saleshift = salesnumberArray.map(salesnumber => {
+                        return {
+                            salesnumber: salesnumber
+                        };
+                    });
+
+
+
+                    fetch(`https://localhost:5001/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
+
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'text/plain',
+                            'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
+                        },
+                        body: JSON.stringify(Saleshift)
+
+                    })
+                        .then(response => response.text())
+                        .then(data => {
+
+
+
+                            if (data == "Operación exitosa") {
+
+
+
+                                location.href = "informeCierre.aspx"
+
+
+
+                            }
+                         
+
+                        }).catch(error => {
+
+                            Swal.fire({
+                                title: "Error!",
+                                text: `Hubo un error: mensaje ${error}`,
+                                icon: "error"
+                            });
+
+                        })
+
+                }
+
+
+            }).catch(error => {
+
+                Swal.fire({
+                    title: "Error!",
+                    text: `Hubo un error: mensaje ${error}`,
+                    icon: "error"
+                });
+
+            })
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        Swal.fire({
+            title: 'Caja cerrada',
+            text: 'ya puedes cerrar este panel',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        })
+
+
+        
+    })
+
+
+
+
+
+
+
+
 
 
 
@@ -1045,38 +1290,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     console.log(data)
 
+                    if (data.length == 8) {
+
+                        var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
 
 
-                    var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
+                        if (elementoEnLocalStorage != "") {
+                            console.log('El elemento existe en local storage:', elementoEnLocalStorage);
 
-
-                    if (elementoEnLocalStorage != "") {
-                        console.log('El elemento existe en local storage:', elementoEnLocalStorage);
-
-                        var ventatotal = parseFloat(elementoEnLocalStorage);
-
-
-
-                        ventatotal = ventatotal + parseFloat(totalapagar);
+                            var ventatotal = parseFloat(elementoEnLocalStorage);
 
 
 
-                        localStorage.setItem('venta_reciente', ventatotal.toString());
+                            ventatotal = ventatotal + parseFloat(totalapagar);
+
+
+
+                            localStorage.setItem('venta_reciente', ventatotal.toString());
+
+                        } else {
+                            console.log('El elemento no existe en local storage');
+
+                            localStorage.setItem('venta_reciente', totalapagar.toString());
+                        }
+
+
+
+                        var currentsale = actualizarCurrentSale();
+
+                   
+
 
                     } else {
-                        console.log('El elemento no existe en local storage');
 
-                        localStorage.setItem('venta_reciente', totalapagar.toString());
+
+                        Swal.fire({
+                            title: "Ocurrio Un error !",
+                            text: `No se Pudo capturar Exitosamente el pago`,
+                            icon: "error"
+                        });
+
                     }
 
-                    Swal.fire({
-                        title: "pago realizado!",
-                        text: `se ha capturado exitosamente`,
-                        icon: "success"
-                    });
 
-                    
-               
 
 
                 }).catch(error => {
@@ -1298,13 +1554,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             localStorage.setItem('venta_reciente', totalapagar.toString());
                         }
 
-                        Swal.fire({
-                            title: "pago realizado!",
-                            text: `Cambio:  $ ${res}`,
-                            icon: "success"
-                        });
 
-                        window.location.href = 'Boletos.aspx'
+                        var currentsale = actualizarCurrentSale();
+
+                       
                     }
 
                     
@@ -1828,3 +2081,51 @@ function generarID() {
 }
 
 
+
+
+
+function actualizarCurrentSale() {
+
+    var ventareciente = localStorage.getItem('num_ventas')
+    var shiftnumber = localStorage.getItem('shift_number')
+    var userid = localStorage.getItem('id')
+
+
+    fetch(`https://localhost:5001/Home/ActualizarSaleShift?userid=${userid}&shiftNumber=${shiftnumber}&currentSale=${ventareciente}`, {
+
+        method: 'POST',
+        headers: {
+            'Accept': 'text/plain',
+            'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
+        },
+        body: JSON.stringify({})
+    })
+        .then(response => response.text())
+        .then(data => {
+
+            if (data == "OK") {
+
+
+                Swal.fire({
+                    title: "pago realizado!",
+                    text: `se ha capturado exitosamente`,
+                    icon: "success"
+                });
+
+
+                window.location.href = 'Boletos.aspx'
+
+            } else {
+
+                Swal.fire({
+                    title: "Error",
+                    text: `Hubo un error al guardar "venta reciente" en el registrod e datos`,
+                    icon: "error"
+                });
+            }
+
+        })
+
+
+
+}

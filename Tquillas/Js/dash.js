@@ -21,11 +21,17 @@
     } else {
 
         var card = document.createElement('div')
-        card.innerHTML = `
+        card.innerHTML = 
         
+        `
         
             <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
             
+             <div>
+                  <div>
+                    <ion-icon name="tv-outline" style="font-size: 80px;"></ion-icon>
+                    </div>
+               </div>
                 <div class="card-body">
                 <h5 class="card-title"> Terminal </h5>
                        <p class="card-text">Cambia la configuracion de tu terminal</p>

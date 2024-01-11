@@ -4,6 +4,7 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <header>
         <script src="Js/boletos.js"></script>
+        <script src="Js/islog.js"></script>
     </header>
   
  
