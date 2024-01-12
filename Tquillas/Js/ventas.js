@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         fetch(`https://localhost:5001/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
 
-                            method: 'POST',
+                            method: 'PATCH',
                             headers: {
                                 'Accept': 'text/plain',
                                 'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     localStorage.setItem("array_ventas", [])
 
                                    
-                                        location.reload();
+                                        location.href= "informePrecorte.aspx"
 
 
 
@@ -301,8 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-                    // Obtener el valor de 'cashcheckpoint' desde localStorage
-                    // Obtener el valor de 'cashcheckpoint' desde localStorage
+                
                     localStorage.setItem('cashcheckpoint', data);
 
                     var cashcheckpoint = localStorage.getItem('cashcheckpoint');
@@ -367,22 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             })
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   
 
         Swal.fire({
             title: 'Caja cerrada',
@@ -2093,7 +2077,7 @@ function actualizarCurrentSale() {
 
     fetch(`https://localhost:5001/Home/ActualizarSaleShift?userid=${userid}&shiftNumber=${shiftnumber}&currentSale=${ventareciente}`, {
 
-        method: 'POST',
+        method: 'PATCH',
         headers: {
             'Accept': 'text/plain',
             'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API

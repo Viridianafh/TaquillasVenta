@@ -10,6 +10,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_end = document.getElementById('btn-end')
     btn_end.addEventListener('click', () => {
 
+
+        const shiftId = localStorage.getItem('saleshift_id')
+        const url = `https://localhost:5001/Home/TerminarTurnoCaja?shift=${shiftId}`;
+
+        fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+                // Puedes incluir otros encabezados si es necesario
+            },
+            // No es necesario incluir un cuerpo (body) si estás pasando los datos en la URL
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+                window.location.href = "dash.aspx"
+            })
+            .then(data => {
+                // Manejar la respuesta exitosa
+                console.log('Respuesta exitosa:', data);
+            })
+            .catch(error => {
+                // Manejar errores de la solicitud
+                console.error('Error en la solicitud:', error);
+            });
+
+
+
+
+
+
         window.location.href= "dash.aspx"
     })
 
