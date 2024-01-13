@@ -49,8 +49,6 @@
     }
 
 
-
-
 })
 
 
@@ -60,9 +58,6 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
  
     try {
 
-
-
-  
 
         // Descargar el formulario PDF
         const url = '/Assets/formticket.pdf';

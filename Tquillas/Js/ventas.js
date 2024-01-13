@@ -644,53 +644,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+       //inicio Conteo inapam
 
-
-    const btn_sumar_inapam = document.getElementById('btn_sumar_inapam')
+    const btn_sumar_inapam = document.getElementById('btn_sumar_inapam');
     btn_sumar_inapam.addEventListener('click', () => {
+        countinapam = countinapam + 1;
 
+        if (countinapam > totalInapam) {
+            btn_sumar_inapam.disabled = true;
+        } else {
+            var label = document.createElement('label');
+            label.textContent = "Nombre del pasajero: " + countinapam;
 
-        countinapam = countinapam + 1
+            const contentinputsinapam = document.getElementById('contentinputsinapam');
 
-        if (countinapam == totalInapam) {
+            var input = document.createElement('input');
+            input.classList.add("form-control");
+            input.classList.add("m-2");
+            input.setAttribute("id", "input_inapam" + countinapam);
+            input.setAttribute("oninput", "convertirAMayusculas(this)");
 
-            btn_sumar_inapam.disabled = true
-        }
-        else {
-
-            var label = document.createElement('label')
-            label.textContent = "Nombre del pasajero: " + countinapam
-
-            const contentinputsinapam = document.getElementById('contentinputsinapam')
-
-
-            var input = document.createElement('input')
-            input.classList.add("form-control")
-            input.classList.add("m-2")
-            input.setAttribute("id", `${"input_inapam" + countinapam}`)
-            input.setAttribute("oninput", "convertirAMayusculas(this)")
-
-            contentinputsinapam.appendChild(label)
-            contentinputsinapam.appendChild(input)
+            contentinputsinapam.appendChild(label);
+            contentinputsinapam.appendChild(input);
             count_pasajeros = count_pasajeros + 1;
-
-
         }
+    });
 
 
-
-
-    })
-
-
-    const btn_restar_inapam = document.getElementById('btn_restar_inapam')
-
+    const btn_restar_inapam = document.getElementById('btn_restar_inapam');
     btn_restar_inapam.addEventListener('click', () => {
+
         if (countinapam > 0) {
+
             countinapam = countinapam - 1;
 
-            count_pasajeros = count_pasajeros - 1;
+            if (count_pasajeros > 0) {
 
+                count_pasajeros = count_pasajeros - 1;
+            }
+
+            document.getElementById('btn_sumar_inapam').disabled = false;
 
             // Elimina el último input y su respectivo label
             const contentinputs = document.getElementById('contentinputsinapam');
@@ -702,12 +695,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 contentinputs.removeChild(inputs[inputs.length - 1]);
             }
         }
-    })
+    });
 
 
 
 
-
+        //fin conteo inapam
 
 
     const btn_sumar_estudiante = document.getElementById('btn_sumar_estudiante')
@@ -740,6 +733,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     })
+
+
 
 
     const btn_restar_estudiante = document.getElementById('btn_restar_estudiante')
@@ -1176,30 +1171,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             const nuevoJson = jsonObj.map(item => {
-                var tipo = ""
-                switch (item.Tipo) {
-                    case "Adulto":
-                        tipo = "ADULT"
-                        break;
+                let tipo = "";
 
-                    case "Niño":
-                        tipo = "CHILD"
-                        break;
-
-                    case "OLDER_ADULT":
-                        console.log("Seleccionaste la opción 3");
-                        break;
-
-                    case "Estudiante":
-                        tipo = "STUDENT"
-                        break;
-
-                    default:
-                        console.log("Opción no válida");
+                if (item.Tipo == "Adulto") {
+                    tipo = "ADULT";
+                } else if (item.Tipo == "Niño") {
+                    tipo = "CHILD";
+                } else if (item.Tipo == "Adulto Mayor") {
+                    tipo = "OLDER_ADULT";
+                    console.log("Seleccionaste la opción 3");
+                } else if (item.Tipo == "Estudiante") {
+                    tipo = "STUDENT";
+                } else {
+                    console.log("Opción no válida");
                 }
 
                 return {
-
                     "Name": item.nombre,
                     "Origin": item.Origen,
                     "Destination": item.Destino,
@@ -1211,9 +1198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     "PayedPrice": parseFloat(item.costo),
                     "OriginalPrice": parseFloat(item.costo),
                     "Trip_ID": id,
-                    "UserId": userid,
-                    "Ticket_id": generarID()
-
+                    "UserId": userid
                 };
             });
 
@@ -1391,8 +1376,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             numero = numero + 1
 
-           
-            
 
             localStorage.setItem('num_ventas', numero.toString())
 
@@ -1408,51 +1391,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 rows.push(row);
             }
 
-
-
-
-      
-
             var res = monto_recibido - totalapagar
-
-
-
-
-     
+   
             const json = JSON.stringify(rows);
 
        
             const jsonObj = JSON.parse(json);
 
-          
             const nuevoJson = jsonObj.map(item => {
-                var tipo = ""
-                switch (item.Tipo) {
-                    case "Adulto":
-                        tipo = "ADULT"
-                        break;
+                let tipo = ""; 
 
-                    case "Niño":
-                        tipo = "CHILD"
-                        break;
-
-                    case "OLDER_ADULT":
-                        console.log("Seleccionaste la opción 3");
-                        break;
-
-                    case "Estudiante":
-                        tipo = "STUDENT"
-                        break;
-
-                    default:
-                        console.log("Opción no válida");
+                if (item.Tipo == "Adulto") {
+                    tipo = "ADULT";
+                } else if (item.Tipo == "Niño") {
+                    tipo = "CHILD";
+                } else if (item.Tipo == "Adulto Mayor") {
+                    tipo = "OLDER_ADULT";
+                    console.log("Seleccionaste la opción 3");
+                } else if (item.Tipo == "Estudiante") {
+                    tipo = "STUDENT";
+                } else {
+                    console.log("Opción no válida");
                 }
 
                 return {
                     "Name": item.nombre,
                     "Origin": item.Origen,
                     "Destination": item.Destino,
-                    "Bus":item.Bus,
+                    "Bus": item.Bus,
                     "PassengerName": item.Pasajero,
                     "PassengerType": tipo,
                     "SeatName": item.Asiento,
@@ -1461,9 +1427,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     "OriginalPrice": parseFloat(item.costo),
                     "Trip_ID": id,
                     "UserId": userid
-                   
                 };
             });
+
 
            
             const nuevoJsonString = JSON.stringify(nuevoJson, null, 2); 
@@ -1684,12 +1650,13 @@ function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, depar
 
                 document.getElementById('content-count-inapam').style.display = "none"
                 document.getElementById("total_inapam").innerHTML = cant_inapam
+                
 
             }
             else {
                 document.getElementById("total_inapam").innerHTML = cant_inapam
             }
-
+            countinapam = cant_inapam
         })
         .catch(error => {
 
