@@ -7,7 +7,13 @@
         <script src="Js/islog.js"></script>
     </header>
   
- 
+   <a href="dash.aspx" style="text-decoration: none;">
+
+            <button class="btn btn-danger">
+             <ion-icon name="arrow-back-outline"></ion-icon>
+            </button>
+
+        </a>
       
       <h2>Escaneo de Boletos <span id="usuario"></span></h2><br>
 
@@ -15,7 +21,7 @@
 
     <section>
 
-
+       
         <div class="container">
 
             <h4>Ingresa el Ticket </h4>

@@ -11,10 +11,24 @@
   </header>
 
 
-    <section id="section-buscarlista">
+   
+
+    <section id="section-buscarlista" >
+
+        
+
+
 
            <div class=h1> Lista de abordar </div>   
         <div class="container p-5" flex=10; align-items: flex-start;>
+
+             <a href="dash.aspx" style="text-decoration: none;">
+
+            <button class="btn btn-danger">
+             <ion-icon name="arrow-back-outline"></ion-icon>
+            </button>
+
+        </a>
         <div class="fecha">
                     <label for="fecha">Desde: </label>
                     <input type="date" id="fecha" class="form form-control" style="width: 160px;">

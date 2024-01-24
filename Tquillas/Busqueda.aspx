@@ -3,6 +3,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <header>
+        <script src="Js/islog.js"></script>
         <script src="Js/Busqueda.js"></script>
     </header>
   
@@ -10,6 +11,13 @@
       
     <section id="section-busqueda">
 
+         <a href="dash.aspx" style="text-decoration: none;">
+
+            <button class="btn btn-danger">
+             <ion-icon name="arrow-back-outline"></ion-icon>
+            </button>
+
+        </a>
 
             <h2>Buscar Boletos</h2>
 

@@ -28,7 +28,7 @@
 <body>
 <!-- navbar Esta barra se adaptará al tamaño de pantalla, mostrando los elementos colapsados en un botón en pantallas pequeñas y de forma normal para pantallas más grandes. -->
     <header class="flex w-full fixed top-0 z-1">
-        <nav class="navbar flex justify-content-between w-full bg-dark">
+        <nav class="navbar flex  justify-content-between w-full bg-dark w-100 " >
             <div class="cabecera bg-dark" >
                 <div class="logo w-100 bg-dark" >
                    <img src="Assets/logotiposagblanco.png" />

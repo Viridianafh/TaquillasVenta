@@ -10,6 +10,13 @@
       <script src="Js/islog.js"></script>
      
   </header>
+      <a href="dash.aspx" style="text-decoration: none;">
+
+            <button class="btn btn-danger">
+             <ion-icon name="arrow-back-outline"></ion-icon>
+            </button>
+
+        </a>
 
   
     <section id="section-precorte" style="display: none;">
@@ -43,7 +50,7 @@
         <hr />
 
         <div class="card">
-            <div class="container p-5">
+            <div class="container p-5 ">
                 <div class="container m-3">
                     <label for="origen">Origen: </label>
                     <select id="origen" class="form form-select" style="width: 320px;">

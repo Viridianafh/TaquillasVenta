@@ -13,6 +13,13 @@
 
     <section id="section-tabla-boletos">
 
+        <a href="ventas.aspx" style="text-decoration: none;">
+
+            <button class="btn btn-danger">
+             <ion-icon name="arrow-back-outline"></ion-icon>
+            </button>
+
+        </a>  
         <div class="container">
 
             <table class="table table-hover" id="table-descarga-boletos">
@@ -31,7 +38,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
 
                 </tbody>
 
