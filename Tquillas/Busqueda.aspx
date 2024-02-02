@@ -39,15 +39,16 @@
         <table class="table table-hover" id="table">
             <thead>
                  <tr>
-                   <td><h4>Nombre</h4></td>
-                   <td><h4>Tipo</h4></td>
-                   <td><h4>Ticket</h4></td>
-                   <td><h4>Precio</h4></td>
-                   <td><h4>Código de compra</h4></td>
-                   <td><h4>Tipo de pago</h4></td>
-                   <td><h4>Fecha</h4></td>
-                   <td><h4>Asiento</h4></td>
-                   <td><h4>Status</h4></td>
+                   <th scope="col">Nombre</th>
+                   <th scope="col">Tipo</th>
+                   <th scope="col">Ticket</th>
+                   <th scope="col">Precio</th>
+                   <th scope="col">Código de compra</th>
+                   <th scope="col">Tipo de pago</th>
+                   <th scope="col">Fecha</th>
+                   <th scope="col">Asiento</th>
+                   <th scope="col">Status</th>
+                   <th scope="col">Actions</th>
                  </tr>
             </thead>
             <tbody>
@@ -57,6 +58,9 @@
         </table>
 
     </section>
+
+
+
 
 
 </asp:Content>

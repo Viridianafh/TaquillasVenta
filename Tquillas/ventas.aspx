@@ -10,16 +10,18 @@
       <script src="Js/islog.js"></script>
      
   </header>
-      <a href="dash.aspx" style="text-decoration: none;">
+     
+
+  
+    <section id="section-precorte" style="display: none;">
+
+         <a href="dash.aspx" style="text-decoration: none;">
 
             <button class="btn btn-danger">
              <ion-icon name="arrow-back-outline"></ion-icon>
             </button>
 
         </a>
-
-  
-    <section id="section-precorte" style="display: none;">
 
         <div class="container mt-5 mb-5 h-100 d-flex flex-column gap-2">
 
@@ -299,6 +301,10 @@
 
     <section id="section-tipo-pago" style="display: none;">
 
+      <button class="btn btn-danger" id="btn-atras3"><ion-icon name="arrow-back-outline"></ion-icon>atras</button>
+
+
+
          <h1>Medio de pago</h1>
         <h5>(selecciona tu tipo de pago)</h5>
 
@@ -329,6 +335,10 @@
 
 
     <section id="pago-efectivo" style="display:none; ">
+
+
+
+              <button class="btn btn-danger" id="btn-atras4"><ion-icon name="arrow-back-outline"></ion-icon>atras</button>
 
         <h1>Resumen:</h1>
         <h5>(resumen de la compra)</h5>
@@ -385,6 +395,7 @@
 
 
     <section id="pago-tarjeta" style="display: none;">
+              <button class="btn btn-danger" id="btn-atras5"><ion-icon name="arrow-back-outline"></ion-icon>atras</button>
 
 
 

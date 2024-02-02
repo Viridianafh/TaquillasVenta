@@ -17,30 +17,29 @@ document.addEventListener('DOMContentLoaded', () => {
     var datosCombinados = JSON.parse(dataviaje);
     var folio = localStorage.getItem('folio')
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/ConsultarBoletos?folio=${folio}`)
+    fetch(`http://apitaquillassag.dyndns.org/Home/ConsultaBoletos?folio=${folio}`)
         .then(response => response.json())
         .then(data => {
 
-            console.log(typeof(data))
+            console.log(data)
 
 
             data.forEach(e => {
 
                 var tr = document.createElement('tr')
                 tr.innerHTML =
-                            `
-                    <td>${e.Origin}</td>
-                    <td>${e.Destination}</td>
-                    <td>${datosCombinados.departingOrigen}</td>
-                    <td>${datosCombinados.bus}</td> 
-                    <td>${e.PassengerName}</td>
-                    <td>${e.PassengerType}</td>
-                    <td>${e.TicketId}<td>
-                    <td>${e.SeatName}</td>
-                    <td>${e.SoldPrice}</td>
-                    <td><button class="btn btn-dark" onclick="Descargar('${e.TicketId}' ,'${e.PassengerName}', '${e.Origin}', '${e.Destination}', '${datosCombinados.departingOrigen}', '${datosCombinados.bus}', '${e.PassengerType}', '${e.SeatName}', ${e.SoldPrice});"> <ion-icon name="download-outline"></ion-icon>Descargar</button></td>
-                `;
-
+                    `
+    <td>${e.Origin}</td>
+    <td>${e.Destination}</td>
+    <td>${datosCombinados.departingOrigen}</td>
+    <td>${datosCombinados.bus}</td> 
+    <td>${e.PassengerName}</td>
+    <td>${e.PassengerType}</td>
+    <td>${e.TicketId}</td>
+    <td>${e.SeatName}</td>
+    <td>${e.SoldPrice}</td>
+    <td><button class="btn btn-dark" onclick="Descargar('${e.TicketId}' ,'${e.PassengerName}', '${e.Origin}', '${e.Destination}', '${datosCombinados.departingOrigen}', '${datosCombinados.bus}', '${e.PassengerType}', '${e.SeatName}', ${e.SoldPrice});"> <ion-icon name="download-outline"></ion-icon>Descargar</button></td>
+`;
 
                 tbodyrsumeefectiivo.appendChild(tr);
 

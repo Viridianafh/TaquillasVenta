@@ -56,7 +56,7 @@
                     </div>
                 <div class="card-body">
                  
-                <h5 class="card-title">Buscar un Boletos</h5>
+                <h5 class="card-title">Buscar un Boleto</h5>
                        <p class="card-text">busca un boleto consultando nombre, correo, o codigo de compra </p>
                 </div>
                <div class="card-footer"><a href="Busqueda.aspx">Ver</a></div>
@@ -73,6 +73,20 @@
                        <p class="card-text">Escanea el Boleto ingresando el código del Ticket </p>
                 </div>
                <div class="card-footer"><a href="escaneo.aspx">Ver</a></div>
+            </div> 
+          
+          
+          <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
+             <div>
+                  <div>
+                       <ion-icon name="documents-outline"  style="font-size: 80px;"></ion-icon>
+                    </div>
+                    </div>
+                <div class="card-body">
+                <h5 class="card-title">Guias de viaje</h5>
+                       <p class="card-text">Genera e imprime la guia de viaje </p>
+                </div>
+               <div class="card-footer"><a href="guias.aspx">Ver</a></div>
             </div>
 
           

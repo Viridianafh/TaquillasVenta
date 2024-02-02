@@ -43,7 +43,7 @@
                         </div>
     
                         <div class="header__info flex  bg-dark">
-                            <ul class="flex flex-column ">
+                            <ul class="flex flex-column mb-3 ">
                               <li> <a class="btn btn-dark" href="dash.aspx"  role="button" style="text-decoration:none"> Inicio </a></li>
 
                                  <li> <a class="btn btn-dark" href="Busqueda.aspx"  role="button" style="text-decoration:none"> Buscar Boletos </a></li>
@@ -52,6 +52,7 @@
                                 <li> <a class="btn btn-dark" href="ventas.aspx" role="button" style="text-decoration:none" >Venta de boletos</a></li>
                                 <center>
                                 <li> <a class="btn btn-dark" href="index.aspx"  role="button" style="text-decoration:none"> Terminal</a></li>
+                                <li> <a class="btn btn-dark" href="guias.aspx"  role="button" style="text-decoration:none"> Guias de Viaje</a></li>
 
                                 <li><div class="salir">
                                     <button  class="btn btn-dark" id="btn_logout" >

@@ -23,19 +23,20 @@
         <div class="container">
 
             <table class="table table-hover" id="table-descarga-boletos">
-                <thead>
-                    <tr>
-                        <th>Origen</th>
-                        <th>Destino</th>
-                        <th>Fecha de salida</th>
-                        <th>Bus</th>
-                        <th>Pasajero</th>
-                        <th>Tipo</th>
-                        <th>Cod.Compra</th>
-                        <th>Asiento</th>
-                        <th>Costo</th>
-                        <th>Descargar</th>
-                    </tr>
+               <thead class="thead-dark"> <!-- Añadido el estilo de encabezado oscuro para resaltar -->
+                <tr>
+                    <th scope="col">Origen</th>
+                    <th scope="col">Destino</th>
+                    <th scope="col">Fecha de salida</th>
+                    <th scope="col">Bus</th>
+                    <th scope="col">Pasajero</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Cod.Compra</th>
+                    <th scope="col">Asiento</th>
+                    <th scope="col">Costo</th>
+                    <th scope="col">Descargar</th>
+                </tr>
+           
                 </thead>
                 <tbody>
 

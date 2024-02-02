@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (parseFloat(totaldelaventa) >= 3000) {
         Swal.fire({
             title: "Has llegado al maximo en tu caja",
+
             text: 'Debes realizar el corte',
             icon: "info"
         });
@@ -290,8 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
 
                 if (data.length <= 6) {
-
-
 
 
                     alert("hubo un error")
@@ -555,6 +554,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    function limpiarTablaAsientosPasajeros() {
+        var tabla = document.getElementById('tabla-pasajeros');
+
+        // Eliminar todas las filas excepto la primera (encabezados)
+        while (tabla.rows.length > 1) {
+            tabla.deleteRow(1);
+        }
+    }
+
+    function limpiarTablacardresume() {
+        var tabla = document.getElementById('tablacardresume');
+
+        // Eliminar todas las filas excepto la primera (encabezados)
+        while (tabla.rows.length > 1) {
+            tabla.deleteRow(1);
+        }
+    }function limpiarTablaefectivoresume() {
+        var tabla = document.getElementById('tablaefectivoresume');
+
+        // Eliminar todas las filas excepto la primera (encabezados)
+        while (tabla.rows.length > 1) {
+            tabla.deleteRow(1);
+        }
+    }
+
+
 
 
 
@@ -599,8 +624,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Elimina el último label y input creados
             var contentinputs = document.getElementById('contentinputs');
-            contentinputs.removeChild(contentinputs.lastChild); // Elimina el input
-            contentinputs.removeChild(contentinputs.lastChild); // Elimina el label
+            contentinputs.removeChild(contentinputs.lastChild);
+            contentinputs.removeChild(contentinputs.lastChild); 
+
         }
 
     });
@@ -775,14 +801,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btn_atras1 = document.getElementById('btn-atras1')
     btn_atras1.addEventListener('click', () => {
-        window.location.reload()
+
+        document.getElementById('section-pasajeros').style.display = 'none'
+        document.getElementById('section-iniciar').style.display = 'block'
+        document.getElementById('content-buscador').style.display = 'block'
+
+
     })
 
 
 
     const btn_atras2 = document.getElementById('btn-atras2')
     btn_atras2.addEventListener('click', () => {
-        window.location.reload()
+
+        document.getElementById('section-pasajeros').style.display = 'block';
+        document.getElementById('section-asientos').style.display = 'none';
+
+        // Elimina los datos almacenados en localStorage
+        localStorage.removeItem('pasajeros');
+        localStorage.removeItem('Total_compra');
+
+        // Restaura el contador de pasajeros
+        countpasajero = 1;
+
+        // Restaura el contador de asientos
+        countasientos = 0;
+
+        // Elimina las filas de la tabla de pasajeros
+        const tablaPasajeros = document.getElementById('tabla-pasajeros');
+        const tbody = tablaPasajeros.querySelector('tbody');
+        tbody.innerHTML = '';
+
+        // Agrega aquí cualquier otra operación de retroceso necesaria
+
+        // Oculta la sección de asientos
+        document.getElementById('section-asientos').style.display = 'none';
+
+    })
+
+
+    const btn_atras3 = document.getElementById('btn-atras3')
+    btn_atras3.addEventListener('click', () => {
+
+        document.getElementById('section-tipo-pago').style.display = 'none';
+        document.getElementById('section-asientos').style.display = 'block';
+        
+    })
+
+
+    const btn_atras4 = document.getElementById('btn-atras4')
+    btn_atras4.addEventListener('click', () => {
+        limpiarTablaefectivoresume()
+        document.getElementById('pago-efectivo').style.display = 'none';
+        document.getElementById('section-tipo-pago').style.display = 'block';
+
+    })
+
+    const btn_atras5 = document.getElementById('btn-atras5')
+    btn_atras5.addEventListener('click', () => {
+        limpiarTablacardresume()
+        document.getElementById('pago-tarjeta').style.display = 'none';
+        document.getElementById('section-tipo-pago').style.display = 'block';
+
     })
 
 
@@ -929,10 +1009,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     buttonElement.style.justifyContent = 'center';
                     buttonElement.style.padding = '5px';
 
-                    var h4Element = document.createElement('h4');
-                    h4Element.textContent = `${e.name == "00" || e.name == "113" ? "WC" : e.name}`;
+                    var h4Element = document.createElement('h6');
+                    var content = (e.floor === "1") ? e.name : `${e.name}/${e.floor}`;
+                    h4Element.textContent = (e.name === "00" || e.name === "113") ? "WC" : content;
 
                     var imgElement = document.createElement('img');
+
                     imgElement.src = `${e.name == "00" || e.name == "113" ? 'Assets/toilet.png' : 'Assets/asiento.png'}` ;
                     imgElement.style.width = '45px';
                     imgElement.style.height = '45px';
@@ -1670,6 +1752,7 @@ function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, depar
             }
             else {
                 document.getElementById("total_inapam").innerHTML = cant_inapam
+                document.getElementById('content-count-inapam').style.display = "block"
             }
             countinapam = cant_inapam
         })
@@ -1711,6 +1794,8 @@ function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, depar
 
                         }
                         else {
+                            document.getElementById('content-count-estudiantes').style.display = "block"
+
                             document.getElementById("BoletosE").innerHTML = cant_students
 
                         }
