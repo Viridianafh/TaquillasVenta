@@ -45,13 +45,13 @@
         <h1>Venta de Boletos</h1>
 
         <div class="container mt-5 mb-2 gap-2" id="content-buttons" style="display: none">
-            <button class="btn btn-success" id="button_precorte">Precorte de Caja</button>
+            <button class="btn btn-success d-none" id="button_precorte">Precorte de Caja</button>
             <button class="btn btn-danger" id="button_cerrar_caja">Cerrar Caja</button>
         </div>
 
         <hr />
 
-        <div class="card">
+       
             <div class="container p-5 ">
                 <div class="container m-3">
                     <label for="origen">Origen: </label>
@@ -77,7 +77,8 @@
             </div>
         </div>
         <br>
-    </div>
+
+  
 </section>
 
     
@@ -106,7 +107,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                      
 
                     </tbody>
                 </table>
@@ -126,7 +126,7 @@
         <div class="container mt-5">
             
 
-            <div class="container d-flex justify-content-between">
+            <div class="container d-flex justify-content-between mb-5">
                 
                 <button class="btn btn-danger" id="btn-atras1"><ion-icon name="arrow-back-outline"></ion-icon>atras</button>
                  <button class="btn btn-success" id="btn-siguiente1">siguiente<ion-icon name="arrow-forward-outline"></ion-icon></button>
@@ -174,7 +174,7 @@
               
 
                 <div class="d-flex">
-                         <label>Adulto</label>
+                         <p>Adulto</p>
                       
                 </div>
 
@@ -191,7 +191,7 @@
              </div>
                 <div class="card m-2 p-3" id="content-count-nino">
 
-                <label>Niño</label>
+                <p>Niño</p>
                   <div class="d-flex gap-2 ">
                         <button id="btn_sumar_niño" class="btn btn-primary"style="width: 50px;"> <ion-icon name="add-outline"></ion-icon> </button>
                         <button id="btn_restar_niño" class="btn btn-danger" style="width: 50px;"> <ion-icon name="remove-outline"></ion-icon></button>
@@ -204,7 +204,7 @@
              </div>
                 <div class="card m-2 p-3" id="content-count-inapam">
 
-                <label>Inapam</label>
+                <p>Inapam</p>
                   <div class="d-flex gap-2 ">
                         <button id="btn_sumar_inapam" class="btn btn-primary"style="width: 50px;"> <ion-icon name="add-outline"></ion-icon> </button>
                         <button id="btn_restar_inapam" class="btn btn-danger" style="width: 50px;"> <ion-icon name="remove-outline"></ion-icon></button>
@@ -219,7 +219,7 @@
 
                 <div class="card m-2 p-3" id="content-count-estudiantes">
 
-                <label>Estudiante</label>
+                <p>Estudiante</p>
                   <div class="d-flex gap-2 ">
                         <button id="btn_sumar_estudiante" class="btn btn-primary"style="width: 50px;"> <ion-icon name="add-outline"></ion-icon> </button>
                         <button id="btn_restar_estudiante" class="btn btn-danger" style="width: 50px;"> <ion-icon name="remove-outline"></ion-icon></button>
@@ -279,6 +279,7 @@
         </div>
 
         <div class="container d-flex gap-2 m-5">
+           
             <ion-icon name="square-outline" style="color: #28a745; background-color: #28a745;"></ion-icon>
             Seleccion
             <ion-icon name="square-outline" style="color: #0d6efd; background-color: #0d6efd;"></ion-icon>
@@ -288,8 +289,28 @@
         </div>
 
 
-        <div class="parent" id="content_seat">
+      
+        <div class="container  align-items-center justify-content-between" style="width: 80%; display: none;" id="content-floor-indicator">
 
+    <div class="d-flex" >
+        <h4>Piso1</h4>
+    </div>
+    
+    <div class="d-flex" style="margin-right: 520px">
+        <h4>Piso2</h4>
+    </div>
+    
+</div>
+
+
+        <div id="contentseatfloor2" style="display: none;">
+
+        </div>
+
+
+        <div class="parent" id="content_seat" >
+
+          
 
  
         </div>

@@ -28,6 +28,7 @@ fetch(`http://apitaquillassag.dyndns.org/Home/verprecorte?cashcheckpoint=${cashc
         document.getElementById('dates').innerHTML = fechaYHoraEnEspanol;
 
         data.map(e => {
+
             document.getElementById('reporte-total-efectivo').innerHTML = e.CantidadEfectivo;
             document.getElementById('reporte-total-tc').innerHTML = e.CantidadTarjeta;
             document.getElementById('reporte-total-me').innerHTML = e.CantidadME;
@@ -38,21 +39,46 @@ fetch(`http://apitaquillassag.dyndns.org/Home/verprecorte?cashcheckpoint=${cashc
             document.getElementById('reporte-total-seretiro').innerHTML = e.SeRetiro;
             document.getElementById('queda-encaja').innerHTML = e.QuedaEnCaja;
             document.getElementById('reporte-total').innerHTML = e.SeRetiro;
+
         });
 
         // Configurar las opciones para generar el PDF
-        const opcionesPDF = {
-            margin: 10,
-            filename: `precortedecaja.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
 
-        // Generar el PDF después de cargar todos los datos
-        const contenidoDiv = document.getElementById('informe');
-        html2pdf(contenidoDiv, opcionesPDF);
+        setTimeout(() => {
+            const opcionesPDF = {
+                margin: 10,
+                filename: `precortedecaja.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Generar el PDF después de cargar todos los datos
+            const contenidoDiv = document.getElementById('informe');
+            html2pdf(contenidoDiv, opcionesPDF);
+
+
+        }, 3000)
+   
     })
     .catch(error => {
         alert("Hubo un error");
     });
+
+
+
+
+
+
+    //todo lo que carga del DOM
+document.addEventListener('DOMContentLoaded', () => {
+
+
+    const btnregresar = document.getElementById('button-regresar')
+        .addEventListener('click', () => {
+
+            window.location.href = "dash.aspx"
+
+        })
+
+})

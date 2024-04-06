@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             data.forEach(e => {
-
+               
                 var tr = document.createElement('tr')
                 tr.innerHTML =
                     `
@@ -47,15 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
            
 
         })
-
-
-
-
-
-   
-
-
-
 
 
 })
@@ -130,6 +121,29 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         form.getTextField('product').enableReadOnly();
 
 
+        const watermarkImageBytes = await fetch('/Assets/logoSag.png').then(res => res.arrayBuffer());
+        const watermarkImage = await pdfDoc.embedPng(watermarkImageBytes);
+        const pages = pdfDoc.getPages();
+        for (const page of pages) {
+            const { width, height } = page.getSize();
+           
+            const watermarkWidth = watermarkImage.width / 6; // Reducir el tamaño a la mitad
+            const watermarkHeight = watermarkImage.height / 6; // Reducir el tamaño a la mitad
+            // Calcular las coordenadas centradas para la posición de la imagen de marca de agua
+            const x = (width - watermarkWidth) / 2;
+            const y = (height - watermarkHeight) / 2;
+            // Dibujar la imagen de marca de agua en la página del PDF
+            page.drawImage(watermarkImage, {
+                x: x,
+                y: y,   
+                width: watermarkWidth,
+                height: watermarkHeight,
+                opacity: 0.2,
+            });
+        }
+
+
+
         // Generar un nuevo PDF con los datos ingresados
         const pdfBytes = await pdfDoc.save();
 
@@ -146,9 +160,9 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         document.body.removeChild(link);
 
         // Imprimir el documento después de descargar
-        setTimeout(() => {
-            window.open(urlObject, '_blank');
-        }, 1000);
+        //setTimeout(() => {
+        //    window.open(urlObject, '_blank');
+        //}, 1000);
 
     } catch (error) {
         console.error('Error:', error);

@@ -13,18 +13,32 @@ var countasientos = 0;
 var countpasajero = 1;
 var countpasajerofinal = 1
 precio_base = 0;
+var ventasls = localStorage.getItem('venta_reciente')
 
 localStorage.setItem("array_checkpoints", [])
 
 
 
 
+
 document.addEventListener('DOMContentLoaded', () => {
+
+
 
     localStorage.setItem('datos_viaje', "")
     localStorage.setItem('datosInternetsale', "")
     localStorage.setItem('pasajeros', "")
 
+    var fechaActual = new Date();
+
+    // Formatear la fecha para que sea compatible con el atributo min de input type="date"  
+    var fechaFormateada = fechaActual.toISOString().split('T')[0];
+
+    // Asignar la fecha formateada como el valor mínimo
+    document.getElementById('fecha').setAttribute('min', fechaFormateada);
+
+    // Establecer el valor del campo de fecha como la fecha actual
+    document.getElementById('fecha').value = fechaFormateada;
 
 
 
@@ -138,21 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
 
 
-                        
-                        // Obtener el valor de 'cashcheckpoint' desde localStorage
-                        // Obtener el valor de 'cashcheckpoint' desde localStorage
+               
                         localStorage.setItem('cashcheckpoint', data);
 
                         var cashcheckpoint = localStorage.getItem('cashcheckpoint');
 
-                        // Verificar si 'cashcheckpoint' tiene un valor antes de proceder
-                 
-                    
-
-                        // Obtener el array almacenado en localStorage ('array_ventas')
                         var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
 
-                        // Crear un nuevo objeto en el formato deseado
                         let Saleshift = salesnumberArray.map(salesnumber => {
                             return {
                                 salesnumber: salesnumber
@@ -160,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
 
                         console.log(Saleshift);
-
 
 
 
@@ -187,16 +192,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                     });
 
                                    
-
-                                   
                                         location.href= "informePrecorte.aspx"
 
+                                    if (ventasls < 3000) {
+                                       
+                                    } else {
 
+                                        localStorage.setItem('venta_reciente', sobrante.toString())
 
-                                    localStorage.setItem('venta_reciente', sobrante.toString())
+                                    }
+
 
                                 } else {
-
 
 
                                     Swal.fire({
@@ -216,10 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 });
 
                             })
-                       
                     }
-
-
                 }).catch(error => {
 
                     Swal.fire({
@@ -229,12 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                 })
-
         }
-
-      
-
-
     })
 
 
@@ -258,6 +257,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    const btnprecorte = document.getElementById('button_precorte')
+    btnprecorte.addEventListener('click', () => {
+
+
+
+        var dataventareciente = localStorage.getItem('venta_reciente');
+
+        var totaprecorte = document.getElementById('totalprecorte');
+        totaprecorte.textContent = dataventareciente;
+
+
+        document.getElementById('section-precorte').style.display = 'block'
+        document.getElementById('section-iniciar').style.display = 'none'
+
+
+
+    })
 
 
 
@@ -269,118 +285,30 @@ document.addEventListener('DOMContentLoaded', () => {
         var montoprevio = localStorage.getItem('venta_reciente')
         var monto = parseFloat(montoprevio)
 
-        var CashCheckpoint = {
 
-            sale_shift_id: saleshiftid,
-            previous_amount: monto,
-            new_amount: 0.0
-        };
+        if (monto < 3000 && monto > 0) {
 
+            CerrarCajamenor()
 
+        } else if (monto == 0)
 
-        fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
+        {
+            CerrarCajavacia()
+        }
 
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(CashCheckpoint)
-
-        })
-            .then(response => response.text())
-            .then(data => {
-
-                if (data.length <= 6) {
+            else {
 
 
-                    alert("hubo un error")
-                    
+            var CashCheckpoint = {
 
-                } else {
-
-
-
-                
-                    localStorage.setItem('cashcheckpoint', data);
-
-                    var cashcheckpoint = localStorage.getItem('cashcheckpoint');
-
-                    var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
-
-                    // Crear un nuevo objeto en el formato deseado
-                    let Saleshift = salesnumberArray.map(salesnumber => {
-                        return {
-                            salesnumber: salesnumber
-                        };
-                    });
+                sale_shift_id: saleshiftid,
+                previous_amount: monto,
+                new_amount: 0.0
+            };
+        }
 
 
-
-                    fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
-
-                        method: 'PATCH',
-                        headers: {
-                            'Accept': 'text/plain',
-                            'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
-                        },
-                        body: JSON.stringify(Saleshift)
-
-                    })
-                        .then(response => response.text())
-                        .then(data => {
-
-                            if (data == "Operación exitosa") {
-
-                                location.href = "informeCierre.aspx"
-
-                            }
-                         
-
-                        }).catch(error => {
-
-                            Swal.fire({
-                                title: "Error!",
-                                text: `Hubo un error: mensaje ${error}`,
-                                icon: "error"
-                            });
-
-                        })
-
-                }
-
-
-            }).catch(error => {
-
-                Swal.fire({
-                    title: "Error!",
-                    text: `Hubo un error: mensaje ${error}`,
-                    icon: "error"
-                });
-
-            })
-
-   
-
-        Swal.fire({
-            title: 'Caja cerrada',
-            text: 'ya puedes cerrar este panel',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        })
-
-
-       
-
-
-        
     })
-
-
-
-
-
-
-
 
 
 
@@ -391,6 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn_trip.addEventListener('click', () => {
 
         btn_trip.textContent = ""
+        btn_trip.disabled = true;
         btn_trip.textContent = "Buscando..."
         btn_trip.classList.remove('btn-primary')
         btn_trip.classList.add('btn-outline-primary')
@@ -435,6 +364,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(data)
 
                 if (data.length == 0) {
+                    btn_trip.classList.add('btn-primary')
+
+                    btn_trip.disabled = false;
+                    btn_trip.textContent = "Buscar viaje"
 
                     Swal.fire({
                         title: 'Error!',
@@ -483,6 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                             tr.innerHTML = `
+
                            <td>${corrida}</td>
                            <td>${tipo}</td>
                            <td>${origen}</td>
@@ -511,6 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const liquidname = document.getElementById('table');
 
+                      
 
                         document.getElementById('section-boletos').style.display = 'block';
                         btn_trip.textContent = "Busar viaje"
@@ -520,6 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         setTimeout(() => {
                             btn_trip.classList.remove('btn-success')
                             btn_trip.classList.add('btn-primary')
+                               btn_trip.disabled = false;
 
 
                         }, "2000");
@@ -542,6 +478,13 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
 
+
+    const sendata= () => {
+
+        var maintest = document.getElementById();
+
+
+    }
 
 
     function limpiarTabla() {
@@ -802,6 +745,94 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_atras1 = document.getElementById('btn-atras1')
     btn_atras1.addEventListener('click', () => {
 
+         count_pasajeros = 0
+         countadulto = 0
+         precio_adulto = 0
+         countnino = 0
+         precionino = 0
+         countinapam = 0
+         precioinapam = 0
+         countstudent = 0
+         preciostudent = 0
+         total = 0
+         totalInapam = 4
+         countasientos = 0;
+         countpasajero = 1;
+         countpasajerofinal = 1
+        precio_base = 0;
+
+       
+         countasientos = 0;
+         countpasajero = 1;
+         countpasajerofinal = 1
+
+
+
+        var divContenedoradulto = document.getElementById("content-count-adulto");
+
+        // Encontrar todos los inputs  y labelsdentro del div contenedor
+        var inputsadulto = divContenedoradulto.querySelectorAll('input');
+        var labelsadulto = divContenedoradulto.querySelectorAll('label');
+
+
+        // Eliminar cada input encontrado
+        inputsadulto.forEach(function (input) {
+            input.remove();
+        });
+
+        labelsadulto.forEach(function (label) {
+            label.remove();
+        })
+
+        var divContenedorninio = document.getElementById("content-count-nino");
+
+        // Encontrar todos los inputs  y labelsdentro del div contenedor
+        var inputsninio = divContenedorninio.querySelectorAll('input');
+        var labelsninio = divContenedorninio.querySelectorAll('label');
+
+
+        // Eliminar cada input encontrado
+        inputsninio.forEach(function (input) {
+            input.remove();
+        });
+
+        labelsninio.forEach(function (label) {
+            label.remove();
+        })
+
+
+        var divContenedorinapam = document.getElementById("content-count-inapam");
+
+        // Encontrar todos los inputs  y labelsdentro del div contenedor
+        var inputsinapam = divContenedorinapam.querySelectorAll('input');
+        var labelsinapam = divContenedorinapam.querySelectorAll('label');
+
+
+        // Eliminar cada input encontrado
+        inputsinapam.forEach(function (input) {
+            input.remove();
+        });
+
+        labelsinapam.forEach(function (label) {
+            label.remove();
+        })
+
+        var divContenedorstudent = document.getElementById("content-count-estudiantes");
+
+        // Encontrar todos los inputs  y labelsdentro del div contenedor
+        var inputsstudent = divContenedorstudent.querySelectorAll('input');
+        var labelsstudent = divContenedorstudent.querySelectorAll('label');
+
+
+        // Eliminar cada input encontrado
+        inputsstudent.forEach(function (input) {
+            input.remove();
+        });
+
+        labelsstudent.forEach(function (label) {
+            label.remove();
+        })
+
         document.getElementById('section-pasajeros').style.display = 'none'
         document.getElementById('section-iniciar').style.display = 'block'
         document.getElementById('content-buscador').style.display = 'block'
@@ -814,6 +845,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_atras2 = document.getElementById('btn-atras2')
     btn_atras2.addEventListener('click', () => {
 
+        countasientos = 0
         document.getElementById('section-pasajeros').style.display = 'block';
         document.getElementById('section-asientos').style.display = 'none';
 
@@ -872,230 +904,252 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_siguiente1 = document.getElementById('btn-siguiente1')
     btn_siguiente1.addEventListener('click', () => {
 
-        if (countadulto != 0 || countinapam != 0 || countstudent != 0 || countnino != 0) {
 
-            var inputs = document.querySelectorAll('input');
-            var valoresObj = {};
-            inputs.forEach(function (input) {
-                var id = input.id;
-                var valor = input.value;
-                valoresObj[id] = valor;
-            });
+        var grupos = document.querySelectorAll('div[id^="content-count-"]');
+        var alMenosUnDivConInputRellenado = false;
 
-            console.log(valoresObj);
+        grupos.forEach(function (grupo) {
+            var inputs = grupo.querySelectorAll('input');
+            if (inputs.length > 0) {
+                inputs.forEach(function (input) {
+                    if (input.value.trim() !== '') {
+                        alMenosUnDivConInputRellenado = true;
+                    }
+                });
+            }
+        });
 
-            var pasajeros = JSON.stringify(valoresObj)
-            localStorage.setItem('pasajeros', pasajeros)
-
-            document.getElementById('section-pasajeros').style.display = 'none'
-
-
-
-            var datosViajeString = localStorage.getItem("datos_viaje");
-            var datosViajeObj = JSON.parse(datosViajeString);
-            var tipo = datosViajeObj.tipo;
-            var id = datosViajeObj.id
+        if (alMenosUnDivConInputRellenado) {
 
 
+            if (countadulto != 0 || countinapam != 0 || countstudent != 0 || countnino != 0) {
 
-
-            fetch(`http://apitaquillassag.dyndns.org/Home/Asientos?Servicelvl=${tipo}`)
-                .then((response) => response.json())
-                .then((seatData) => {
-
-                    // Hacer otra solicitud fetch para obtener datos de ocupación
-
-                    fetch(`http://apitaquillassag.dyndns.org/Home/listarAsientosOcupados?TripId=${id}`)
-                        .then((response) => response.json())
-                        .then((occupiedSeats) => {
-                            // Llamar a la función para construir el mapa de asientos
-                            document.getElementById("section-asientos").style.display = "block"
-                            creartabalapasejro();
-                            buildSeatMap(seatData, occupiedSeats);
-
-                        })
-                        .catch((error) => {
-
-                            Swal.fire({
-                                title: "Error!",
-                                text: `error al listar asientos: ${error}`,
-                                icon: "error"
-                            });
-                        });
-                })
-                .catch((error) => {
-                    Swal.fire({
-                        title: "Error!",
-                        text: `${error}`,
-                        icon: "error"
-                    });
+                var inputs = document.querySelectorAll('input');
+                var valoresObj = {};
+                inputs.forEach(function (input) {
+                    var id = input.id;
+                    var valor = input.value;
+                    valoresObj[id] = valor;
                 });
 
+                console.log(valoresObj);
+
+                var pasajeros = JSON.stringify(valoresObj)
+                localStorage.setItem('pasajeros', pasajeros)
+
+                document.getElementById('section-pasajeros').style.display = 'none'
+
+                var datosViajeString = localStorage.getItem("datos_viaje");
+                var datosViajeObj = JSON.parse(datosViajeString);
+                var tipo = datosViajeObj.tipo;
+                var id = datosViajeObj.id
+
+                fetch(`http://apitaquillassag.dyndns.org/Home/Asientos?Servicelvl=${tipo}`)
+                    .then((response) => response.json())
+                    .then((seatData) => {
+
+                        // Hacer otra solicitud fetch para obtener datos de ocupación
+
+                        fetch(`http://apitaquillassag.dyndns.org/Home/listarAsientosOcupados?TripId=${id}`)
+                            .then((response) => response.json())
+                            .then((occupiedSeats) => {
+                                // Llamar a la función para construir el mapa de asientos
+                                document.getElementById("section-asientos").style.display = "block"
+                                creartabalapasejro();
 
 
-            function creartabalapasejro() {
+                                buildSeatMap(seatData, occupiedSeats);
 
-                const pasajerosJSON = localStorage.getItem('pasajeros');
+                            })
+                            .catch((error) => {
 
-                if (pasajerosJSON) {
-                    const pasajeros = JSON.parse(pasajerosJSON);
-                    const tablaPasajeros = document.getElementById('tabla-pasajeros');
-                    const tbody = tablaPasajeros.querySelector('tbody');
-                    var datosViajeString = localStorage.getItem("datos_viaje");
-                    var datosViajeObj = JSON.parse(datosViajeString);
-                    precio_base = datosViajeObj.precio;
-                    precio_descuento = precio_base * 0.70;
-                    // Iterar sobre las claves y valores del objeto
-                    var totalPrecio = 0;
-
-                    // Iterar sobre las claves y valores del objeto
-
-                    for (const key in pasajeros) {
-                        if (pasajeros.hasOwnProperty(key) && key !== "fecha" && key !== "" && pasajeros[key] !== "") {
-                            const nombre = pasajeros[key];
-                            const tipo = key.split('_')[1] || "otro"; // Obtener el tipo desde el nombre de la clave
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: `error al listar asientos: ${error}`,
+                                    icon: "error"
+                                });
+                            });
+                    })
+                    .catch((error) => {
+                        Swal.fire({
+                            title: "Error!",
+                            text: `${error}`,
+                            icon: "error"
+                        });
+                    });
 
 
-                            // Calcular el precio para el pasajero
-                            const precioPasajero = tipo.includes("adulto") ? precio_base : precio_descuento.toFixed(2);
+                function creartabalapasejro() {
 
-                            // Acumular el precio al total
-                            totalPrecio += parseFloat(precioPasajero);
+                    const pasajerosJSON = localStorage.getItem('pasajeros');
 
-                            // Crear una nueva fila en la tabla
-                            const fila = document.createElement('tr');
-                            fila.innerHTML =
-                                `
+                    if (pasajerosJSON) {
+                        const pasajeros = JSON.parse(pasajerosJSON);
+                        const tablaPasajeros = document.getElementById('tabla-pasajeros');
+                        const tbody = tablaPasajeros.querySelector('tbody');
+                        var datosViajeString = localStorage.getItem("datos_viaje");
+                        var datosViajeObj = JSON.parse(datosViajeString);
+                        precio_base = datosViajeObj.precio;
+                        precio_descuento = precio_base * 0.70;
+                        // Iterar sobre las claves y valores del objeto
+                        var totalPrecio = 0;
+
+                        // Iterar sobre las claves y valores del objeto
+
+                        for (const key in pasajeros) {
+                            if (pasajeros.hasOwnProperty(key) && key !== "fecha" && key !== "" && pasajeros[key] !== "") {
+                                const nombre = pasajeros[key];
+                                const tipo = key.split('_')[1] || "otro"; // Obtener el tipo desde el nombre de la clave
+
+
+                                // Calcular el precio para el pasajero
+                                const precioPasajero = tipo.includes("adulto") ? precio_base : precio_descuento.toFixed(2);
+
+                                // Acumular el precio al total
+                                totalPrecio += parseFloat(precioPasajero);
+
+                                // Crear una nueva fila en la tabla
+                                const fila = document.createElement('tr');
+                                fila.innerHTML =
+                                    `
                                 <td>${nombre}</td>
                                 <td>${tipo}</td>
                                 <td id="asientoparapasajero${countpasajero}"></td>
                                 <td id="precioparapasajero">${precioPasajero}</td>
-
+                                
                                 `;
-                            document.getElementById('span_total_orasi').innerHTML = totalPrecio.toFixed(2)
+                                document.getElementById('span_total_orasi').innerHTML = totalPrecio.toFixed(2)
+
+                                
 
 
-                            localStorage.setItem('Total_compra', totalPrecio.toFixed(2))
-                            // Agregar la fila al cuerpo de la tabla
-                            tbody.appendChild(fila);
-                            countpasajero++
+                                localStorage.setItem('Total_compra', totalPrecio.toFixed(2))
+                                // Agregar la fila al cuerpo de la tabla
+                                tbody.appendChild(fila);
+                                countpasajero++
+                            }
                         }
                     }
                 }
-            }
 
-            function buildSeatMap(seatData, occupiedSeats) {
-                var parent = document.getElementById('content_seat');
+                function buildSeatMap(seatData, occupiedSeats) {
 
-                parent.innerHTML = '';
+                    var datosViajeString = localStorage.getItem("datos_viaje");
+                    var datosViajeObj = JSON.parse(datosViajeString);
+                    var tipo = datosViajeObj.tipo;
+                    if (tipo == "Plus") {
 
-                var seatcounter = 1;
-
-                seatData.forEach(e => {
-
-                    var seatElement = document.createElement('div');
-                    seatElement.className = `div${e.name} container`;
-                    seatElement.id = 'content';
-
-
-                    var buttonElement = document.createElement('button');
-
-                    buttonElement.id = `Asientos`;
-                    buttonElement.value = `${e.name == "00" || e.name == "113" ? "WC" : e.name}`
-                    buttonElement.style.width = '70px';
-                    buttonElement.style.height = '70px';
-                    buttonElement.style.display = 'flex';
-                    buttonElement.style.alignItems = 'flex-start';
-                    buttonElement.style.justifyContent = 'center';
-                    buttonElement.style.padding = '5px';
-
-                    var h4Element = document.createElement('h6');
-                    var content = (e.floor === "1") ? e.name : `${e.name}/${e.floor}`;
-                    h4Element.textContent = (e.name === "00" || e.name === "113") ? "WC" : content;
-
-                    var imgElement = document.createElement('img');
-
-                    imgElement.src = `${e.name == "00" || e.name == "113" ? 'Assets/toilet.png' : 'Assets/asiento.png'}` ;
-                    imgElement.style.width = '45px';
-                    imgElement.style.height = '45px';
-                    imgElement.style.objectFit = 'cover';
-                    imgElement.style.alignSelf = 'end';
-                    imgElement.style.transform = "scaleX(-1)";
-
-                    buttonElement.appendChild(h4Element);
-                    buttonElement.appendChild(imgElement);
-
-                    seatElement.appendChild(buttonElement);
-
-                    parent.appendChild(seatElement);
-
-
-                    if (occupiedSeats.some(seat => seat.asiento == parseInt(e.name))) {
-
-                        buttonElement.className = 'btn btn-danger';
-
+                        document.getElementById('content-floor-indicator').style.display = "flex"
                     } else {
+                        document.getElementById('content-floor-indicator').style.display = "none"
 
-                        buttonElement.className = 'btn btn-primary';
-
-                        buttonElement.addEventListener('click', () => {
-
-                            if (buttonElement.value == "WC") {
-                                alert("No puedes seleccionar este elemento")
-
-
-                            } else {
-                                if (buttonElement.className === 'btn btn-primary') {
-
-                                    if (countasientos < count_pasajeros) {
-
-
-                                        buttonElement.className = 'btn btn-success';
-
-                                        countasientos = countasientos + 1;
-                                        countpasajero = countpasajero - 1;
-
-                                        agregaratabla(buttonElement.value)
-
-                                    }
-                                    else {
-
-                                        Swal.fire({
-                                            title: "Mensaje!",
-                                            text: `No puedes escojer mas boletos`,
-                                            icon: "info"
-                                        });
-
-                                    }
-
-                                }
-                                else {
-
-                                    buttonElement.className = 'btn btn-primary'
-                                    countasientos = countasientos - 1;
-                                    countpasajero = countpasajero + 1;
-                                    quitartabla(buttonElement.value)
-                                }
-                            }
-
-                            
-                        })
 
                     }
 
-                    seatcounter++;
+
+                    var parent = document.getElementById('content_seat');
+
+                    parent.innerHTML = '';
+
+                    var seatcounter = 1;
+
+
+                    seatData.forEach(e => {
+
+
+
+                        var seatElement = document.createElement('div');
+                        seatElement.className = `div${e.name} container`;
+                        seatElement.id = 'content';
+
+                        var buttonElement = document.createElement('button');
+                        buttonElement.id = `Asientos`;
+                        buttonElement.value = `${e.name == "00" || e.name == "113" ? "WC" : e.name}`
+                        buttonElement.style.width = '80px';
+                        buttonElement.style.height = '80px';
+                        buttonElement.style.display = e.name === "01" || e.name === "05" || e.name === "00" || e.name === "113" ? 'none' : 'flex';
+                        buttonElement.style.alignItems = 'flex-start';
+                        buttonElement.style.justifyContent = 'center';
+                        buttonElement.style.padding = '5px';
+
+                        var h4Element = document.createElement('h6');
+                        var content = (e.floor === "1") ? e.name : `${e.name}/${e.floor}`;
+                        h4Element.textContent = (e.name === "00" || e.name === "113") ? "WC" : content;
+
+                        var imgElement = document.createElement('img');
+                        imgElement.src = `${e.name == "00" || e.name == "113" ? 'Assets/toilet.png' : 'Assets/asiento.png'}`;
+                        imgElement.style.width = '45px';
+                        imgElement.style.height = '45px';
+                        imgElement.style.objectFit = 'cover';
+                        imgElement.style.alignSelf = 'end';
+                        imgElement.style.transform = "scaleX(-1)";
+
+                        buttonElement.appendChild(h4Element);
+                        buttonElement.appendChild(imgElement);
+
+                        seatElement.appendChild(buttonElement);
+
+                        parent.appendChild(seatElement);
+
+                        // Verificar si el asiento está entre el 1 y el 8
+                        if (parseInt(e.name) >= 5 && parseInt(e.name) <= 8) {
+                            seatElement.style.marginRight = tipo == "Plus" ? '50px' : '0px'; // Agregar margen inferior para separarlos visualmente
+                        }
+
+                        if (occupiedSeats.some(seat => seat.asiento == parseInt(e.name))) {
+                            buttonElement.className = 'btn btn-danger';
+                        } else {
+                            buttonElement.className = 'btn btn-primary';
+
+                            buttonElement.addEventListener('click', () => {
+                                if (buttonElement.value == "WC") {
+                                    alert("No puedes seleccionar este elemento");
+                                } else {
+                                    if (buttonElement.className === 'btn btn-primary') {
+                                        if (countasientos < count_pasajeros) {
+                                            buttonElement.className = 'btn btn-success';
+                                            countasientos = countasientos + 1;
+                                            //countpasajero = countpasajero - 1;
+                                            agregaratabla(buttonElement.value);
+                                        } else {
+                                            Swal.fire({
+                                                title: "Mensaje!",
+                                                text: `No puedes escojer mas boletos`,
+                                                icon: "info"
+                                            });
+                                        }
+                                    } else {
+                                        buttonElement.className = 'btn btn-primary'
+                                        countasientos = countasientos - 1;
+                                       // countpasajero = countpasajero + 1;
+                                        quitartabla(buttonElement.value);
+                                    }
+                                }
+                            });
+                        }
+
+                        seatcounter++;
+                    });
+                }
+            } else {
+
+                Swal.fire({
+                    title: "mensaje!",
+                    text: "Debes Seleccionar Una opcion",
+                    icon: "info"
                 });
             }
-
 
         } else {
 
             Swal.fire({
                 title: "mensaje!",
-                text: "Debes Seleccionar Una opcion",
+                text: "Selecciona un tipo de pasajero y agrega sus datos",
                 icon: "info"
             });
         }
+
+       
 
 
     })
@@ -1327,7 +1381,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "totalAmount": parseFloat(totalapagar),
                 "changeAmount": tipo != "ADULT" ? (parseFloat(totalapagar) - parseFloat(precio_base)) : 0.00,
 
-                "PaymentMethod": "card",
+                "PaymentType": "card",
                 "payedAmount": parseFloat(precio_base),
                 "salesTerminalId": terminalid,
                 "salesmanId": ticketuserid,
@@ -1554,7 +1608,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 "totalAmount": parseFloat(totalapagar),
                 "changeAmount": 0.00,
-                "PaymentMethod": "cash",
+                "PaymentType": "cash",
                 "payedAmount": parseFloat(precio_base),
                 "salesTerminalId": terminalid,
                 "salesmanId": ticketuserid,
@@ -1692,13 +1746,11 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("spantotalcard").innerHTML = totalapagar
         }
 
-
-
-
     })
 
 
 })
+
 
 
 
@@ -1824,33 +1876,49 @@ function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, depar
 
 
 
-function agregaratabla(elemt) {
 
-    var dato = document.getElementById(`asientoparapasajero${countpasajerofinal}`);
-    dato.textContent = elemt;
-    countpasajerofinal++
+
+
+function agregaratabla(elemt) {
+    // Obtener el primer elemento vacío
+    for (var i = 1; ; i++) {
+        var dato = document.getElementById(`asientoparapasajero${i}`);
+        if (!dato) {
+            // Si no se encuentra ningún elemento con ese id, se detiene la búsqueda
+            break;
+        }
+        if (!dato.textContent.trim()) {
+            // Si el contenido está vacío, se establece el contenido y se actualiza el contador
+            dato.textContent = elemt;
+            return; // Salir de la función después de agregar el contenido
+        }
+    }
+    // Si no se encontraron elementos vacíos, se crea uno nuevo
+    var newElement = document.createElement("div");
+    newElement.id = `asientoparapasajero${i}`;
+    newElement.textContent = elemt;
+    document.body.appendChild(newElement); 
+    
 }
 
-
-
 function quitartabla(element) {
-    countpasajerofinal = countpasajerofinal - 1
+    // Decrementar countpasajerofinal
+    countpasajerofinal--;
 
     for (var i = 1; ; i++) {
-
         var elemento = document.getElementById('asientoparapasajero' + i);
         if (!elemento) {
             break;
         }
 
-        if (elemento.textContent === element) {
+        if (elemento.textContent.trim() === element.trim()) {
             elemento.textContent = '';
+            return; // Salir de la función después de eliminar el contenido
         }
     }
-
-
-
 }
+
+
 
 
 function procesardatosViaje() {
@@ -1963,8 +2031,6 @@ function iniciarturno() {
                         console.error(error);
                        
                     });
-
-
                
             })
 
@@ -2060,6 +2126,7 @@ function iniciarturno() {
 
 
     function searchDestiny() {
+
         var selectOrigenUs = document.getElementById('origen');
         var selectDestino = document.getElementById('destino');
 
@@ -2071,6 +2138,7 @@ function iniciarturno() {
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify(data)
         })
             .then(response => response.json())
@@ -2180,3 +2248,157 @@ function actualizarCurrentSale() {
 
 
 }
+
+
+
+function CerrarCajamenor() {
+
+   
+    var saleshift = localStorage.getItem('saleshift_id')
+    var venta = localStorage.getItem('venta_reciente')
+    var venta_reciente = parseFloat(venta)
+
+
+    const CashCheckpoint = {
+
+        sale_shift_id: saleshift,
+        previous_amount: venta_reciente,
+        new_amount: 0
+
+    }
+
+
+    fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
+
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(CashCheckpoint)
+
+    })
+        .then(response => response.text())
+        .then(data => {
+
+            if (data.length <= 6) {
+                alert("ocurrio un error")
+            } else {
+
+                localStorage.setItem('cashcheckpoint', data);
+                var cashcheckpoint = localStorage.getItem('cashcheckpoint');
+                var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
+
+                let Saleshift = salesnumberArray.map(salesnumber => {
+                    return {
+                        salesnumber: salesnumber
+                    };
+                });
+
+                fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
+
+                    method: 'PATCH',
+                    headers: {
+                        'Accept': 'text/plain',
+                        'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
+                    },
+                    body: JSON.stringify(Saleshift)
+
+                })
+                    .then(response => response.text())
+                    .then(data => {
+
+
+
+                        if (data == "Operación exitosa") {
+
+                            Swal.fire({
+                                title: "OK",
+                                text: `Se ha cerrado la caja exitosamente`,
+                                icon: "success"
+                            });
+
+                            location.href = "informeCierre.aspx"
+
+                        } else {
+                            Swal.fire({
+                                title: "Error",
+                                text: `Hubo un error al cerrar la caja`,
+                                icon: "error"
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        alert("ocurrio un error: " + error)
+                    })
+
+
+            }
+
+        }).catch(error => {
+
+            alert("Ocurrio un error: " + error)
+        })
+        
+
+
+}
+
+
+
+function CerrarCajavacia() {
+
+    alert("caja en 0")
+    var saleshift = localStorage.getItem('saleshift_id')
+    var venta = localStorage.getItem('venta_reciente')
+    var venta_reciente = parseFloat(venta)
+
+
+    const CashCheckpoint = {
+
+        sale_shift_id: saleshift,
+        previous_amount: 0,
+        new_amount: 0
+
+    }
+
+
+
+    fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
+
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(CashCheckpoint)
+
+    })
+        .then(response => response.text())
+        .then(data => {
+
+            if (data.length <= 6) {
+                alert("ocurrio un error")
+            } else {
+
+                localStorage.setItem('cashcheckpoint', data);
+                var cashcheckpoint = localStorage.getItem('cashcheckpoint');
+
+                location.href = "informeCierre.aspx"
+
+
+            }
+
+            
+        }).catch(error => {
+
+            alert("Ocurrio un error: " + error)
+        })
+
+
+
+
+
+
+}
+
+
+            

@@ -33,7 +33,10 @@
                         icon: "error"
                     });
 
-                } else {
+
+                    btn_buscar.textContent = "Buscar"
+
+                } else {    
 
                     // Supongamos que tienes una tabla con id "miTabla" en tu HTML
                     var tabla = document.getElementById("table").getElementsByTagName('tbody')[0];
@@ -165,7 +168,32 @@ async function Descargar(ticket) {
             form.getTextField('product').enableReadOnly();
 
 
+
+      
+
+
         });
+
+        const watermarkImageBytes = await fetch('/Assets/logoSag.png').then(res => res.arrayBuffer());
+        const watermarkImage = await pdfDoc.embedPng(watermarkImageBytes);
+        const pages = pdfDoc.getPages();
+        for (const page of pages) {
+            const { width, height } = page.getSize();
+            // Definir el tamaño deseado para la imagen de marca de agua
+            const watermarkWidth = watermarkImage.width / 6; // Reducir el tamaño a la mitad
+            const watermarkHeight = watermarkImage.height / 6; // Reducir el tamaño a la mitad
+            // Calcular las coordenadas centradas para la posición de la imagen de marca de agua
+            const x = (width - watermarkWidth) / 2;
+            const y = (height - watermarkHeight) / 2;
+            // Dibujar la imagen de marca de agua en la página del PDF
+            page.drawImage(watermarkImage, {
+                x: x,
+                y: y,
+                width: watermarkWidth,
+                height: watermarkHeight,
+                opacity: 0.2,
+            });
+        }
 
         // Generar un nuevo PDF con los datos ingresados
         const pdfBytes = await pdfDoc.save();

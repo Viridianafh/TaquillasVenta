@@ -23,9 +23,9 @@
 
             <div class="container m-5">
 
-            <h5>(Busca un boleto por nombre, ticket o código de compra)</h5>
+            <h5>(Busca un boleto por su nombre completo, su ticket o código de compra)</h5>
         
-            <input type="text" id="textconcepto" class="form-control" />
+            <input type="text" id="textconcepto" class="form-control" style="width:80%;" />
             <br />
             <button class="btn btn-dark" id="btn-buscar">Buscar</button>
 

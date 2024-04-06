@@ -9,14 +9,20 @@ window.addEventListener('load', () => {
         .then(response => response.json())
         .then(data => {
 
-
+            console.log(data)
 
             var idterminal = data[0].id_terminal
             var terminal_name = data[0].terminal_nombre
+            var officename = data[0].nombreoficina
+            var idoficina = data[0].id_oficina
 
             localStorage.setItem('terminal_id', idterminal)
             localStorage.setItem('terminal_name', terminal_name)
+         
 
+
+
+         
 
                 window.location.replace('/dash.aspx')
 

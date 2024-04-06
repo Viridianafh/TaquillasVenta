@@ -18,7 +18,9 @@
       <h2>Guias de viaje <span id="usuario"></span></h2><br>
 
     
-    <section id="section-busqueda-guide">
+  
+
+    <section id="section-busqueda-guide" class="d-none">
 
          <h5>Buscar Origen</h5>
         <div class="d-flex gap-2 flex-direction-column">
@@ -62,11 +64,11 @@
 
         
 
-    </section>
 
 
 
-    <section id="section-guides-actions">
+
+    <section id="section-guides-actions" class="d-none">
 
         <div class="container" id="content-action1">
 

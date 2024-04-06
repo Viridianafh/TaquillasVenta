@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_end = document.getElementById('btn-end')
     btn_end.addEventListener('click', () => {
 
+        localStorage.setItem("Total_compra", 0)
+
 
         const shiftId = localStorage.getItem('saleshift_id')
         const url = `http://apitaquillassag.dyndns.org/Home/TerminarTurnoCaja?shift=${shiftId}`;
@@ -27,6 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
                 }
                 return response.json();
+
+         
+
                 window.location.href = "dash.aspx"
             })
             .then(data => {
@@ -39,13 +44,20 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
 
-        localStorage.setItem('venta_reciente', "")
-        localStorage.setItem('shift_number', "")
-        localStorage.setItem('folio', "")
-        localStorage.setItem('current_shift', "")
-        localStorage.setItem('Total_compra', "")
-        localStorage.setItem('num_ventas', 0)
+        //localStorage.setItem('venta_reciente', "")
+        //localStorage.setItem('shift_number', "")
+        //localStorage.setItem('folio', "")
+        //localStorage.setItem('current_shift', "")
+        //localStorage.setItem('Total_compra', "")
+        //localStorage.setItem('num_ventas', 0)
 
+        localStorage.removeItem("num_ventas");
+        //localStorage.removeItem("current_shift");
+        localStorage.removeItem("shift_number");
+        localStorage.removeItem("saleshift_id");
+        localStorage.removeItem("venta_reciente");
+        localStorage.removeItem("array_ventas")
+        localStorage.removeItem("cashcheckpoint")
 
 
         window.location.href= "dash.aspx"
@@ -70,7 +82,16 @@ fetch(`http://apitaquillassag.dyndns.org/Home/verprecorte?cashcheckpoint=${cashc
         var fechaActual = new Date();
 
         // Configurar las opciones para formatear la fecha y hora
-        var opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
+        var opciones = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false
+        };
 
         // Obtener la fecha y hora formateada en español
         var fechaYHoraEnEspanol = fechaActual.toLocaleDateString('es-ES', opciones);
@@ -133,18 +154,20 @@ fetch(`http://apitaquillassag.dyndns.org/Home/vercashcheckpoint?saleshiftID=${sa
             table.appendChild(tr);
         });
 
-        // Generar el PDF después de cargar todos los datos
-        const opciones = {
-            margin: 10,
-            filename: `precortedecaja.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
+        // Esperar 5 segundos antes de generar el PDF
+        setTimeout(() => {
+            // Generar el PDF después de 5 segundos
+            const opciones = {
+                margin: 10,
+                filename: `precortedecaja.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
 
-        const contenidoDiv = document.getElementById('informe');
-        html2pdf(contenidoDiv, opciones);
+            const contenidoDiv = document.getElementById('informe');
+            html2pdf(contenidoDiv, opciones);
+        }, 3000); // 5000 milisegundos = 5 segundos
     });
-
 
 

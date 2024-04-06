@@ -14,11 +14,7 @@
     var contentcards = document.getElementById('contentcards')
 
 
-    var rol = localStorage.getItem('rol')
-    if (rol != 'admin-role') {
-
-     
-    } else {
+  
 
         var card = document.createElement('div')
         card.innerHTML = 
@@ -43,7 +39,7 @@
 
         contentcards.appendChild(card)
 
-    }
+    
 
 
     if (mi_terminal === null || mi_terminal === "") {

@@ -26,6 +26,25 @@
 
 
 <body>
+    <style>
+
+    footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa; /* Cambia el color de fondo según tus preferencias */
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        /* Estilos adicionales para el cuerpo de la página */
+        .container.body-content {
+            margin-bottom: 60px; /* Asegura que el contenido no se superponga con el footer */
+        }
+
+        
+    </style>
+
 <!-- navbar Esta barra se adaptará al tamaño de pantalla, mostrando los elementos colapsados en un botón en pantallas pequeñas y de forma normal para pantallas más grandes. -->
     <header class="flex w-full fixed top-0 z-1">
         <nav class="navbar flex  justify-content-between w-full bg-dark w-100 " >
@@ -33,6 +52,15 @@
                 <div class="logo w-100 bg-dark" >
                    <img src="Assets/logotiposagblanco.png" />
                 </div>
+
+        
+            <a href="#"  style="text-decoration: none; background-color: transparent; color: snow;">
+                    <ion-icon name="notifications-outline" class=""  style="color: #fff; text-shadow: 0px 0px 30px #ffffff; font-size: 25px; background-color:transparent;"> </ion-icon>
+         
+            </a>
+
+
+
                 
                 <div class="hamburger">
                     <input type="checkbox" class="checkbox">
@@ -74,14 +102,14 @@
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             <hr />
-            <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - Sag Autobuces</p>
-            </footer>
+           
         </div>
 
 
 
-    
+     <footer>
+                <p>&copy; <%: DateTime.Now.Year %> - Sag Autobuces</p>
+            </footer>
    
 </body>
 </html>

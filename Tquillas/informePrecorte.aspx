@@ -10,7 +10,7 @@
 
     <div class="container m-3">
 
-        <button class="btn btn-danger m-2">Regresar</button>
+        <button class="btn btn-danger m-2" id="button-regresar">Regresar</button>
         <button class="btn btn-primary m-2" id="botonDescargar">Descargar</button>
     </div>
 

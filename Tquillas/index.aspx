@@ -27,9 +27,21 @@
 
 
         
+                        
+          <div class="row gap-2 d-flex flex-wrap">
 
-          <div class="row gap-2">
 
+
+              <div class="card h-5 p-5 gap-2">
+
+                      <h3>Selecciona la Oficina </h3>
+                      <select class="form-select" id ="select_oficina_crear">
+                          <option value="-">Selecciona tu terminal</option>
+                      </select>    
+               </div>
+
+              <br />
+              
               <div class="col border rounded p-2" >
                   <h3>Configurar terminal</h3>
 
