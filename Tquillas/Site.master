@@ -54,7 +54,7 @@
                 </div>
 
         
-            <a href="#"  style="text-decoration: none; background-color: transparent; color: snow;">
+            <a href="notifications.aspx"  style="text-decoration: none; background-color: transparent; color: snow;">
                     <ion-icon name="notifications-outline" class=""  style="color: #fff; text-shadow: 0px 0px 30px #ffffff; font-size: 25px; background-color:transparent;"> </ion-icon>
          
             </a>

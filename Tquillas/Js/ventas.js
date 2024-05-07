@@ -14,6 +14,7 @@ var countpasajero = 1;
 var countpasajerofinal = 1
 precio_base = 0;
 var ventasls = localStorage.getItem('venta_reciente')
+var startdate = ""
 
 localStorage.setItem("array_checkpoints", [])
 
@@ -35,10 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     var fechaFormateada = fechaActual.toISOString().split('T')[0];
 
     // Asignar la fecha formateada como el valor mínimo
-    document.getElementById('fecha').setAttribute('min', fechaFormateada);
+    //document.getElementById('fecha').setAttribute('min', fechaFormateada);
 
-    // Establecer el valor del campo de fecha como la fecha actual
-    document.getElementById('fecha').value = fechaFormateada;
+    //// Establecer el valor del campo de fecha como la fecha actual
+    //document.getElementById('fecha').value = fechaFormateada;
 
 
 
@@ -338,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Destino = Destino.options[Destino.selectedIndex].text;
 
         var Fecha_salida = document.getElementById('fecha').value
-
+        startdate = Fecha_salida;
 
         const Viaje = {
 
@@ -352,13 +353,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(JSON.stringify(Viaje))
 
 
-        fetch('http://apitaquillassag.dyndns.org/Home/BuscarViaje', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(Viaje)
-        })
+        fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
+           
+        })  
             .then(response => response.json())
             .then(data => {
                 console.log(data)
@@ -385,23 +382,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (i = 0; i < alldata.length; i++) {
                     console.log(alldata[i].Corrida)
 
-                    if (alldata[i].dias_semana != "") {
-
-                        if (!addedTripIds[alldata[i].TripId]) {
+                  
 
 
                             var tr = document.createElement('tr');
 
 
-                            var id = alldata[i].TripId
-                            var corrida = alldata[i].Corrida
-                            var tipo = alldata[i].Tipo
+                            var id = alldata[i].tripID
+                            var corrida = alldata[i].NombreCorrida
+                            var tipo = alldata[i].TipoServicio
+                            var type = alldata[i].TipoServicio
                             var origen = alldata[i].Origen
                             var destino = alldata[i].Destino
                             var bus = alldata[i].Bus
-                            var departingOrigen = alldata[i].DepartingOrigen
-                            var departingDestino = alldata[i].DepartingDestino
+                            var departingOrigen = alldata[i].origencorridabuscada
+                            var departingDestino = alldata[i].llegadacorridabuscada
                             var precio = alldata[i].Precio
+                            var Arrival = alldata[i].Arrival
+                            var Departure = alldata[i].Departure
+                            var RunId = alldata[i].RunId
+                            var totaltime = alldata[i].totaltime
+
+                   
+
+
+
+                            // Convertir la cadena de fecha y hora en un objeto de fecha de JavaScript
+                            var fechayhorasalida = new Date(departingOrigen);
+                            var fechayhorallegada = new Date(departingDestino);
+                            var horaActual = new Date();
+
+
+                            // Obtener la hora ajustada
+                            var horaAjustada = fechayhorasalida.toLocaleTimeString();
+                            var horaAjustadallegada = fechayhorallegada.toLocaleTimeString();
+
+                            // Crear strings para fecha y hora ajustadas
+                            var fechaYHoraSalida = fechayhorasalida.toLocaleDateString() + ' ' + horaAjustada;
+                            var fechaYHoraLlegada = fechayhorallegada.toLocaleDateString() + ' ' + horaAjustadallegada;
+
+
+                            console.log("Hora ajustada:", horaAjustada);
+
 
                             if (tipo == "premium-id") {
                                 tipo = "Primera"
@@ -412,36 +434,43 @@ document.addEventListener('DOMContentLoaded', () => {
                             else if (tipo == "de5a7752-a52c-41b0-a01e-99d51f73abde") {
                                 tipo = "Básico"
                             }
-                            console.log(id, corrida, tipo, origen, destino, bus, departingOrigen, departingDestino, precio)
+                        
+
+                            var fechaYHoraSalida = fechayhorasalida.toLocaleString();
+                            var fechaYHoraLlegada = fechayhorallegada.toLocaleString();
 
 
-                            tr.innerHTML = `
-
-                           <td>${corrida}</td>
-                           <td>${tipo}</td>
-                           <td>${origen}</td>
-                           <td>${destino}</td>
-                           <td>${bus}</td>
-                           <td>${departingOrigen}</td>
-                           <td>${departingDestino}</td>
-                           <td>${precio} $ </td>
-                           <td>
-                              <button 
-                                    class="btn btn-primary" 
-                                    id="comprar" 
-                                    value="${alldata[i].TripId}" 
-                                    onclick="Comprar('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}'  )">
-                                    Comprar
-                              </button>
-                           </td>
-
-                       `;
-
-                            tbody.appendChild(tr);
-                            addedTripIds[id] = true;
 
 
-                        }
+                           tr.innerHTML = `
+
+
+                               <td>${corrida}</td>
+                               <td>${tipo}</td>
+                               <td>${origen}</td>
+                               <td>${destino}</td>
+                               <td>${bus == null ? '' : bus}</td >
+                               <td>${departingOrigen}</td>
+                               <td>${departingDestino}</td>
+                               <td>${precio} $ </td>
+                               <td>
+                                  <button 
+                                        class="btn btn-primary"     
+                                        id="comprar" 
+                                        value="${alldata[i].TripId}" 
+                                        onclick="Comprar('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}'   )">
+                                        Comprar
+                                  </button>
+                               </td>
+
+                           `;
+
+                                tbody.appendChild(tr);
+                                addedTripIds[id] = true;
+
+
+                            }
+                      
 
                         const liquidname = document.getElementById('table');
 
@@ -460,9 +489,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         }, "2000");
 
-                    }
-
-                }
 
 
             })
@@ -1016,7 +1042,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${tipo}</td>
                                 <td id="asientoparapasajero${countpasajero}"></td>
                                 <td id="precioparapasajero">${precioPasajero}</td>
-                                
+
                                 `;
                                 document.getElementById('span_total_orasi').innerHTML = totalPrecio.toFixed(2)
 
@@ -1712,6 +1738,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             var tr = document.createElement("tr");
             var tipo = datais[i].tipo
+            var type = datais[i].tipo
             if (tipo.includes("adulto")) {
                 tipo = "Adulto"
             } else if (tipo.includes("nino")) {
@@ -1757,7 +1784,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //fin DOMcontent loaded
 
-function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, departing_destino, precio) {
+async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, departing_destino, precio, Arrival, Departure, RunId, totaltime, type) {
+
+
+
+    console.log("Iniciando agregado de datos")
+
+    if (id == "") {
+
+        id = await gettripid(RunId, type, Departure, Arrival, totaltime)
+
+    } 
 
     var datos_viaje = {
 
@@ -1769,7 +1806,11 @@ function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, depar
         "bus": bus,
         "departingOrigen": departin_origen,
         "departingDestino": departing_destino,
-        "precio": precio
+        "precio": precio,
+        "arrival": Arrival,
+        "Departure": Departure,
+        "RunId": RunId,
+        "TotalTIme": totaltime
 
     }
 
@@ -1874,6 +1915,28 @@ function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, depar
 }
 
 
+
+async function gettripid(RunId, type, Departure, Arrival, totaltime) {
+    try {
+        const response = await fetch(`http://apitaquillassag.dyndns.org/Home/AgregarTrip?runid=${RunId}&service=${type}&departure=${Departure}&arriveDate=${Arrival}&totalTime=${totaltime}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('La solicitud falló');
+        }
+
+        const data = await response.text();
+        console.log("Respuesta:", data);
+        return data;
+    } catch (error) {
+        console.error("Error:", error);
+        throw error;
+    }
+}
 
 
 
@@ -2383,7 +2446,7 @@ function CerrarCajavacia() {
                 var cashcheckpoint = localStorage.getItem('cashcheckpoint');
 
                 location.href = "informeCierre.aspx"
-
+                
 
             }
 
