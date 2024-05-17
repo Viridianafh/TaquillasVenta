@@ -73,21 +73,24 @@
                        <p class="card-text">Escanea el Boleto ingresando el código del Ticket </p>
                 </div>
                <div class="card-footer"><a href="escaneo.aspx">Ver</a></div>
-            </div> 
+            </div>
           
           
           <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
              <div>
                   <div>
-                       <ion-icon name="documents-outline"  style="font-size: 80px;"></ion-icon>
+                        <ion-icon name="swap-horizontal-outline" style="font-size: 70px; color: white;"></ion-icon>
                     </div>
                     </div>
                 <div class="card-body">
-                <h5 class="card-title">Guias de viaje</h5>
-                       <p class="card-text">Genera e imprime la guia de viaje </p>
+                <h5 class="card-title">Cambio</h5>
+                       <p class="card-text">Necesitas cambiar un viaje por otro da click aquí</p>
                 </div>
-               <div class="card-footer"><a href="guias.aspx">Ver</a></div>
-            </div>
+               <div class="card-footer"><a href="Cambio.aspx">Ver</a></div>
+            </div> 
+          
+          
+        
 
           
            

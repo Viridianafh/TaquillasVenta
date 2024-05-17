@@ -43,7 +43,7 @@
                    <th scope="col">Tipo</th>
                    <th scope="col">Ticket</th>
                    <th scope="col">Precio</th>
-                   <th scope="col">Código de compra</th>
+                   <th scope="col">Código Compra</th>
                    <th scope="col">Tipo de pago</th>
                    <th scope="col">Fecha</th>
                    <th scope="col">Asiento</th>

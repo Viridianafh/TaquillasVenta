@@ -86,7 +86,32 @@
                         <td><h5>Destino</h5></td>
                         <td><h5>Boleto</h5></td>
                         <td><h5>Tipo</h5></td>
-                        <td><h5>se escaneo</h5></td>
+                        <td><h5>Escaneado</h5></td>
+                        <td id="h4escaneado"><h5>Escaneado por: </h5></td>
+
+                    </tr>
+
+                </thead>
+
+                 <tbody>
+
+
+
+                </tbody>
+
+        </table>  
+            <table id="table-lista2" class="table table-hover" style="display: none;">
+
+                <thead class="bg-dark">
+                    <tr>
+                        <td><h5>Asiento</h5></td>
+                        <td><h5>Nombre</h5></td>
+                        <td><h5>Origen</h5></td>
+                        <td><h5>Destino</h5></td>
+                        <td><h5>Boleto</h5></td>
+                        <td><h5>Tipo</h5></td>
+                        <td><h5>Escaneado</h5></td>
+                        
 
                     </tr>
 

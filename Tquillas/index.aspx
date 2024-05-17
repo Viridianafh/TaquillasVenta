@@ -52,17 +52,13 @@
                           <option value="-">Selecciona tu terminal</option>
                       </select>
 
-
-                
                       <button id="btncreate" class="btn btn-primary" style="height: 40px; width: 50%;">Crear</button>
-                  
-
+                
                   </div>
 
                 
 
               </div>
-
 
                <div class="col border rounded p-2">
                   <h3>Cambiar Configuración</h3>

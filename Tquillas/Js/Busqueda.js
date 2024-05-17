@@ -62,15 +62,18 @@
                         
                         `
                             <td>${data[i].passenger_name}</td>
-                            <td>${tipo}</td>
-                            <td>${data[i].ticket_id}</td>
+                            <td>${tipo}</td>                    
+                            <td>${data[i].ticket_id}</td>          
                             <td>${data[i].sold_price}</td>
                             <td>${data[i].short_id}</td>
                             <td>${data[i].payment_provider}</td>
                             <td>${data[i].date_created}</td>
                             <td>${data[i].seat_name}</td>
                             <td>${data[i].status}</td>
-                            <td><button class="btn btn-dark" id="btn-download" onclick="Descargar('${data[i].ticket_id}');"> <ion-icon name="download-outline"></ion-icon>Descargar</button></td>
+                            <td>
+                            <button class="btn btn-dark" id="btn-download" onclick="Descargar('${data[i].ticket_id}');"> <ion-icon name="download-outline"></ion-icon>Descargar</button>
+                            
+                            </td>
                         `;
 
                         tabla.appendChild(tr);  // Agrega el nuevo elemento tr a la tabla
@@ -219,6 +222,13 @@ async function Descargar(ticket) {
     }
 }
 
+
+
+function CancelarBoleto(ticket) {
+
+    alert("Cancelado:  " + ticket)
+
+}
 
 
 function limpiarTabla() {

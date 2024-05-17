@@ -4,6 +4,10 @@
     
     button_Buscar.addEventListener('click', () => {
 
+
+
+
+
         button_Buscar.textContent = ""
         button_Buscar.textContent = "Buscando..."
         button_Buscar.classList.remove('btn-primary')
@@ -109,10 +113,14 @@
     btn_descargar_lista.addEventListener('click', () => {
 
 
+        document.getElementById('table-lista').style.display = 'none'
+        document.getElementById('table-lista2').style.display = 'block'
+
+
+        const tabla = document.getElementById('table-lista2');
         
 
-
-        const tabla = document.getElementById('table-lista');
+       
 
         // Configura las opciones para html2pdf
         const opciones = {
@@ -132,14 +140,50 @@
             text: 'se esta descargando la lista',
             icon: 'success',
             confirmButtonText: 'OK'
-        })
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                document.getElementById('table-lista').style.display = 'block'
+                document.getElementById('table-lista2').style.display = 'none'
+            } else if (result.isDismissed) {
+
+                document.getElementById('table-lista').style.display = 'block'
+                document.getElementById('table-lista2').style.display = 'none'
+                // Aquí puedes ejecutar el código que desees cuando se descarta la alerta
+                if (result.dismiss === Swal.DismissReason.backdrop) {
+
+                    document.getElementById('table-lista').style.display = 'block'
+                    document.getElementById('table-lista2').style.display = 'none'
+                } else if (result.dismiss === Swal.DismissReason.esc) {
+
+                    document.getElementById('table-lista').style.display = 'block'
+                document.getElementById('table-lista2').style.display = 'none'
+                }
+            }
+        });
+
+
+    
+
     })
 
+   
 
 })
 
 
+function ocultarColumna6() {
+    // Selecciona la tabla
+    var tabla = document.getElementById('table-lista');
 
+    // Recorre todas las filas de la tabla
+    for (var i = 0, fila; fila = tabla.rows[i]; i++) {
+        // Oculta la celda en la columna 6 (índice 5 porque es 0-based)
+        if (fila.cells[6]) {
+            fila.cells[6].style.display='none';
+        }
+    }
+}
 
 
                 
@@ -154,6 +198,7 @@
             .then(data => {
 
                 var tbody = document.getElementById('table-lista').getElementsByTagName('tbody')[0];
+                var tbody2 = document.getElementById('table-lista2').getElementsByTagName('tbody')[0];
                 var tipo = "";
                 data.forEach(e => {
 
@@ -171,6 +216,7 @@
 
 
                     var tr = document.createElement('tr')
+                    var tr2 = document.createElement('tr')
                     tr.innerHTML = `
                     
                     <td>${e.Seat_number}</td>
@@ -180,10 +226,25 @@
                     <td>${e.Ticket}</td>
                     <td>${tipo}</td>
                     <td>${e.IsScanned == "USED" ? "SI" : "NO"} </td>
+                    <td>${e.ScannedBy } </td>
+                        
+                    
+                    `
+                    tr2.innerHTML = `
+                    
+                    <td>${e.Seat_number}</td>
+                    <td>${e.Name}</td>
+                    <td>${e.Origin}</td>
+                    <td>${e.Destination}</td>
+                    <td>${e.Ticket}</td>
+                    <td>${tipo}</td>
+                    <td>${e.IsScanned == "USED" ? "SI" : "NO"} </td>
+                  
                         
                     
                     `
                     tbody.appendChild(tr)
+                    tbody2.appendChild(tr2)
 
                     console.log(e)
 

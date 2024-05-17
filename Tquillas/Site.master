@@ -50,7 +50,7 @@
         <nav class="navbar flex  justify-content-between w-full bg-dark w-100 " >
             <div class="cabecera bg-dark" >
                 <div class="logo w-100 bg-dark" >
-                   <img src="Assets/logotiposagblanco.png" />
+                  <a href="dash.aspx"> <img src="Assets/logotiposagblanco.png" /></a>
                 </div>
 
         
@@ -108,7 +108,7 @@
 
 
      <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - Sag Autobuces</p>
+                <p>&copy; <%: DateTime.Now.Year %> - Sag Autobuses</p>
             </footer>
    
 </body>

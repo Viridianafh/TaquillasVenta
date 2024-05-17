@@ -38,7 +38,7 @@
                     <tr>
                   <td>Aquí podras ver todas las novedades, viajes nuevos, modificaciones, etc</td>
                   <td>2024-04-22</td>
-                  <td><button class="btn btn-danger">borrar</button></td>
+                  <td><button class="btn btn-danger disabled">borrar</button></td>
               </tr>
               </tbody>
           </table>

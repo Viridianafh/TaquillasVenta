@@ -11,15 +11,19 @@
     var mi_terminal = localStorage.getItem('terminal_name');
     var role = localStorage.getItem('rol')
 
+
     var contentcards = document.getElementById('contentcards')
 
-
-  
-
         var card = document.createElement('div')
-        card.innerHTML = 
-        
-        `
+        var card2 = document.createElement('div')
+
+    var rol = localStorage.getItem('rol')
+    if (rol != 'admin-role') {
+    } else {
+
+        card.innerHTML =
+
+            `
         
             <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
             
@@ -34,11 +38,33 @@
                 </div>
                <div class="card-footer"><a href="index.aspx">Ver</a></div>
             </div>
-        
+
         `
+
 
         contentcards.appendChild(card)
 
+        card2.innerHTML =
+            `
+        
+              <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
+             <div>
+                  <div>
+                       <ion-icon name="documents-outline"  style="font-size: 80px;"></ion-icon>
+                    </div>
+                    </div>
+                <div class="card-body">
+                <h5 class="card-title">Guias de viaje</h5>
+                       <p class="card-text">generar e imprimir la guias de viajes </p>
+                </div>
+               <div class="card-footer"><a href="guias.aspx">Ver</a></div>
+            </div>
+            
+            `
+        contentcards.appendChild(card2)
+
+
+    }
     
 
 

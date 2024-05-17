@@ -1,8 +1,4 @@
 ﻿
-
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
 
 
@@ -20,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(`http://apitaquillassag.dyndns.org/Home/ConsultaBoletos?folio=${folio}`)
         .then(response => response.json())
         .then(data => {
+
+            document.getElementById('loaderboletos').style.display = 'none'
+            document.getElementById('section-tabla-boletos').style.display = 'block'
 
             console.log(data)
 

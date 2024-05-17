@@ -13,7 +13,7 @@
     var usuario = document.getElementById('usuario')
     usuario.textContent = minombre
     var mi_terminal = localStorage.getItem('terminal_name');
-  //  var role = localStorage.getItem('rol')
+   var role = localStorage.getItem('rol')
 
     if (mi_terminal === null || mi_terminal === "") {
 
@@ -38,20 +38,20 @@
         var miSelect = document.getElementById('select_terminal_crear');
         miSelect.disabled = true;
 
-        //if (role != "admin-role") {
+        if (role != "admin-role") {
 
-        //    Swal.fire({
-        //        title: "Mensaje!",
-        //        text: "No tienes los permisos suficientes para acceder a esta sección, serás redirigido a la página principal",
-        //        icon: "error",
-        //        confirmButtonText: 'OK'
-        //    }).then(function () {
-        //        window.location.href = "/dash.aspx";
-        //    });
-           
-        //} else {
+            Swal.fire({
+                title: "Mensaje!",
+                text: "No tienes los permisos suficientes para acceder a esta sección, serás redirigido a la página principal",
+                icon: "error",
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location.href = "/dash.aspx";
+            });
 
-        //}
+        } else {
+
+        }
 
 
     }
