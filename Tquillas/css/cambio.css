@@ -1,0 +1,22 @@
+﻿
+
+#bus-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.floor {
+    display: grid;
+    grid-template-columns: repeat(15, 50px);
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.btn {
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+

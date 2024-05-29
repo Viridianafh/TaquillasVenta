@@ -1,24 +1,116 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.Mobile.master.cs" Inherits="Site_Mobile" %>
-
-<%@ Register Src="~/ViewSwitcher.ascx" TagPrefix="friendlyUrls" TagName="ViewSwitcher" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="SiteMaster" %>
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head id="Head1" runat="server">
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
-    <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
-</head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+           <link rel="shortcut icon" href="Assets/logoSag.ico" type="image/x-icon">
+    <link href="css/nav.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script src="Js/logout.js"></script>
+    <script src="Js/logout.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.15.0/dist/pdf-lib.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    
+</head> 
+
+
+
+
+
 <body>
-    <form id="form1" runat="server">
-    <div>
-        <h1>Mobile Master Page</h1>
-        <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
-        <section class="content-wrapper main-content clear-fix">
-            <asp:ContentPlaceHolder runat="server" ID="MainContent" />
-        </section>
-        <friendlyUrls:ViewSwitcher ID="ViewSwitcher1" runat="server" />
-    </div>
-    </form>
+    <style>
+
+    footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa; /* Cambia el color de fondo según tus preferencias */
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        /* Estilos adicionales para el cuerpo de la página */
+        .container.body-content {
+            margin-bottom: 60px; /* Asegura que el contenido no se superponga con el footer */
+        }
+
+        
+    </style>
+
+<!-- navbar Esta barra se adaptará al tamaño de pantalla, mostrando los elementos colapsados en un botón en pantallas pequeñas y de forma normal para pantallas más grandes. -->
+    <header class="flex w-full fixed top-0 z-1">
+        <nav class="navbar flex  justify-content-between w-full bg-dark w-100 " >
+            <div class="cabecera bg-dark" >
+                <div class="logo w-100 bg-dark" >
+                  <a href="dash.aspx"> <img src="Assets/logotiposagblanco.png" /></a>
+                </div>
+
+        
+            <a href="notifications.aspx"  style="text-decoration: none; background-color: transparent; color: snow;">
+                    <ion-icon name="notifications-outline" class=""  style="color: #fff; text-shadow: 0px 0px 30px #ffffff; font-size: 25px; background-color:transparent;"> </ion-icon>
+         
+            </a>
+
+
+
+                
+                <div class="hamburger">
+                    <input type="checkbox" class="checkbox">
+                        <div class="hamburger__lines">
+                            <span class="line line1"></span>
+                            <span class="line line2"></span>
+                            <span class="line line3"></span>
+                        </div>
+    
+                        <div class="header__info flex  bg-dark">
+                            <ul class="flex flex-column mb-3 ">
+                              <li> <a class="btn btn-dark" href="dash.aspx"  role="button" style="text-decoration:none"> Inicio </a></li>
+
+                                 <li> <a class="btn btn-dark" href="Busqueda.aspx"  role="button" style="text-decoration:none"> Buscar Boletos </a></li>
+                                    <li> <a class="btn btn-dark" href="escaneo.aspx"  role="button" style="text-decoration:none"> Escaneo de Boletos </a></li>
+                                 <li> <a class="btn btn-dark" href="listadeabordar.aspx" role="button" style="text-decoration:none" >Lista de Abordar</a></li>
+                                <li> <a class="btn btn-dark" href="ventas.aspx" role="button" style="text-decoration:none" >Venta de boletos</a></li>
+                                <center>
+                                <li> <a class="btn btn-dark" href="index.aspx"  role="button" style="text-decoration:none"> Terminal</a></li>
+                                <li> <a class="btn btn-dark" href="guias.aspx"  role="button" style="text-decoration:none"> Guias de Viaje</a></li>
+                                <li> <a class="btn btn-dark" href="Cambio.aspx"  role="button" style="text-decoration:none">Cambiar boleto</a></li>
+
+                                <li><div class="salir">
+                                    <button  class="btn btn-dark" id="btn_logout" >
+                                        Salir 
+                                       <center>
+                                    </button>
+                                </div></li>
+                            </ul>
+                        </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+     
+
+
+        <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            <hr />
+           
+        </div>
+
+
+
+     <footer>
+                <p>&copy; <%: DateTime.Now.Year %> - Sag Autobuses</p>
+            </footer>
+   
 </body>
 </html>

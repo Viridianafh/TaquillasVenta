@@ -20,7 +20,7 @@
     
   
 
-    <section id="section-busqueda-guide" class="d-none">
+    <section id="section-busqueda-guide" class="">
 
          <h5>Buscar Origen</h5>
         <div class="d-flex gap-2 flex-direction-column">

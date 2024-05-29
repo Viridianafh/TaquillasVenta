@@ -81,6 +81,7 @@
                                 <center>
                                 <li> <a class="btn btn-dark" href="index.aspx"  role="button" style="text-decoration:none"> Terminal</a></li>
                                 <li> <a class="btn btn-dark" href="guias.aspx"  role="button" style="text-decoration:none"> Guias de Viaje</a></li>
+                                <li> <a class="btn btn-dark" href="Cambio.aspx"  role="button" style="text-decoration:none">Cambiar boleto</a></li>
 
                                 <li><div class="salir">
                                     <button  class="btn btn-dark" id="btn_logout" >

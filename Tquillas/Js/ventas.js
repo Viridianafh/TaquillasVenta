@@ -1615,7 +1615,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
             var shift_number_to_is = shiftnumber + "-" + numero
             alert(shift_number_to_is)
 

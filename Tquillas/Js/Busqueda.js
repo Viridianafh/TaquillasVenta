@@ -72,6 +72,7 @@
                             <td>${data[i].status}</td>
                             <td>
                             <button class="btn btn-dark" id="btn-download" onclick="Descargar('${data[i].ticket_id}');"> <ion-icon name="download-outline"></ion-icon>Descargar</button>
+                            <button class="btn btn-danger mt-2" id="btn-download" onclick="SolicitarCodigo('${data[i].ticket_id}');">CancelarBoleto</button>
                             
                             </td>
                         `;
@@ -224,12 +225,67 @@ async function Descargar(ticket) {
 
 
 
-function CancelarBoleto(ticket) {
+function SolicitarCodigo(ticket) {
 
-    alert("Cancelado:  " + ticket)
+    fetch('https://localhost:5001/Home/GenerarTokenCancelacion')
+        .then(res => res.json())
+        .then(data => {
+
+            localStorage.setItem("tokenCancelacionBoleto", data.keydata)
+        })
+    document.getElementById('section-code').style.display = 'block'
 
 }
 
+function ProcederCancelacion() {
+
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: 'Esta acción no podrá deshacerse',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Acción cuando se hace clic en "Sí"
+            validardata()
+        } else {
+            // Acción cuando se hace clic en "No"
+
+        }
+    })
+
+
+    function validardata() {
+        var code = document.getElementById('code').value
+        var key = localStorage.getItem('tokenCancelacionBoleto')
+
+        fetch(`https://localhost:5001/Home/ValidarTokenCancelacion?code=${code}&key=${key} `)
+            .then(res => res.text())
+            .then(data => {
+                if (data == "Ok") {
+
+                    Swal.fire({
+                        title: "Cambios Realizados",
+
+                        text: 'Boleto Cancelado',
+                        icon: "success"
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: "Ocurrio un error",
+                        text: 'intenta de nuevo',
+                        icon: "error"
+                    });
+                }
+            })
+    }
+
+}
 
 function limpiarTabla() {
     var tabla = document.getElementById('table');

@@ -59,6 +59,15 @@
 
     </section>
 
+    <section class="container" id="section-code" style="display:none;"">
+
+        <label>Ingresa el código que se envio al jefe de taquilla: </label>
+
+        <input type="type" class="form-control" id="code" />
+
+        <button class="btn btn-dark" onclick="ProcederCancelacion()" >Confirmar Cancelación</butto>
+
+    </section>
 
 
 
