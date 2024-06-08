@@ -477,7 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       
 
                         document.getElementById('section-boletos').style.display = 'block';
-                        btn_trip.textContent = "Busar viaje"
+                        btn_trip.textContent = "Buscar viaje"
 
                         btn_trip.classList.remove('btn-outline-primary')
                         btn_trip.classList.add('btn-success')

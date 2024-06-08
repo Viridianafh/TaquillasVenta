@@ -15,36 +15,65 @@ var totaltime = ""
 var numseat = ""
 var seatcount = 1
 var seatcounter = 0
+var isaleid = ""
 
 
 document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    document.getElementById('btn-buscar').addEventListener('click', async () => {
+        // Obtén el valor del ticket
+        var ticket = document.getElementById('boletoanterior').value;
+
+        localStorage.setItem("oldticket", ticket)
+
+        // Verifica si el campo de entrada está vacío
+        if (ticket.trim() === '') {
+            alert("Debes ingresar un boleto");
+            return; // Detiene la ejecución si el campo está vacío
+        }
+
+        // Cambia el texto del botón y deshabilítalo mientras se realiza la búsqueda
+        document.getElementById('btn-buscar').textContent = "Buscando...";
+        document.getElementById('btn-buscar').disabled = true;
+
+        try {
+            // Llama a la función para buscar el boleto
+            const data1 = await BuscarBoletoUno(ticket);
+            document.getElementById('bus-container').style.display = 'none'
+            var contentcards = document.getElementById("content-cards")
+            var floor1 = document.getElementById('floor-1')
+            var floor2 = document.getElementById('floor-2')
+
+             seatcount = 1
+             seatcounter = 0
+
+            floor1.innerHTML =''
+            floor2.innerHTML =''
+            contentcards.innerHTML = ''
 
 
 
-    var btnbuscar = document.getElementById('btn-buscar')
-        .addEventListener('click', async () => {
+            limpiarTabla()
+            // Crea las tablas y realiza los cambios necesarios en la interfaz
+            CrearTablas(data1, 'tableticket');
+            iniciarCambio();
 
-            var btnbuscar = document.getElementById('btn-buscar').textContent = "Buscando..."
-            document.getElementById('btn-buscar').disabled = true
-
-            var ticket = document.getElementById('boletoanterior').value
-
-
-            const data1 = await BuscarBoletoUno(ticket)
-
-
-            CrearTablas(data1, 'tableticket')
-            iniciarCambio()
-
-            document.getElementById("section-viaje").style.display = "block"
+            // Muestra la sección del viaje
+            document.getElementById("section-viaje").style.display = "block";
+        } catch (error) {
+            console.error("Error al buscar el boleto:", error);
+            alert("Hubo un error al buscar el boleto. Por favor, intenta nuevamente.");
+        } finally {
+            // Restablece el botón
+            document.getElementById('btn-buscar').disabled = false;
+            document.getElementById('btn-buscar').textContent = "Buscar";
+        }
+    });
 
 
-            document.getElementById('btn-buscar').disabled = false
-            document.getElementById('btn-buscar').textContent = "Buscar"
-        })
+
 
 
     const btn_siguiente1 = document.getElementById('btn-siguiente1')
@@ -79,7 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             localStorage.setItem("precio_anteriorcambio", e.precio)
             localStorage.setItem("asiento_anterior_cambio", e.asiento)
-
+            localStorage.setItem('isale_cambio', e.isaleid)
+           
             tr.innerHTML = `
     
                     <td>${e.pasajero}</td>
@@ -88,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${e.asiento}</td>
                     <td>${e.precio}</td>
                     <td>${e.ticket}</td>
-    
     
                     `;
 
@@ -148,7 +177,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     Departure = alldata[i].Departure
                     RunId = alldata[i].RunId
                     totaltime = alldata[i].totaltime
-
+                    isaleid = alldata[i].isaleid
+                    
 
 
 
@@ -196,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h6 class="card-subtitle mb-2 text-muted">precio: $ ${precio}</h6>
                         <p class="card-text">corrida: ${corrida}</p>
                         <p class="card-text">tipo: ${tipo}</p>
-                        <button class="btn btn-primary" onClick=" enviardata('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}')">escoger</button>
+                        <button class="btn btn-primary" onClick=" enviardata('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}', '${isaleid}')">escoger</button>
                     </div>
                 </div> 
 
@@ -228,18 +258,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-async function enviardata(id, corrida, tipo, origen, destino, bus, departingOrigen, departingDestino, precio, Arrival, Departure, RunId, totaltime, type) {
+async function enviardata(id, corrida, tipo, origen, destino, bus, departingOrigen, departingDestino, precio, Arrival, Departure, RunId, totaltime, type, ) {
     document.getElementById("section-viaje").style.display = 'none';
 
     if (id == "") {
 
         id = await gettripid(RunId, type, Departure, Arrival, totaltime)
 
-        localStorage.setItem('tripid_cambio', id)
-        localStorage.setItem('precionuevo', precio)
+    
 
 
     }
+    localStorage.setItem('tripid_cambio', id)
+    localStorage.setItem('precionuevo', precio)
+    localStorage.setItem('origen_cambio', origen)
+    localStorage.setItem('destino_cambio', destino)
+    localStorage.setItem('runid_cambio', RunId)
+
     localStorage.setItem('tripid_cambio', id)
     await contarInapam(id)
     await ContarEstudiante(id)
@@ -553,35 +588,79 @@ function ProcederBoleto() {
     var dataid = localStorage.getItem('tripid_cambio')
 
     var asiento_cambio = localStorage.getItem("asiento_cambio")
-    var asiento_anterior = localStorage.getItem("precio_anteriorcambio")
-    var precio_anterior = localStorage.getItem("asiento_anterior_cambio")
+    var precio_anterior = localStorage.getItem("precio_anteriorcambio")
+    var asiento_anterior = localStorage.getItem("asiento_anterior_cambio")
     var precio_nuevo = localStorage.getItem("precionuevo")
+    var oldticket = localStorage.getItem('oldticket')
+    var origen= localStorage.getItem('origen_cambio')
+    var destino = localStorage.getItem('destino_cambio')
+    var runid = localStorage.getItem('runid_cambio')
+    var isale = localStorage.getItem('isale_cambio')
 
-  //  alert(`${nombre}` + `${tipopasajero}` + ` ${dataid}` + ` ${asiento_anterior}` + ` ${asiento_cambio}` + ` ${precio_anterior}`)
+    //  alert(`${nombre}` + `${tipopasajero}` + ` ${dataid}` + ` ${asiento_anterior}` + ` ${asiento_cambio}` + ` ${precio_anterior}`)
 
+    
 
+    var Boletocambio = {
 
-
-    if (parseFloat(precio_anterior) > parseFloat(precio_nuevo)) {
-
-        var diferencia = parseFloat(precio_anterior) - parseFloat(precio_nuevo)
-        document.getElementById("spanTexto2").textContent = `cliente tiene diferencia a favor de: ${diferencia} `
+        "isaleid": isale,
+        "runid": runid,
+        "StartingStopId": origen,
+        "EndingStopId": destino,
+        "TripId": dataid,
+        "SeatName": parseInt(asiento_cambio),
+        "PassengerName": nombre,
+        "PassengerType": tipopasajero,
+        "SoldPrice": parseFloat(precio_nuevo),
+        "PayedPrice": parseFloat(precio_nuevo),
+        "OriginalPrice": parseFloat(precio_nuevo),
+        "oldticket": oldticket
 
     }
-    else if (parseFloat(precio_anterior) < parseFloat(precio_nuevo)) {
 
-        var diferencia = parseFloat(precio_anterior) - parseFloat(precio_nuevo)
-        document.getElementById("spanTexto2").textContent = `cliente debe pagar diferencia de: ${diferencia} `
+
+
+    fetch('http://apitaquillassag.dyndns.org/Home/cambiarBoleto', {
+        method: 'PATCH',  // Especifica el método HTTP como PATCH
+        headers: {
+            'Content-Type': 'application/json',  // Indica que se envían datos JSON
+            'Authorization': 'Bearer tu_token'  // Incluye el token de autorización si es necesario
+        },
+        body: JSON.stringify(Boletocambio)  // Convierte el objeto JavaScript a una cadena JSON
+    })
+        .then(response => response.text())
+        .then(data => {
+
+            if (data.length > 8) {
+                alert("Ocurrio Un error")
+            } else {
+
+                alert(data)
+                document.getElementById('spanTexto2').textContent = `el nuevo boleto es:  ${data} `
+            }
+
+        })
+
+
+
+
+}
+
+
+
+
+
+
+function Toupper() {
+    var inputElement = document.getElementById('input-nombre-pasajero');
+    inputElement.value = inputElement.value.toUpperCase();
+}
+
+
+function limpiarTabla() {
+    var tabla = document.getElementById('tableticket');
+    // Eliminar todas las filas excepto la primera (encabezados)
+    while (tabla.rows.length > 1) {
+        tabla.deleteRow(1);
     }
-    else if (parseFloat(precio_anterior) == parseFloat(precio_nuevo)) {
-
-        document.getElementById("spanTexto2").textContent = `la cantidad es la misma no hay diferencia a favor o en contra`
-    }
-
-
-
-
-
-
-
 }

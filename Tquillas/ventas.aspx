@@ -96,13 +96,13 @@
                     <thead >
                         <tr>
                             <td><h4>Corrida</h4></td>
-                            <td><h4>tipo</h4></td>
+                            <td><h4>Tipo</h4></td>
                             <td><h4>Origen</h4></td>
                             <td><h4>Destino</h4></td>
                             <td><h4>Bus</h4></td>
                             <td><h4>Salida</h4></td>
                             <td><h4>LLegada</h4></td>
-                            <td><h4>Precio $ </h4></td>
+                            <td><h4>Precio  </h4></td>
                             <td><h4>Acciones</h4></td>
                         </tr>
                     </thead>
@@ -376,7 +376,7 @@
                         <td>Pasajero</td>
                         <td>Tipo</td>
                         <td>Asiento</td>
-                        <td>costo</td>
+                        <td>Costo</td>
 
                     </tr>
                 </thead>

@@ -112,7 +112,7 @@
             <label>Escoge el pasajero y el tipo de boleto </label>
 
             <br />
-            <input type="text" class="form-control" id="input-nombre-pasajero" style="width:220px;" />
+            <input type="text" class="form-control" id="input-nombre-pasajero" oninput="Toupper()" style="width:220px;" />
             <br />
           
             Tipo de pasajero:
@@ -148,7 +148,7 @@
     </section>
 
 
-            <button class="btn btn-danger mt-5" id="procederCambio" onclick="ProcederBoleto()">Proceder Cambio</button>
+            <button class="btn btn-danger mt-5" id="procederCambio" onclick="ProcederBoleto()" >Proceder Cambio</button>
 
     <h1 id="spanTexto2"></h1>
     <h1 id="spanTexto"></h1>
