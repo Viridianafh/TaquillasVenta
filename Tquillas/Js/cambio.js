@@ -46,11 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
             var floor1 = document.getElementById('floor-1')
             var floor2 = document.getElementById('floor-2')
 
-             seatcount = 1
-             seatcounter = 0
+            seatcount = 1
+            seatcounter = 0
 
-            floor1.innerHTML =''
-            floor2.innerHTML =''
+            floor1.innerHTML = ''
+            floor2.innerHTML = ''
             contentcards.innerHTML = ''
 
 
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem("precio_anteriorcambio", e.precio)
             localStorage.setItem("asiento_anterior_cambio", e.asiento)
             localStorage.setItem('isale_cambio', e.isaleid)
-           
+
             tr.innerHTML = `
     
                     <td>${e.pasajero}</td>
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     RunId = alldata[i].RunId
                     totaltime = alldata[i].totaltime
                     isaleid = alldata[i].isaleid
-                    
+
 
 
 
@@ -258,14 +258,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-async function enviardata(id, corrida, tipo, origen, destino, bus, departingOrigen, departingDestino, precio, Arrival, Departure, RunId, totaltime, type, ) {
+async function enviardata(id, corrida, tipo, origen, destino, bus, departingOrigen, departingDestino, precio, Arrival, Departure, RunId, totaltime, type,) {
     document.getElementById("section-viaje").style.display = 'none';
 
     if (id == "") {
 
         id = await gettripid(RunId, type, Departure, Arrival, totaltime)
 
-    
+
 
 
     }
@@ -337,7 +337,7 @@ function ContarEstudiante(id) {
                     .then(data => {
                         console.log(data)
 
-
+                        var cant_students = data
 
                         if (cant_students == 6) {
 
@@ -548,6 +548,17 @@ function crearasientos(tipo, id) {
         });
 
 
+
+
+        var precio_anteriorcambo = localStorage.getItem('precio_anteriorcambio')
+        var nuevo = localStorage.getItem('precionuevo')
+        var precio_anterior = parseFloat(precio_anteriorcambo)
+        var precionuevo = parseFloat(nuevo)
+
+        var res = precio_anterior - precionuevo
+
+        document.getElementById('spanTexto2').textContent = `la diferencia de precio es de: ${res} `
+
         return seatElement;
     }
 
@@ -582,7 +593,7 @@ function crearasientos(tipo, id) {
 function ProcederBoleto() {
 
     var nombre = localStorage.getItem("nombrepasajero_cambio")
-
+    var tipo = ""
     var tipopasajero = localStorage.getItem("tipopasajero_cambio")
 
     var dataid = localStorage.getItem('tripid_cambio')
@@ -592,62 +603,188 @@ function ProcederBoleto() {
     var asiento_anterior = localStorage.getItem("asiento_anterior_cambio")
     var precio_nuevo = localStorage.getItem("precionuevo")
     var oldticket = localStorage.getItem('oldticket')
-    var origen= localStorage.getItem('origen_cambio')
+    var origen = localStorage.getItem('origen_cambio')
     var destino = localStorage.getItem('destino_cambio')
     var runid = localStorage.getItem('runid_cambio')
     var isale = localStorage.getItem('isale_cambio')
+    var user = localStorage.getItem('id')
+    var terminal = localStorage.getItem('terminal_id')
+    var saleshift = localStorage.getItem('saleshift_id')
+    var  origen = localStorage.getItem('origen_cambio')
+    var destino = localStorage.getItem('destino_cambio')
+
 
     //  alert(`${nombre}` + `${tipopasajero}` + ` ${dataid}` + ` ${asiento_anterior}` + ` ${asiento_cambio}` + ` ${precio_anterior}`)
 
-    
+
+
 
     var Boletocambio = {
-
-        "isaleid": isale,
-        "runid": runid,
-        "StartingStopId": origen,
-        "EndingStopId": destino,
-        "TripId": dataid,
-        "SeatName": parseInt(asiento_cambio),
-        "PassengerName": nombre,
-        "PassengerType": tipopasajero,
-        "SoldPrice": parseFloat(precio_nuevo),
-        "PayedPrice": parseFloat(precio_nuevo),
-        "OriginalPrice": parseFloat(precio_nuevo),
-        "oldticket": oldticket
+        
+        "oldticket": oldticket,
+        "cancelUserId": user
 
     }
 
 
-
-    fetch('http://apitaquillassag.dyndns.org/Home/cambiarBoleto', {
-        method: 'PATCH',  // Especifica el método HTTP como PATCH
+    const options = {
+        method: 'PATCH',
         headers: {
-            'Content-Type': 'application/json',  // Indica que se envían datos JSON
-            'Authorization': 'Bearer tu_token'  // Incluye el token de autorización si es necesario
+            'Content-Type': 'application/json'
+            // Podrías añadir otros encabezados aquí según sea necesario
         },
-        body: JSON.stringify(Boletocambio)  // Convierte el objeto JavaScript a una cadena JSON
-    })
-        .then(response => response.text())
-        .then(data => {
+        body: JSON.stringify(Boletocambio)
+    };
 
-            if (data.length > 8) {
-                alert("Ocurrio Un error")
-            } else {
 
-                alert(data)
-                document.getElementById('spanTexto2').textContent = `el nuevo boleto es:  ${data} `
+
+
+    if (tipopasajero == "Adulto") {
+            tipo = "ADULT";
+    } else if (tipopasajero == "Niño") {
+            tipo = "CHILD";
+    } else if (tipopasajero == "Adulto Mayor") {
+            tipo = "OLDER_ADULT";
+            console.log("Seleccionaste la opción 3");
+    } else if (tipopasajero == "Estudiante") {
+            tipo = "STUDENT";
+        } else {
+            console.log("Opción no válida");
+        }
+
+       
+
+
+
+
+    var shiftnumber = localStorage.getItem('shift_number')
+
+    var num_ventas = localStorage.getItem('num_ventas')
+
+    var numero = parseInt(num_ventas)
+
+    numero = numero + 1
+
+
+    localStorage.setItem('num_ventas', numero.toString())
+
+
+
+
+  
+
+
+
+
+
+
+    var shift_number_to_is = shiftnumber + "-" + numero
+    alert(shift_number_to_is)
+
+
+    var lista_ventas = localStorage.getItem("array_ventas")
+
+    var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
+
+    // Añadir el nuevo valor al array
+    lista_ventasstr.push(shift_number_to_is);
+
+    // Convertir la lista actualizada a cadena y almacenarla en localStorage
+    localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
+
+
+    const tripseats = {
+        "Name": nombre,
+        "Origin": origen,
+        "Destination": destino,
+        "Bus": "",
+        "PassengerName": nombre,
+        "PassengerType": tipopasajero,
+        "SeatName": asiento_cambio,
+        "SoldPrice": parseFloat( precio_nuevo),
+        "PayedPrice": parseFloat(precio_nuevo),
+        "OriginalPrice": parseFloat(precio_nuevo),
+        "Trip_ID": dataid  ,
+        "UserId": user
+
+    }
+
+
+    const InternetSale =
+    {
+        "totalAmount": parseFloat(precio_nuevo),
+        "changeAmount": tipo != "ADULT" ? (parseFloat(precio_nuevo) - parseFloat(precio_anterior)) : 0.00,
+        "PaymentType": "cash",
+        "payedAmount": parseFloat(precio_nuevo),
+        "salesTerminalId": terminal,
+        "salesmanId": user,
+        "salesShiftId": saleshift,
+        "saleNumber": shift_number_to_is,
+        "short_id": generarID(),
+        "tripseatlist": [tripseats]
+    }
+
+
+
+    console.log(JSON.stringify(InternetSale))
+    // Realizar la solicitud PATCH usando fetch
+    fetch(http://apitaquillassag.dyndns.org/Home/cambiarBoleto', options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Hubo un problema con la solicitud: ' + response.status);
             }
+            return response.text(); // Analizar la respuesta JSON si es necesario
+        })
+        .then(data => {
+            console.log('Solicitud PATCH exitosa:', data);
+
+
+
+
+            fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(InternetSale)
+            })
+                .then(response => response.text())
+                .then(data => {
+
+                    alert("success")
+                    console.log(data)
+
+                    document.getElementById('spanTexto').textContent = `el nuevo folio es: ${data} puedes descargar el boleto en el menu "Buscar Boleto"`
+
+
+                })
+                .catch(error => {
+                    alert(error)
+                })
+
 
         })
-
-
-
+        .catch(error => {
+            console.error('Error al realizar la solicitud PATCH:', error);
+            // Aquí puedes manejar errores de la solicitud
+        });
+   
 
 }
 
 
 
+function generarID() {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let id = '';
+
+    for (let i = 0; i < 8; i++) {
+        const indice = Math.floor(Math.random() * caracteres.length);
+        id += caracteres.charAt(indice);
+    }
+
+    return id;
+}
 
 
 

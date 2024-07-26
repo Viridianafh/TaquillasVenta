@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_end = document.getElementById('btn-end')
     btn_end.addEventListener('click', () => {
 
+        var cajaabierta = false
+        localStorage.setItem("caja_abierta" , cajaabierta)
+
         localStorage.setItem("Total_compra", 0)
 
 

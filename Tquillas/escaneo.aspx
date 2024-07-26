@@ -3,6 +3,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <header>
+        <script src="Js/terminalcheck.js"></script>
         <script src="Js/Escaneo.js"></script>
         <script src="Js/islog.js"></script>
     </header>

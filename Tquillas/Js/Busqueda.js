@@ -72,9 +72,15 @@
                             <td>${data[i].status}</td>
                             <td>
                             <button class="btn btn-dark" id="btn-download" onclick="Descargar('${data[i].ticket_id}');"> <ion-icon name="download-outline"></ion-icon>Descargar</button>
-                            <button class="btn btn-danger mt-2" id="btn-download" onclick="SolicitarCodigo('${data[i].ticket_id}');">CancelarBoleto</button>
+                             
+                                  <td>
+                            ${data[i].status !== 'USED' ? `
+          <button class="btn btn-danger mt-2" id="btn-cancel" onclick="SolicitarCodigo('${data[i].ticket_id}');">
+            Cancelar Boleto
+          </button> </td>` : ''}
+                        
                             
-                            </td>
+                            
                         `;
 
                         tabla.appendChild(tr);  // Agrega el nuevo elemento tr a la tabla
@@ -227,11 +233,13 @@ async function Descargar(ticket) {
 
 function SolicitarCodigo(ticket) {
 
-    fetch('https://localhost:5001/Home/GenerarTokenCancelacion')
+    var officename = localStorage.getItem('office_name')
+
+    fetch(`http://apitaquillassag.dyndns.org/Home/GenerarTokenCancelacion?oflname=${officename}`)
         .then(res => res.json())
         .then(data => {
 
-            localStorage.setItem("tokenCancelacionBoleto", data.keydata)
+            localStorage.setItem("tokenCancelacionBoleto", data.token)
         })
     document.getElementById('section-code').style.display = 'block'
 
@@ -263,17 +271,14 @@ function ProcederCancelacion() {
         var code = document.getElementById('code').value
         var key = localStorage.getItem('tokenCancelacionBoleto')
 
-        fetch(`https://localhost:5001/Home/ValidarTokenCancelacion?code=${code}&key=${key} `)
+        fetch(`http://apitaquillassag.dyndns.org/Home/ValidarTokenCancelacion?code=${code}&key=${key} `)
             .then(res => res.text())
             .then(data => {
                 if (data == "Ok") {
 
-                    Swal.fire({
-                        title: "Cambios Realizados",
+                    cancelarBoleto()
 
-                        text: 'Boleto Cancelado',
-                        icon: "success"
-                    });
+                    
                 }
                 else {
                     Swal.fire({
@@ -287,6 +292,58 @@ function ProcederCancelacion() {
 
 }
 
+
+function cancelarBoleto() {
+
+
+
+
+    var boleto = document.getElementById('textconcepto').value
+    var userid = localStorage.getItem('id')
+
+
+    const boletocambio =
+    {
+
+        "oldticket": boleto,
+        "cancelUserId": userid,
+                                                                                      
+    }
+
+
+    fetch('http://apitaquillassag.dyndns.org/Home/CancelarBoleto', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            // Otros encabezados si es necesario
+        },
+        body: JSON.stringify(boletocambio)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la solicitud');
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log('Recurso eliminado:', data);
+
+            Swal.fire({
+                title: "Cambios Realizados",
+
+                text: 'Boleto Cancelado',
+                icon: "success"
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    
+
+}
+
+ 
 function limpiarTabla() {
     var tabla = document.getElementById('table');
 

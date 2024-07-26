@@ -6,6 +6,7 @@
         <link href="css/cambio.css" rel="stylesheet" />
         <script src="Js/islog.js"></script>
         <script src="Js/cambio.js"></script>
+        <script src="Js/terminalcheck.js"></script>
     </header>
   
  
@@ -151,5 +152,5 @@
             <button class="btn btn-danger mt-5" id="procederCambio" onclick="ProcederBoleto()" >Proceder Cambio</button>
 
     <h1 id="spanTexto2"></h1>
-    <h1 id="spanTexto"></h1>
+    <h4 id="spanTexto"></h4>
 </asp:Content>

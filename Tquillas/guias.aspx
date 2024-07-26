@@ -7,7 +7,25 @@
         <script src="Js/islog.js"></script>
     </header>
 
-    
+    <style>
+        /* HTML: <div class="loader"></div> */
+#loaderguia {
+  width: 50px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #25b09b;
+  --_m: 
+    conic-gradient(#0000 10%,#000),
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+          mask: var(--_m);
+  -webkit-mask-composite: source-out;
+          mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {to{transform: rotate(1turn)}}
+    </style>
   
   <a href="dash.aspx" style="text-decoration: none;">
 
@@ -183,10 +201,29 @@
       </div>
    
       <div class="container m-5 gap-3" >
-          <button class="btn btn-primary" id="btn-print">imprimir</button>
-          <button class="btn btn-success" id="btn-save">Guardar</button>
+          
+          <button class="btn btn-success" id="btn-save" onclick="agregaranticipo()">Guardar</button>
+
+                  <pre id="json-output" class="mt-3" style="display:none;"></pre>
+
 
       </div>
+
+      <div class="container m-5 gap-3" style="display:none;">
+         
+          <div class="container" id="loaderguia">
+          </div>
+              <p>Espere mientras se genera la guia...</p>
+
+          <div class="container">
+              <p>Guia generada Puedes Descargarla</p>
+              <button class="btn btn-primary" id="btn-print">imprimir</button>
+          </div>
+
+
+      </div>
+
+
 
 
 

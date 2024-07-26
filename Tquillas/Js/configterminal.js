@@ -5,57 +5,76 @@
 
 
 
-    var miDato = localStorage.getItem('office_name'); 
-    var miElemento = document.getElementById('Oficina');
-    miElemento.textContent = miDato;
+    var role = JSON.parse(localStorage.getItem('rol'));
 
-    var minombre = localStorage.getItem('name');
-    var usuario = document.getElementById('usuario')
-    usuario.textContent = minombre
-    var mi_terminal = localStorage.getItem('terminal_name');
-   var role = localStorage.getItem('rol')
+    localforage.getItem('office_name').then(function (value) {
+        if (value !== null) {
+            console.log('Terminal ID:', value);
+            document.getElementById('Oficina').textContent = value;
+        } else {
+            console.log('No se encontró el terminalid.');
+        }
+    }).catch(function (err) {
+        console.error('Error al obtener el terminalid:', err);
+    });
 
-    if (mi_terminal === null || mi_terminal === "") {
+    localforage.getItem('terminal_name').then(function (value) {
+        if (value !== null) {
+            console.log('Terminal ID:', value);
+            document.getElementById('Terminals').textContent = value;
+        } else {
+            console.log('No se encontró el terminalid.');
+        }
+    }).catch(function (err) {
+        console.error('Error al obtener el terminalid:', err);
+    });
 
 
-        Swal.fire({
-            title: "Mensaje!",
-            text: `No hay una terminal asignada`,
-            icon: "info"
-        });
+    localforage.getItem('terminal_id').then(function (value) {
+
+        if (value != null) {
+            console.log('Terminal ID:', value);
+
+            var miElemento = document.getElementById('Terminals');
+            miElemento.textContent = mi_terminal;
+            var buttonCrear = document.getElementById('btncreate')
+            buttonCrear.disabled = true
+            var miSelect = document.getElementById('select_terminal_crear');
+            miSelect.disabled = true;
+
+            if (role && role.includes('admin-role')) {
 
 
 
+            } else {
 
-
-    } else {
-
-
-        var miElemento = document.getElementById('Terminals');
-        miElemento.textContent = mi_terminal;
-        var buttonCrear = document.getElementById('btncreate')
-        buttonCrear.disabled = true
-        var miSelect = document.getElementById('select_terminal_crear');
-        miSelect.disabled = true;
-
-        if (role != "admin-role") {
-
-            Swal.fire({
-                title: "Mensaje!",
-                text: "No tienes los permisos suficientes para acceder a esta sección, serás redirigido a la página principal",
-                icon: "error",
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location.href = "/dash.aspx";
-            });
+                Swal.fire({
+                    title: "Mensaje!",
+                    text: "No tienes los permisos suficientes para acceder a esta sección, serás redirigido a la página principal",
+                    icon: "error",
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location.href = "/dash.aspx";
+                });
+            }
 
         } else {
-
+            console.log('No se encontró el terminalid.');
+         
         }
+    }).catch(function (err) {
+        console.error('Error al obtener el terminalid:', err);
+
+    });
+
+   
 
 
-    }
 
+
+
+
+   
 
 
     fetch('http://apitaquillassag.dyndns.org/Home/getofice')
@@ -85,6 +104,18 @@
 
                 localStorage.setItem('office_name', oficename)
                 localStorage.setItem('office_location_id', officeselected)
+                localforage.setItem('office_name', oficename).then(function () {
+                    console.log('office_name guardado con éxito.');
+                }).catch(function (err) {
+                    console.error('Error al guardar el terminalid:', err);
+                });
+
+                localforage.setItem('office_location_id', officeselected).then(function () {
+                    console.log('office_location_id guardado con éxito.');
+                }).catch(function (err) {
+                    console.error('Error al guardar el terminalid:', err);
+                });
+
 
                 var office_location_id = localStorage.getItem('office_location_id')
                 fetch(`http://apitaquillassag.dyndns.org/Home/BuscarTerminal?location=${officeselected}`)
@@ -129,15 +160,6 @@
 
 
 
-   
-  
-
-
-
-
-
-
-
 
 
 
@@ -151,6 +173,12 @@
 
         localStorage.setItem('terminal_name', terminal_name)
 
+        localforage.setItem('terminal_name', terminal_name).then(function () {
+            console.log('Terminal name guardado con éxito.');
+        }).catch(function (err) {
+            console.error('Error al guardar el terminal name:', err);
+        });
+
 
         var terminal = document.getElementById('select_terminal_crear').value
         var iduser = localStorage.getItem('id')
@@ -163,6 +191,11 @@
             .then(data => {
 
                 localStorage.setItem('terminal_id', data.terminal_id)
+                localforage.setItem('terminal_id', data.terminal_id).then(function () {
+                    console.log('Terminal ID guardado con éxito.');
+                }).catch(function (err) {
+                    console.error('Error al guardar el terminalid:', err);
+                });
 
                 var mi_terminal = localStorage.getItem('terminal_name'); 
                 var miElemento = document.getElementById('Terminals');
@@ -232,6 +265,11 @@
 
                 localStorage.setItem('terminal_name', terminal_name)
                 localStorage.setItem('terminal_id', terminal)
+                localforage.setItem('terminal_id', terminal).then(function () {
+                    console.log('Terminal ID guardado con éxito.');
+                }).catch(function (err) {
+                    console.error('Error al guardar el terminalid:', err);
+                });
 
                 var mi_terminal = localStorage.getItem('terminal_name');
                 var miElemento = document.getElementById('Terminals');

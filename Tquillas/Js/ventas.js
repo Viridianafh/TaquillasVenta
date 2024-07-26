@@ -62,9 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
         var ventas = localStorage.getItem('num_ventas')
         var numeroVentas = parseInt(ventas)
         if (numeroVentas >= 1) {
-    
 
-            if (localStorage.getItem('id') != null && localStorage.getItem('office_location_id') != null ) {
+
+            if (localStorage.getItem('id') != null && localStorage.getItem('office_location_id') != null) {
 
                 iniciarturno()
 
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             }
 
-        } 
+        }
 
 
     }
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
 
 
-               
+
                         localStorage.setItem('cashcheckpoint', data);
 
                         var cashcheckpoint = localStorage.getItem('cashcheckpoint');
@@ -192,11 +192,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                         icon: "success"
                                     });
 
-                                   
-                                        location.href= "informePrecorte.aspx"
+
+                                    location.href = "informePrecorte.aspx"
 
                                     if (ventasls < 3000) {
-                                       
+
                                     } else {
 
                                         localStorage.setItem('venta_reciente', sobrante.toString())
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
 
-    
+
 
 
     var totalorasi = 0
@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         localStorage.setItem('num_ventas', 0)
         iniciarturno()
-     
+
     })
 
 
@@ -291,13 +291,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             CerrarCajamenor()
 
-        } else if (monto == 0)
-
-        {
+        } else if (monto == 0) {
             CerrarCajavacia()
         }
 
-            else {
+        else {
 
 
             var CashCheckpoint = {
@@ -354,8 +352,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
-           
-        })  
+
+        })
             .then(response => response.json())
             .then(data => {
                 console.log(data)
@@ -382,67 +380,67 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (i = 0; i < alldata.length; i++) {
                     console.log(alldata[i].Corrida)
 
-                  
-
-
-                            var tr = document.createElement('tr');
-
-
-                            var id = alldata[i].tripID
-                            var corrida = alldata[i].NombreCorrida
-                            var tipo = alldata[i].TipoServicio
-                            var type = alldata[i].TipoServicio
-                            var origen = alldata[i].Origen
-                            var destino = alldata[i].Destino
-                            var bus = alldata[i].Bus
-                            var departingOrigen = alldata[i].origencorridabuscada
-                            var departingDestino = alldata[i].llegadacorridabuscada
-                            var precio = alldata[i].Precio
-                            var Arrival = alldata[i].Arrival
-                            var Departure = alldata[i].Departure
-                            var RunId = alldata[i].RunId
-                            var totaltime = alldata[i].totaltime
-
-                   
 
 
 
-                            // Convertir la cadena de fecha y hora en un objeto de fecha de JavaScript
-                            var fechayhorasalida = new Date(departingOrigen);
-                            var fechayhorallegada = new Date(departingDestino);
-                            var horaActual = new Date();
+                    var tr = document.createElement('tr');
 
 
-                            // Obtener la hora ajustada
-                            var horaAjustada = fechayhorasalida.toLocaleTimeString();
-                            var horaAjustadallegada = fechayhorallegada.toLocaleTimeString();
-
-                            // Crear strings para fecha y hora ajustadas
-                            var fechaYHoraSalida = fechayhorasalida.toLocaleDateString() + ' ' + horaAjustada;
-                            var fechaYHoraLlegada = fechayhorallegada.toLocaleDateString() + ' ' + horaAjustadallegada;
-
-
-                            console.log("Hora ajustada:", horaAjustada);
-
-
-                            if (tipo == "premium-id") {
-                                tipo = "Primera"
-                            }
-                            else if (tipo == "normal-id") {
-                                tipo = "Plus"
-                            }
-                            else if (tipo == "de5a7752-a52c-41b0-a01e-99d51f73abde") {
-                                tipo = "Básico"
-                            }
-                        
-
-                            var fechaYHoraSalida = fechayhorasalida.toLocaleString();
-                            var fechaYHoraLlegada = fechayhorallegada.toLocaleString();
+                    var id = alldata[i].tripID
+                    var corrida = alldata[i].NombreCorrida
+                    var tipo = alldata[i].TipoServicio
+                    var type = alldata[i].TipoServicio
+                    var origen = alldata[i].Origen
+                    var destino = alldata[i].Destino
+                    var bus = alldata[i].Bus
+                    var departingOrigen = alldata[i].origencorridabuscada
+                    var departingDestino = alldata[i].llegadacorridabuscada
+                    var precio = alldata[i].Precio
+                    var Arrival = alldata[i].Arrival
+                    var Departure = alldata[i].Departure
+                    var RunId = alldata[i].RunId
+                    var totaltime = alldata[i].totaltime
 
 
 
 
-                           tr.innerHTML = `
+
+                    // Convertir la cadena de fecha y hora en un objeto de fecha de JavaScript
+                    var fechayhorasalida = new Date(departingOrigen);
+                    var fechayhorallegada = new Date(departingDestino);
+                    var horaActual = new Date();
+
+
+                    // Obtener la hora ajustada
+                    var horaAjustada = fechayhorasalida.toLocaleTimeString();
+                    var horaAjustadallegada = fechayhorallegada.toLocaleTimeString();
+
+                    // Crear strings para fecha y hora ajustadas
+                    var fechaYHoraSalida = fechayhorasalida.toLocaleDateString() + ' ' + horaAjustada;
+                    var fechaYHoraLlegada = fechayhorallegada.toLocaleDateString() + ' ' + horaAjustadallegada;
+
+
+                    console.log("Hora ajustada:", horaAjustada);
+
+
+                    if (tipo == "premium-id") {
+                        tipo = "Primera"
+                    }
+                    else if (tipo == "normal-id") {
+                        tipo = "Plus"
+                    }
+                    else if (tipo == "de5a7752-a52c-41b0-a01e-99d51f73abde") {
+                        tipo = "Básico"
+                    }
+
+
+                    var fechaYHoraSalida = fechayhorasalida.toLocaleString();
+                    var fechaYHoraLlegada = fechayhorallegada.toLocaleString();
+
+
+
+
+                    tr.innerHTML = `
 
 
                                <td>${corrida}</td>
@@ -465,29 +463,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
                            `;
 
-                                tbody.appendChild(tr);
-                                addedTripIds[id] = true;
+                    tbody.appendChild(tr);
+                    addedTripIds[id] = true;
 
 
-                            }
-                      
-
-                        const liquidname = document.getElementById('table');
-
-                      
-
-                        document.getElementById('section-boletos').style.display = 'block';
-                        btn_trip.textContent = "Buscar viaje"
-
-                        btn_trip.classList.remove('btn-outline-primary')
-                        btn_trip.classList.add('btn-success')
-                        setTimeout(() => {
-                            btn_trip.classList.remove('btn-success')
-                            btn_trip.classList.add('btn-primary')
-                               btn_trip.disabled = false;
+                }
 
 
-                        }, "2000");
+                const liquidname = document.getElementById('table');
+
+
+
+                document.getElementById('section-boletos').style.display = 'block';
+                btn_trip.textContent = "Busar viaje"
+
+                btn_trip.classList.remove('btn-outline-primary')
+                btn_trip.classList.add('btn-success')
+                setTimeout(() => {
+                    btn_trip.classList.remove('btn-success')
+                    btn_trip.classList.add('btn-primary')
+                    btn_trip.disabled = false;
+
+
+                }, "2000");
 
 
 
@@ -505,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const sendata= () => {
+    const sendata = () => {
 
         var maintest = document.getElementById();
 
@@ -539,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
         while (tabla.rows.length > 1) {
             tabla.deleteRow(1);
         }
-    }function limpiarTablaefectivoresume() {
+    } function limpiarTablaefectivoresume() {
         var tabla = document.getElementById('tablaefectivoresume');
 
         // Eliminar todas las filas excepto la primera (encabezados)
@@ -594,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Elimina el último label y input creados
             var contentinputs = document.getElementById('contentinputs');
             contentinputs.removeChild(contentinputs.lastChild);
-            contentinputs.removeChild(contentinputs.lastChild); 
+            contentinputs.removeChild(contentinputs.lastChild);
 
         }
 
@@ -646,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-       //inicio Conteo inapam
+    //inicio Conteo inapam
 
     const btn_sumar_inapam = document.getElementById('btn_sumar_inapam');
     btn_sumar_inapam.addEventListener('click', () => {
@@ -702,7 +700,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-        //fin conteo inapam
+    //fin conteo inapam
 
 
     const btn_sumar_estudiante = document.getElementById('btn_sumar_estudiante')
@@ -771,26 +769,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_atras1 = document.getElementById('btn-atras1')
     btn_atras1.addEventListener('click', () => {
 
-         count_pasajeros = 0
-         countadulto = 0
-         precio_adulto = 0
-         countnino = 0
-         precionino = 0
-         countinapam = 0
-         precioinapam = 0
-         countstudent = 0
-         preciostudent = 0
-         total = 0
-         totalInapam = 4
-         countasientos = 0;
-         countpasajero = 1;
-         countpasajerofinal = 1
+        count_pasajeros = 0
+        countadulto = 0
+        precio_adulto = 0
+        countnino = 0
+        precionino = 0
+        countinapam = 0
+        precioinapam = 0
+        countstudent = 0
+        preciostudent = 0
+        total = 0
+        totalInapam = 4
+        countasientos = 0;
+        countpasajero = 1;
+        countpasajerofinal = 1
         precio_base = 0;
 
-       
-         countasientos = 0;
-         countpasajero = 1;
-         countpasajerofinal = 1
+
+        countasientos = 0;
+        countpasajero = 1;
+        countpasajerofinal = 1
 
 
 
@@ -903,7 +901,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('section-tipo-pago').style.display = 'none';
         document.getElementById('section-asientos').style.display = 'block';
-        
+
     })
 
 
@@ -1046,7 +1044,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 `;
                                 document.getElementById('span_total_orasi').innerHTML = totalPrecio.toFixed(2)
 
-                                
+
 
 
                                 localStorage.setItem('Total_compra', totalPrecio.toFixed(2))
@@ -1147,7 +1145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     } else {
                                         buttonElement.className = 'btn btn-primary'
                                         countasientos = countasientos - 1;
-                                       // countpasajero = countpasajero + 1;
+                                        // countpasajero = countpasajero + 1;
                                         quitartabla(buttonElement.value);
                                     }
                                 }
@@ -1175,7 +1173,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-       
+
 
 
     })
@@ -1263,7 +1261,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("spantotaltotal").innerHTML = totalapagar
         }
 
-        
+
     })
 
 
@@ -1335,7 +1333,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-       //     var res = monto_recibido - totalapagar
+            //     var res = monto_recibido - totalapagar
 
 
 
@@ -1387,9 +1385,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-         
 
-           var lista_ventas = localStorage.getItem("array_ventas")
+
+            var lista_ventas = localStorage.getItem("array_ventas")
 
             var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
 
@@ -1398,9 +1396,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Convertir la lista actualizada a cadena y almacenarla en localStorage
             localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
-            
 
-       
+
+
 
             const InternetSale =
             {
@@ -1464,7 +1462,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         var currentsale = actualizarCurrentSale();
 
-                   
+
 
 
                     } else {
@@ -1528,7 +1526,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
         var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
         var userid = localStorage.getItem('id')
-        
+
 
 
 
@@ -1569,14 +1567,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             var res = monto_recibido - totalapagar
-   
+
             const json = JSON.stringify(rows);
 
-       
+
             const jsonObj = JSON.parse(json);
 
             const nuevoJson = jsonObj.map(item => {
-                let tipo = ""; 
+                let tipo = "";
 
                 if (item.Tipo == "Adulto") {
                     tipo = "ADULT";
@@ -1608,10 +1606,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
 
-           
-            const nuevoJsonString = JSON.stringify(nuevoJson, null, 2); 
 
-          
+            const nuevoJsonString = JSON.stringify(nuevoJson, null, 2);
+
+
+
 
 
 
@@ -1683,13 +1682,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         var currentsale = actualizarCurrentSale();
 
-                       
+
                     }
 
-                    
-                    else{
+
+                    else {
                         Swal.fire({
-                            title: "Erroro!",
+                            title: "Error!",
                             text: `Ocurrio un error`,
                             icon: "error"
                         });
@@ -1793,7 +1792,7 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
 
         id = await gettripid(RunId, type, Departure, Arrival, totaltime)
 
-    } 
+    }
 
     var datos_viaje = {
 
@@ -1839,7 +1838,7 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
 
                 document.getElementById('content-count-inapam').style.display = "none"
                 document.getElementById("total_inapam").innerHTML = cant_inapam
-                
+
 
             }
             else {
@@ -1959,8 +1958,8 @@ function agregaratabla(elemt) {
     var newElement = document.createElement("div");
     newElement.id = `asientoparapasajero${i}`;
     newElement.textContent = elemt;
-    document.body.appendChild(newElement); 
-    
+    document.body.appendChild(newElement);
+
 }
 
 function quitartabla(element) {
@@ -1996,24 +1995,24 @@ function procesardatosViaje() {
         var fila = filas[i];
         var celdas = fila.getElementsByTagName('td');
 
-       
+
         var filaDatos = {};
 
-      
+
         for (var j = 0; j < celdas.length; j++) {
-           
+
             var columna = tabla.rows[0].cells[j].innerHTML;
             var valor = celdas[j].innerHTML;
 
-           
+
             filaDatos[columna.toLowerCase()] = valor;
         }
 
-     
+
         datos.push(filaDatos);
     }
 
- 
+
     var jsonDatos = JSON.stringify(datos, null, 2);
     localStorage.setItem('datosInternetsale', jsonDatos)
 
@@ -2038,11 +2037,13 @@ function iniciarturno() {
     var id_terminal = localStorage.getItem('terminal_id')
     var oficina = localStorage.getItem('office_name')
     var selectOrigen = document.getElementById("origen");
+    var cajaabierta = true
+    localStorage.setItem("caja_abierta" , cajaabierta)
 
 
     var clave = "shift_number";
 
-   
+
     if (localStorage.getItem(clave) == null) {
 
 
@@ -2055,45 +2056,45 @@ function iniciarturno() {
                 localStorage.setItem('shift_number', data.shift)
                 localStorage.setItem('saleshift_id', data.saleShift)
 
-             
+
 
                 const url = `http://apitaquillassag.dyndns.org/Home/descargar?url=${data.url}`;
 
-              
+
                 fetch(url)
                     .then(response => {
-                        
+
                         if (!response.ok) {
                             throw new Error(`Error al descargar el archivo. Código de estado: ${response.status}`);
                         }
 
-                     
+
                         return response.blob();
                     })
                     .then(blob => {
-                      
+
                         const blobUrl = URL.createObjectURL(blob);
 
-                      
+
                         const link = document.createElement('a');
                         link.href = blobUrl;
 
                         link.download = 'apertura de caja';
 
-                  
+
                         document.body.appendChild(link);
 
-                  
+
                         link.click();
 
-                    
+
                         document.body.removeChild(link);
                     })
                     .catch(error => {
                         console.error(error);
-                       
+
                     });
-               
+
             })
 
         Swal.fire({
@@ -2124,7 +2125,7 @@ function iniciarturno() {
         .then(data => {
             var selectOrigen = document.getElementById('origen');
 
-          
+
             while (selectOrigen.options.length > 1) {
                 selectOrigen.remove(1);
             }
@@ -2152,7 +2153,7 @@ function iniciarturno() {
 
         var data = { origen: Origen };
 
-   
+
         fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
             method: 'POST',
             headers: {
@@ -2164,7 +2165,7 @@ function iniciarturno() {
             .then(responseData => {
                 var selectDestino = document.getElementById('destino');
 
-         
+
                 while (selectDestino.options.length > 1) {
                     selectDestino.remove(1);
                 }
@@ -2205,7 +2206,7 @@ function iniciarturno() {
         })
             .then(response => response.json())
             .then(responseData => {
-            
+
                 while (selectDestino.options.length > 1) {
                     selectDestino.remove(1);
                 }
@@ -2315,7 +2316,7 @@ function actualizarCurrentSale() {
 
 function CerrarCajamenor() {
 
-   
+
     var saleshift = localStorage.getItem('saleshift_id')
     var venta = localStorage.getItem('venta_reciente')
     var venta_reciente = parseFloat(venta)
@@ -2400,7 +2401,7 @@ function CerrarCajamenor() {
 
             alert("Ocurrio un error: " + error)
         })
-        
+
 
 
 }
@@ -2445,11 +2446,11 @@ function CerrarCajavacia() {
                 var cashcheckpoint = localStorage.getItem('cashcheckpoint');
 
                 location.href = "informeCierre.aspx"
-                
+
 
             }
 
-            
+
         }).catch(error => {
 
             alert("Ocurrio un error: " + error)
@@ -2463,4 +2464,4 @@ function CerrarCajavacia() {
 }
 
 
-            
+

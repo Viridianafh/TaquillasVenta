@@ -28,6 +28,12 @@
     </style>
   
  
+
+    
+        <div class="container mt-2" >
+            <button class="btn btn-danger">Atrás</button>
+            <button class="btn btn-dark" id="botonDescargar">Descargar</button>
+        </div>
      
     <section id="guia">
 
@@ -43,7 +49,7 @@
 
             <div>
                 <h4>
-                fecha: <span id="fecha">2024-06-06</span>
+                <%--fecha: <span id="fecha">2024-06-06</span>--%>
                     
                     
              </h4>       
@@ -56,17 +62,17 @@
         <div class="d-flex justify-content-between m-3">
 
             <div>
-                <h5>Corrida: <span id="titleorigen"> Corrida</span></h5>
-                <h5>Origen: <span id="titleorigen"> Villahermosa Central</span></h5>
-                <h5>Destino: <span id="titledestino">Merida</span></h5>
-                <h5>Salida: <span id="titledestino">14:00</span></h5>
-                <h5>LLegadada: <span id="titledestino">15:00</span></h5>
+                <h5 class="text-primary">Corrida: <span   class="text-dark" id="textcorrida"> </span></h5>
+                <h5 class="text-primary">Origen: <span    class="text-dark" id  ="textorigen"> </span></h5>
+                <h5 class="text-primary">Destino: <span   class="text-dark" id="textdestino"></span></h5>
+                <h5 class="text-primary">Salida: <span    class="text-dark" id   ="textsalida"></span></h5>
+                <%--<h5 class="text-primary">LLegadada: <span class="text-dark" id="textllegada"></span></h5>--%>
             </div>
             <div>
-                <h5>Operador1: <span id="titleorigen">Ejemplo Operador</span></h5>
-                <h5>Operador2: <span id="titledestino">Ejemplo Operador</span></h5>
-                <h5>Bus: <span id="titledestino"> ejemplo bu</span></h5>
-                <h5>Anticpo: <span id="titledestino">50</span></h5>
+                <h5 class="text-primary">Operador1: <span class="text-dark" id="textoperador1"></span></h5>
+                <h5 class="text-primary">Operador2: <span class="text-dark" id="textoperador2"></span></h5>
+                <h5 class="text-primary">Bus:       <span class="text-dark" id="textbus"> </span></h5>
+                <h5 class="text-primary">Anticpo:   <span class="text-dark" id="textanticipo"></span></h5>
             </div>
             
         </div>
@@ -75,112 +81,9 @@
 
 
          <div class="container">
-        <div class="row">
+        <div class="row" id="cards-container">
 
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Oficina: <span class="text-primary">Villahermosa Central</span></h5>
-                        <h6 class="card-subtitle mb-2">Hora: 4:30</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Código: <span>CODIGOQR</span></h6>
-                        <div id="qrcode"></div>
-
-                    </div>
-                </div>
-            </div>     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Oficina: <span class="text-primary">Villahermosa Central</span></h5>
-                        <h6 class="card-subtitle mb-2">Hora: 4:30</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Código: <span>CODIGOQR</span></h6>
-                        <div id="qrcode" ></div>
-
-                    </div>
-                </div>
-            </div>     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Oficina: <span class="text-primary">Villahermosa Central</span></h5>
-                        <h6 class="card-subtitle mb-2">Hora: 4:30</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Código: <span>CODIGOQR</span></h6>
-                        <div id="qrcode"></div>
-
-                    </div>
-                </div>
-            </div>     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Oficina: <span class="text-primary">Villahermosa Central</span></h5>
-                        <h6 class="card-subtitle mb-2">Hora: 4:30</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Código: <span>CODIGOQR</span></h6>
-                        <div id="qrcode"></div>
-
-                    </div>
-                </div>
-            </div>     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Oficina: <span class="text-primary">Villahermosa Central</span></h5>
-                        <h6 class="card-subtitle mb-2">Hora: 4:30</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Código: <span>CODIGOQR</span></h6>
-                        <div id="qrcode"></div>
-
-                    </div>
-                </div>
-            </div>     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Oficina: <span class="text-primary">Villahermosa Central</span></h5>
-                        <h6 class="card-subtitle mb-2">Hora: 4:30</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Código: <span>CODIGOQR</span></h6>
-                        <div id="qrcode"></div>
-
-                    </div>
-                </div>
-            </div>     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Oficina: <span class="text-primary">Villahermosa Central</span></h5>
-                        <h6 class="card-subtitle mb-2">Hora: 4:30</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Código: <span>CODIGOQR</span></h6>
-                        <div id="qrcode"></div>
-
-                    </div>
-                </div>
-            </div>     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Oficina: <span class="text-primary">Villahermosa Central</span></h5>
-                        <h6 class="card-subtitle mb-2">Hora: 4:30</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Código: <span>CODIGOQR</span></h6>
-                        <div id="qrcode"></div>
-
-                    </div>
-                </div>
-            </div>     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Oficina: <span class="text-primary">Villahermosa Central</span></h5>
-                        <h6 class="card-subtitle mb-2">Hora: 4:30</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Código: <span>CODIGOQR</span></h6>
-                        <div id="qrcode"></div>
-
-                    </div>
-                </div>
-            </div>     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Oficina: <span class="text-primary">Villahermosa Central</span></h5>
-                        <h6 class="card-subtitle mb-2">Hora: 4:30</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Código: <span>CODIGOQR</span></h6>
-                        <div id="qrcode"></div>
-
-                    </div>
-                </div>
-            </div>
-            
-
-   
+           
 
        
 
@@ -192,15 +95,13 @@
 
         <div class="d-flex justify-content-between m-5">
 
-            <div>
-                <img src="Assets/logoSag.png" style="width: 150px;" />
-            </div>
+           
 
             <h5>Buen viaje, Conduce con cuidado tu familia te espera!</h5>
 
             <div>
                 <h6>
-                fecha: <span id="fecha">2024-06-06</span>
+              <%--  fecha: <span id="fecha">2024-06-06</span>--%>
                     
                     
              </h6>       
@@ -213,12 +114,12 @@
 
           
            <div>
-               <h6>Condictor1</h6>
+               <h6 id="hconductor1"></h6>
                <hr  style="width: 250px;"/>
            </div> 
             
             <div>
-               <h6>Condictor1</h6>
+               <h6 id="hconductor2"></h6>
                 <hr  style="width: 250px;"/>
            </div>
 
@@ -229,19 +130,25 @@
 
           
            <div>
-               <h6>corrida</h6>
+               <h6>corrida <span id="text-corrida"></span></h6>
            </div> 
             
             <div>
-               <h6>unidad</h6>
+               <h6 id="hunidad"></h6>
            </div>
             
             
             <div>
-               <h6>anticipo</h6>
+               <h6>anticipo <span id="text-anticipo"></span></h6>
            </div>
 
             
+        </div>
+        <div class="container d-flex align-items-center justify-content-center">
+
+             <div>
+                <img src="Assets/logoSag.png" style="width: 200px;" />
+            </div>
         </div>
 
      

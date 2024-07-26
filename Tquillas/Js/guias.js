@@ -1,7 +1,7 @@
 ﻿document.addEventListener('DOMContentLoaded', (event) => {
 
 
-   
+
 
     //Swal.fire({
     //    title: "Modulo en Desarrollo",
@@ -16,49 +16,49 @@
     //    }
     //});
 
-   
 
-   
-        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify('')
+
+
+    fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify('')
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                var selectOrigen = document.getElementById('origen');
-                // Limpia las opciones actuales del select
-                selectOrigen.innerHTML = ""; // Esta línea limpia las opciones actuales del select
+        .then(data => {
+            var selectOrigen = document.getElementById('origen');
+            // Limpia las opciones actuales del select
+            selectOrigen.innerHTML = ""; // Esta línea limpia las opciones actuales del select
 
-                data.forEach(option => {
-                    var newOption = document.createElement("option");
-                    newOption.value = option.name;
-                    newOption.text = option.name;
-                    selectOrigen.appendChild(newOption);
-                });
-            })
-            .catch(error => {
-                Swal.fire({
-                    title: "Error!",
-                    text: `${error}`,
-                    icon: "error"
-                });
+            data.forEach(option => {
+                var newOption = document.createElement("option");
+                newOption.value = option.name;
+                newOption.text = option.name;
+                selectOrigen.appendChild(newOption);
             });
+        })
+        .catch(error => {
+            Swal.fire({
+                title: "Error!",
+                text: `${error}`,
+                icon: "error"
+            });
+        });
 
     var selectOrigen = document.getElementById('origen');
     selectOrigen.addEventListener('change', () => {
 
-    var data = selectOrigen.value
+        var data = selectOrigen.value
         Buscarbegins(data)
     })
-    
+
     function Buscarbegins(data) {
         var tabla = document.getElementById('tabla-begins').getElementsByTagName('tbody')[0]
         tabla.innerHTML = '';
@@ -75,9 +75,9 @@
         console.log(formattedDate);
 
 
-      
 
-        fetch(`https://localhost:5001/Home/ObtenerIniciosGuias?origen=${data}&fecha=${formattedDate}`)
+
+        fetch(`http://apitaquillassag.dyndns.org/Home/ObtenerIniciosGuias?origen=${data}&fecha=${formattedDate}`)
             .then(response => response.json())
             .then(data => {
 
@@ -88,15 +88,36 @@
                 data.forEach(e => {
 
                     var tr = document.createElement('tr')
+
+
+                    var dateObject = new Date(e.salida);
+                   
+
+                    // Función para agregar ceros a la izquierda si es necesario
+                    function padZero(number) {
+                        return number < 10 ? `0${number}` : number;
+                    }
+
+                    const day = padZero(dateObject.getDate());
+                    const month = padZero(dateObject.getMonth() + 1); // Los meses empiezan desde 0
+                    const year = dateObject.getFullYear();
+                    const hours = padZero(dateObject.getHours());
+                    const minutes = padZero(dateObject.getMinutes());
+                    const seconds = padZero(dateObject.getSeconds());
+
+                    const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+
+                    console.log("Fecha formateada:", formattedDate);
+
                     tr.innerHTML += `
 
-              
+                  
                         <td> ${e.corrida} </td>
                         <td> ${e.origen} </td>
                         <td> ${e.destino} </td>
                         <td> ${e.operador1}  //  ${e.operador2}   </td>
                         <td> ${e.bus} </td>
-                        <td> ${e.salida} </td>
+                        <td> ${formattedDate} </td>
                         <td>
                         <button class="btn btn-dark" onclick="generarguia('${e.route_id}', '${e.run_id}', '${e.trip_id}', '${e.bus_id}', '${e.origenid}', '${e.destinoid}', '${e.anticipo}', '${e.corrida}', '${e.origen}', '${e.destino}', '${e.operador1}', '${e.operador2}', '${e.bus}', '${e.salida}')">
 
@@ -109,7 +130,7 @@
 
 
                 })
-                
+
             })
             .catch(error => {
                 console.error(error)
@@ -118,7 +139,7 @@
 
     }
 
-  
+
 
 })
 
@@ -139,14 +160,14 @@ function generarguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, ant
     localStorage.setItem("destino_guia", destino)
     localStorage.setItem("operador1_guia", operador1)
     localStorage.setItem("operador2_guia", operador2)
-    localStorage.setItem("bus_guia",bus)
+    localStorage.setItem("bus_guia", bus)
     localStorage.setItem("salida_guia", salida)
     localStorage.setItem("totalanticipo_guia", anticipo)
 
 
     llamarlistaabordar(trip_id);
     llamarparadas(route_id)
-    llamaranticipo(anticipo)
+    llamaranticipo()
 
     document.getElementById('section-busqueda-guide').style.display = "none";
     document.getElementById('section-guides-actions').style.display = "block";
@@ -154,7 +175,7 @@ function generarguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, ant
 
 
 function llamarlistaabordar(trip_id) {
-    fetch(`https://localhost:5001/Home/MostrarListaAbordar?trip_id=${trip_id}`)
+    fetch(`http://apitaquillassag.dyndns.org/Home/MostrarListaAbordar?trip_id=${trip_id}`)
         .then(res => {
             if (!res.ok) {
                 throw new Error('Network response was not ok ' + res.statusText);
@@ -184,7 +205,7 @@ function llamarlistaabordar(trip_id) {
 
 
 function llamarparadas(route_id) {
-    fetch(`https://localhost:5001/Home/GetStopsByRouteId?id=${route_id}`)
+    fetch(`http://apitaquillassag.dyndns.org/Home/GetStopsByRouteId?id=${route_id}`)
         .then(res => {
             if (!res.ok) {
                 throw new Error('Network response was not ok ' + res.statusText);
@@ -192,6 +213,7 @@ function llamarparadas(route_id) {
             return res.json();
         })
         .then(data => {
+            localStorage.setItem("paradas-guia", JSON.stringify(data))
             const tablaparadas = document.getElementById('table-paradas').getElementsByTagName('tbody')[0];
             tablaparadas.innerHTML = '';
 
@@ -211,43 +233,43 @@ function llamarparadas(route_id) {
         });
 }
 
-function llamaranticipo(anticipo) {
+function llamaranticipo() {
     // Recuperar el total del anticipo almacenado en localStorage
     var anticip = parseFloat(localStorage.getItem('anticipo_guia')) || 0;
-    document.getElementById('totalanticipo').textContent = anticip.toFixed(2);
+    document.getElementById('contentanticipo').textContent = anticip.toFixed(2);
 
-    // Variable para contar la cantidad de entradas de anticipo
-    var datacount = 1;
-    document.getElementById('contentanticipo').textContent = anticipo;
-
-    // Función para actualizar el total del anticipo
+    // Función para actualizar el total del anticipo y el JSON de anticipos
     function updateTotalAnticipo() {
         let totalAnticipo = 0;
-        document.querySelectorAll('input[name="anticipo"]').forEach(input => {
-            totalAnticipo += parseFloat(input.value) || 0;
+        const anticipos = [];
+        document.querySelectorAll('.anticipo-div').forEach((div, index) => {
+            const descripcion = div.querySelector('input[name="descripcion"]').value;
+            const valorAnticipo = parseFloat(div.querySelector('input[name="anticipo"]').value) || 0;
+            totalAnticipo += valorAnticipo;
+            anticipos.push({ descripcion, valor: valorAnticipo });
         });
+
         localStorage.setItem("totalanticipo_guia", totalAnticipo.toFixed(2));
+        document.getElementById('totalanticipo').textContent = (totalAnticipo + anticip).toFixed(2);
 
-        document.getElementById('totalanticipo').textContent = parseFloat(totalAnticipo.toFixed(2)) + parseFloat(localStorage.getItem('anticipo_guia'));
-
-
+        // Mostrar el JSON de anticipos
+        document.getElementById('json-output').textContent = JSON.stringify(anticipos, null, 2);
+        localStorage.setItem("arrayanticipos", JSON.stringify(anticipos))
     }
 
     // Escuchar el evento de clic para agregar nuevos anticipos
     document.querySelector('#btn-add-advance').addEventListener('click', () => {
-        datacount++;
-        var contentcontrols = document.getElementById('content-controls');
+        const contentcontrols = document.getElementById('content-controls');
 
         // Crear un nuevo div para los controles del anticipo
         const newDiv = document.createElement('div');
-        newDiv.className = 'd-flex m-2 gap-2';
-        newDiv.id = `anticipo-div-${datacount}`;
+        newDiv.className = 'd-flex m-2 gap-2 anticipo-div';
 
         // Crear el input para la descripción
         const input1 = document.createElement('input');
         input1.type = 'text';
         input1.name = 'descripcion';
-        input1.id = `descripcion${datacount}`;
+        input1.placeholder = 'Descripcion';
         input1.className = 'form-control';
         input1.style.width = '220px';
 
@@ -255,7 +277,7 @@ function llamaranticipo(anticipo) {
         const input2 = document.createElement('input');
         input2.type = 'number';
         input2.name = 'anticipo';
-        input2.id = `anticipo${datacount}`;
+        input2.placeholder = 'Valor Anticipo';
         input2.className = 'form-control';
         input2.style.width = '220px';
         input2.addEventListener('input', updateTotalAnticipo);
@@ -266,7 +288,6 @@ function llamaranticipo(anticipo) {
         button.innerText = 'Eliminar anticipo';
         button.addEventListener('click', function () {
             newDiv.remove();
-            datacount--;
             updateTotalAnticipo();
         });
 
@@ -281,26 +302,111 @@ function llamaranticipo(anticipo) {
         // Actualizar el total del anticipo después de agregar un nuevo input
         updateTotalAnticipo();
     });
-}
 
+
+
+
+
+
+
+}
 
 
 
 
 function agregaranticipo() {
 
-    var anticipoObj = [
-        
-            {
-                "id": "string",
-                "amount": "string",
-                "comments": "string",
-                "date_created": "string",
-                "last_updated": "string",
-                "version": "string"
+
+    var anticipo = localStorage.getItem("arrayanticipos");
+    var totalanticipo = document.getElementById('totalanticipo').textContent
+    var anticipototal = parseFloat(totalanticipo)
+    localStorage.setItem("anticipototal", anticipototal)
+    console.log(anticipo)
+    var longitudanticipo = JSON.parse(anticipo)
+
+    if (anticipo) {
+
+
+        if (Object.keys(longitudanticipo).length === 0) {
+
+            alert("No hay Anticipo")
+            actualizaranticipo()
+            InsertarTripStopControl()
+
+        } else {
+
+            fetch('http://apitaquillassag.dyndns.org/Home/agregar_anticipo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+
+                },
+                body: anticipo
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    actualizaranticipo()
+                    InsertarTripStopControl()
+                })
+                .catch(error => console.error('Error:', error));
+
+        }
+
+    } else {
+        alert("no hay anticipó")
+        actualizaranticipo()
+        InsertarTripStopControl()
+    }
+
+
+
+
+}
+
+
+function actualizaranticipo() {
+
+
+    var idguia = localStorage.getItem("trip_id-guia");
+    fetch(`http://apitaquillassag.dyndns.org/Home/ActualizarGuia?tripId=${idguia}`, {
+        method: 'PATCH', 
+        headers: {
+            'Authorization': 'Bearer your-token-here' 
+           
+        }
+      
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
             }
-        
-    ]
+            return response.text(); 
+        })
+        .then(data => console.log(data)) 
+        .catch(error => console.error('Error:', error)); 
+}
+
+
+function InsertarTripStopControl(){
+
+    var salida_guia = localStorage.getItem("salida_guia")
+    var dataparadas = localStorage.getItem("paradas-guia")
+    var tripid = localStorage.getItem("trip_id-guia")
+
+
+
+    fetch(`http://apitaquillassag.dyndns.org/Home/InsertarTripStopControl?tripid=${tripid}&salida=${salida_guia}`, {
+         
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer your-token-here'
+        }
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+        })
 
 
 }
