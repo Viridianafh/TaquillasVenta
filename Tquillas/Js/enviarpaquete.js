@@ -1078,431 +1078,525 @@ function iniciarturno() {
     if (localStorage.getItem(clave) == null) {
 
 
+        var terminal = "";
+        var office = "";
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeLocationId}&terminal=${id_terminal}&office_name=${oficina}&terminal_name=${nombre_terminal}`)
-            .then(response => response.json())
-            .then(data => {
+        var terminalid = "";
+        var officeid = "";
 
-                console.log(data.shift)
-                localStorage.setItem('shift_number', data.shift)
-                localStorage.setItem('saleshift_id', data.saleShift)
+        localforage.getItem('terminal_name')
+            .then(function (value) {
+                // Se ejecuta después de que el valor haya sido recuperado
+                console.log('Terminal Name recuperado:', value);
 
-
-
-                const url = `http://apitaquillassag.dyndns.org/Home/descargar?url=${data.url}`;
-
-
-                fetch(url)
-                    .then(response => {
-
-                        if (!response.ok) {
-                            throw new Error(`Error al descargar el archivo. Código de estado: ${response.status}`);
-                        }
-
-
-                        return response.blob();
-                    })
-                    .then(blob => {
-
-                        const blobUrl = URL.createObjectURL(blob);
-
-
-                        const link = document.createElement('a');
-                        link.href = blobUrl;
-
-                        link.download = 'apertura de caja';
-
-
-                        document.body.appendChild(link);
-
-
-                        link.click();
-
-
-                        document.body.removeChild(link);
-                    })
-                    .catch(error => {
-                        console.error(error);
-
-                    });
-
-            })
-
-        Swal.fire({
-            title: "Mensaje!",
-            text: `puedes iniciar con la venta`,
-            icon: "success"
-        });
-
-        var arrayventas = []
-
-        localStorage.setItem("array_ventas", arrayventas)
-
-        localStorage.setItem('venta_reciente', 0)
-
-    } else {
-
-    }
-
-
-    fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify('')
-    })
-        .then(response => response.json())
-        .then(data => {
-            var selectOrigen = document.getElementById('origen');
-
-
-            while (selectOrigen.options.length > 1) {
-                selectOrigen.remove(1);
-            }
-
-            data.forEach(option => {
-                var newOption = document.createElement("option");
-                newOption.value = option.id;
-                newOption.text = option.name;
-                selectOrigen.appendChild(newOption);
+                terminal = value
+            }).catch(function (err) {
+                // Manejo de errores
+                console.error('Error al recuperar el Terminal Name:', err);
             });
-        })
-        .catch(error => {
-            Swal.fire({
-                title: "Error!",
-                text: `${error}`,
-                icon: "error"
+
+
+        localforage.getItem('office_name')
+            .then(function (value) {
+                // Se ejecuta después de que el valor haya sido recuperado
+                console.log('Terminal Name recuperado:', value);
+
+                office = value
+            }).catch(function (err) {
+                // Manejo de errores
+                console.error('Error al recuperar el Terminal Name:', err);
             });
-        });
 
 
-    var selectOrigen = document.getElementById('origen');
-    selectOrigen.addEventListener('change', () => {
-        var IDOrigen = selectOrigen.value;
-        var Origen = selectOrigen.options[selectOrigen.selectedIndex].text;
-
-        var data = { origen: Origen };
 
 
-        fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(responseData => {
-                var selectDestino = document.getElementById('destino');
+        localforage.getItem('office_location_id')
+            .then(function (value) {
+                // Se ejecuta después de que el valor haya sido recuperado
+                console.log('Terminal Name recuperado:', value);
 
-
-                while (selectDestino.options.length > 1) {
-                    selectDestino.remove(1);
-                }
-
-
-                responseData.forEach(option => {
-                    var newOption = document.createElement("option");
-                    newOption.value = option.id;
-                    newOption.text = option.name;
-                    selectDestino.appendChild(newOption);
-                });
-            })
-            .catch(error => {
-                Swal.fire({
-                    title: "Error!",
-                    text: `${error}`,
-                    icon: "error"
-                });
+                officeid = value
+            }).catch(function (err) {
+                // Manejo de errores
+                console.error('Error al recuperar el Terminal Name:', err);
             });
-    });
 
 
+        localforage.getItem('terminal_id')
+            .then(function (value) {
+                // Se ejecuta después de que el valor haya sido recuperado
+                console.log('Terminal Name recuperado:', value);
 
-
-
-
-    function searchDestiny() {
-
-        var selectOrigenUs = document.getElementById('origen');
-        var selectDestino = document.getElementById('destino');
-
-        var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
-
-
-        fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(responseData => {
-
-                while (selectDestino.options.length > 1) {
-                    selectDestino.remove(1);
-                }
-
-                responseData.forEach(option => {
-                    var newOption = document.createElement("option");
-                    newOption.value = option.id;
-                    newOption.text = option.name;
-                    selectDestino.appendChild(newOption);
-                });
-            })
-            .catch(error => {
-                Swal.fire({
-                    title: "Error!",
-                    text: `${error}`,
-                    icon: "error"
-                });
+                terminalid = value
+            }).catch(function (err) {
+                // Manejo de errores
+                console.error('Error al recuperar el Terminal Name:', err);
             });
-    }
+
+        var clave = "shift_number";
 
 
-    document.getElementById('content-button').style.display = "none"
-    document.getElementById('content-buttons').style.display = "flex"
-    document.getElementById('content-buscador').style.display = "block"
+        if (localStorage.getItem(clave) == null) {
 
 
+            var terminal = "";
+            var office = "";
+            var terminalid = "";
+            var officeid = "";
 
-}
+            Promise.all([
+                localforage.getItem('terminal_name'),
+                localforage.getItem('office_name'),
+                localforage.getItem('office_location_id'),
+                localforage.getItem('terminal_id')
+            ]).then(function (values) {
+                terminall = values[0];
+                officee = values[1];
+                officeidd = values[2];
+                terminalidd = values[3];
+
+                localStorage.setItem("terminal_name", terminall)
+                localStorage.setItem("terminal_id", terminalidd)
+            }).catch(function (err) {
+                console.error('Error al recuperar datos:', err);
+            });
+
+            var clave = "shift_number";
 
 
-
-
-function convertirAMayusculas(input) {
-    input.value = input.value.toUpperCase();
-}
-
-
-function validarNumero(input) {
-
-    input.value = input.value.replace(/[^0-9]/g, '');
-}
-
-
-function generarID() {
-    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let id = '';
-
-    for (let i = 0; i < 8; i++) {
-        const indice = Math.floor(Math.random() * caracteres.length);
-        id += caracteres.charAt(indice);
-    }
-
-    return id;
-}
+            if (localStorage.getItem(clave) == null) {
 
 
 
-
-
-function actualizarCurrentSale() {
-
-    var ventareciente = localStorage.getItem('num_ventas')
-    var shiftnumber = localStorage.getItem('shift_number')
-    var userid = localStorage.getItem('id')
-
-
-    fetch(`http://apitaquillassag.dyndns.org/Home/ActualizarSaleShift?userid=${userid}&shiftNumber=${shiftnumber}&currentSale=${ventareciente}`, {
-
-        method: 'PATCH',
-        headers: {
-            'Accept': 'text/plain',
-            'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
-        },
-        body: JSON.stringify({})
-    })
-        .then(response => response.text())
-        .then(data => {
-
-            if (data == "OK") {
-
-
-                Swal.fire({
-                    title: "pago realizado!",
-                    text: `se ha capturado exitosamente`,
-                    icon: "success"
-                });
-
-
-                window.location.href = 'Boletos.aspx'
-
-            } else {
-
-                Swal.fire({
-                    title: "Error",
-                    text: `Hubo un error al guardar "venta reciente" en el registro de datos`,
-                    icon: "error"
-                });
-            }
-
-        })
-
-
-
-}
-
-
-
-function CerrarCajamenor() {
-
-
-    var saleshift = localStorage.getItem('saleshift_id')
-    var venta = localStorage.getItem('venta_reciente')
-    var venta_reciente = parseFloat(venta)
-
-
-    const CashCheckpoint = {
-
-        sale_shift_id: saleshift,
-        previous_amount: venta_reciente,
-        new_amount: 0
-
-    }
-
-
-    fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
-
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(CashCheckpoint)
-
-    })
-        .then(response => response.text())
-        .then(data => {
-
-            if (data.length <= 6) {
-                alert("ocurrio un error")
-            } else {
-
-                localStorage.setItem('cashcheckpoint', data);
-                var cashcheckpoint = localStorage.getItem('cashcheckpoint');
-                var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
-
-                let Saleshift = salesnumberArray.map(salesnumber => {
-                    return {
-                        salesnumber: salesnumber
-                    };
-                });
-
-                fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
-
-                    method: 'PATCH',
-                    headers: {
-                        'Accept': 'text/plain',
-                        'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
-                    },
-                    body: JSON.stringify(Saleshift)
-
-                })
-                    .then(response => response.text())
+                fetch(`http://apitaquillassag.dyndns.org/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
+                    .then(response => response.json())
                     .then(data => {
 
 
+                        console.log(data.shift)
+                        localStorage.setItem('shift_number', data.shift)
+                        localStorage.setItem('saleshift_id', data.saleShift)
 
-                        if (data == "Operación exitosa") {
 
-                            Swal.fire({
-                                title: "OK",
-                                text: `Se ha cerrado la caja exitosamente`,
-                                icon: "success"
+
+                        const url = `http://apitaquillassag.dyndns.org/Home/descargar?url=${data.url}`;
+
+
+                        fetch(url)
+                            .then(response => {
+
+                                if (!response.ok) {
+                                    throw new Error(`Error al descargar el archivo. Código de estado: ${response.status}`);
+                                }
+
+
+                                return response.blob();
+                            })
+                            .then(blob => {
+
+                                const blobUrl = URL.createObjectURL(blob);
+
+
+                                const link = document.createElement('a');
+                                link.href = blobUrl;
+
+                                link.download = 'apertura de caja';
+
+
+                                document.body.appendChild(link);
+
+
+                                link.click();
+
+
+                                document.body.removeChild(link);
+                            })
+                            .catch(error => {
+                                console.error(error);
+
                             });
 
-                            location.href = "informeCierre.aspx"
-
-                        } else {
-                            Swal.fire({
-                                title: "Error",
-                                text: `Hubo un error al cerrar la caja`,
-                                icon: "error"
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        alert("ocurrio un error: " + error)
                     })
 
+                Swal.fire({
+                    title: "Mensaje!",
+                    text: `puedes iniciar con la venta`,
+                    icon: "success"
+                });
 
-            }
+                var arrayventas = []
 
-        }).catch(error => {
+                localStorage.setItem("array_ventas", arrayventas)
 
-            alert("Ocurrio un error: " + error)
-        })
+                localStorage.setItem('venta_reciente', 0)
 
-
-
-}
-
-
-
-function CerrarCajavacia() {
-
-    alert("caja en 0")
-    var saleshift = localStorage.getItem('saleshift_id')
-    var venta = localStorage.getItem('venta_reciente')
-    var venta_reciente = parseFloat(venta)
-
-
-    const CashCheckpoint = {
-
-        sale_shift_id: saleshift,
-        previous_amount: 0,
-        new_amount: 0
-
-    }
-
-
-
-    fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
-
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(CashCheckpoint)
-
-    })
-        .then(response => response.text())
-        .then(data => {
-
-            if (data.length <= 6) {
-                alert("ocurrio un error")
             } else {
 
-                localStorage.setItem('cashcheckpoint', data);
-                var cashcheckpoint = localStorage.getItem('cashcheckpoint');
+            }
 
-                location.href = "informeCierre.aspx"
 
+            fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify('')
+            })
+                .then(response => response.json())
+                .then(data => {
+                    var selectOrigen = document.getElementById('origen');
+
+
+                    while (selectOrigen.options.length > 1) {
+                        selectOrigen.remove(1);
+                    }
+
+                    data.forEach(option => {
+                        var newOption = document.createElement("option");
+                        newOption.value = option.id;
+                        newOption.text = option.name;
+                        selectOrigen.appendChild(newOption);
+                    });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: "Error!",
+                        text: `${error}`,
+                        icon: "error"
+                    });
+                });
+
+
+            var selectOrigen = document.getElementById('origen');
+            selectOrigen.addEventListener('change', () => {
+                var IDOrigen = selectOrigen.value;
+                var Origen = selectOrigen.options[selectOrigen.selectedIndex].text;
+
+                var data = { origen: Origen };
+
+
+                fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(responseData => {
+                        var selectDestino = document.getElementById('destino');
+
+
+                        while (selectDestino.options.length > 1) {
+                            selectDestino.remove(1);
+                        }
+
+
+                        responseData.forEach(option => {
+                            var newOption = document.createElement("option");
+                            newOption.value = option.id;
+                            newOption.text = option.name;
+                            selectDestino.appendChild(newOption);
+                        });
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: "Error!",
+                            text: `${error}`,
+                            icon: "error"
+                        });
+                    });
+            });
+
+
+
+
+
+
+            function searchDestiny() {
+
+                var selectOrigenUs = document.getElementById('origen');
+                var selectDestino = document.getElementById('destino');
+
+                var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
+
+
+                fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(responseData => {
+
+                        while (selectDestino.options.length > 1) {
+                            selectDestino.remove(1);
+                        }
+
+                        responseData.forEach(option => {
+                            var newOption = document.createElement("option");
+                            newOption.value = option.id;
+                            newOption.text = option.name;
+                            selectDestino.appendChild(newOption);
+                        });
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: "Error!",
+                            text: `${error}`,
+                            icon: "error"
+                        });
+                    });
+            }
+
+
+            document.getElementById('content-button').style.display = "none"
+            document.getElementById('content-buttons').style.display = "flex"
+            document.getElementById('content-buscador').style.display = "block"
+
+
+
+        }
+
+
+
+
+        function convertirAMayusculas(input) {
+            input.value = input.value.toUpperCase();
+        }
+
+
+        function validarNumero(input) {
+
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+
+
+        function generarID() {
+            const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let id = '';
+
+            for (let i = 0; i < 8; i++) {
+                const indice = Math.floor(Math.random() * caracteres.length);
+                id += caracteres.charAt(indice);
+            }
+
+            return id;
+        }
+
+
+
+
+
+        function actualizarCurrentSale() {
+
+            var ventareciente = localStorage.getItem('num_ventas')
+            var shiftnumber = localStorage.getItem('shift_number')
+            var userid = localStorage.getItem('id')
+
+
+            fetch(`http://apitaquillassag.dyndns.org/Home/ActualizarSaleShift?userid=${userid}&shiftNumber=${shiftnumber}&currentSale=${ventareciente}`, {
+
+                method: 'PATCH',
+                headers: {
+                    'Accept': 'text/plain',
+                    'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
+                },
+                body: JSON.stringify({})
+            })
+                .then(response => response.text())
+                .then(data => {
+
+                    if (data == "OK") {
+
+
+                        Swal.fire({
+                            title: "pago realizado!",
+                            text: `se ha capturado exitosamente`,
+                            icon: "success"
+                        });
+
+
+                        window.location.href = 'Boletos.aspx'
+
+                    } else {
+
+                        Swal.fire({
+                            title: "Error",
+                            text: `Hubo un error al guardar "venta reciente" en el registro de datos`,
+                            icon: "error"
+                        });
+                    }
+
+                })
+
+
+
+        }
+
+
+
+        function CerrarCajamenor() {
+
+
+            var saleshift = localStorage.getItem('saleshift_id')
+            var venta = localStorage.getItem('venta_reciente')
+            var venta_reciente = parseFloat(venta)
+
+
+            const CashCheckpoint = {
+
+                sale_shift_id: saleshift,
+                previous_amount: venta_reciente,
+                new_amount: 0
 
             }
 
 
-        }).catch(error => {
+            fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
 
-            alert("Ocurrio un error: " + error)
-        })
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(CashCheckpoint)
+
+            })
+                .then(response => response.text())
+                .then(data => {
+
+                    if (data.length <= 6) {
+                        alert("ocurrio un error")
+                    } else {
+
+                        localStorage.setItem('cashcheckpoint', data);
+                        var cashcheckpoint = localStorage.getItem('cashcheckpoint');
+                        var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
+
+                        let Saleshift = salesnumberArray.map(salesnumber => {
+                            return {
+                                salesnumber: salesnumber
+                            };
+                        });
+
+                        fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
+
+                            method: 'PATCH',
+                            headers: {
+                                'Accept': 'text/plain',
+                                'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
+                            },
+                            body: JSON.stringify(Saleshift)
+
+                        })
+                            .then(response => response.text())
+                            .then(data => {
+
+
+
+                                if (data == "Operación exitosa") {
+
+                                    Swal.fire({
+                                        title: "OK",
+                                        text: `Se ha cerrado la caja exitosamente`,
+                                        icon: "success"
+                                    });
+
+                                    location.href = "informeCierre.aspx"
+
+                                } else {
+                                    Swal.fire({
+                                        title: "Error",
+                                        text: `Hubo un error al cerrar la caja`,
+                                        icon: "error"
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                alert("ocurrio un error: " + error)
+                            })
+
+
+                    }
+
+                }).catch(error => {
+
+                    alert("Ocurrio un error: " + error)
+                })
+
+
+
+        }
+
+
+
+        function CerrarCajavacia() {
+
+            alert("caja en 0")
+            var saleshift = localStorage.getItem('saleshift_id')
+            var venta = localStorage.getItem('venta_reciente')
+            var venta_reciente = parseFloat(venta)
+
+
+            const CashCheckpoint = {
+
+                sale_shift_id: saleshift,
+                previous_amount: 0,
+                new_amount: 0
+
+            }
+
+
+
+            fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
+
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(CashCheckpoint)
+
+            })
+                .then(response => response.text())
+                .then(data => {
+
+                    if (data.length <= 6) {
+                        alert("ocurrio un error")
+                    } else {
+
+                        localStorage.setItem('cashcheckpoint', data);
+                        var cashcheckpoint = localStorage.getItem('cashcheckpoint');
+
+                        location.href = "informeCierre.aspx"
+
+
+                    }
+
+
+                }).catch(error => {
+
+                    alert("Ocurrio un error: " + error)
+                })
 
 
 
 
 
 
-}
+        }
 
-function limpiarTabla() {
-    var tabla = document.getElementById('tabla-viajes');
+        function limpiarTabla() {
+            var tabla = document.getElementById('tabla-viajes');
 
-    // Eliminar todas las filas excepto la primera (encabezados)
-    while (tabla.rows.length > 1) {
-        tabla.deleteRow(1);
+            // Eliminar todas las filas excepto la primera (encabezados)
+            while (tabla.rows.length > 1) {
+                tabla.deleteRow(1);
+            }
+        }
+
+
     }
 }

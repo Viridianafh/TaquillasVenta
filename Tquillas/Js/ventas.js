@@ -1288,6 +1288,25 @@ document.addEventListener('DOMContentLoaded', () => {
         var userid = localStorage.getItem('id')
 
 
+        var terminall = "";
+        var officee = "";
+        var terminalidd = "";
+        var officeidd = "";
+
+        Promise.all([
+            localforage.getItem('terminal_name'),
+            localforage.getItem('office_name'),
+            localforage.getItem('office_location_id'),
+            localforage.getItem('terminal_id')
+        ]).then(function (values) {
+            terminall = values[0];
+            officee = values[1];
+            officeidd = values[2];
+            terminalidd = values[3];
+
+        }).catch(function (err) {
+            console.error('Error al recuperar datos:', err);
+        });
 
 
 
@@ -1407,7 +1426,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 "PaymentType": "card",
                 "payedAmount": parseFloat(precio_base),
-                "salesTerminalId": terminalid,
+                "salesTerminalId": terminalidd,
                 "salesmanId": ticketuserid,
                 "salesShiftId": localStorage.getItem('saleshift_id'),
                 "saleNumber": shift_number_to_is,
@@ -1526,6 +1545,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
         var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
         var userid = localStorage.getItem('id')
+
 
 
 
@@ -2039,7 +2059,30 @@ function iniciarturno() {
     var selectOrigen = document.getElementById("origen");
     var cajaabierta = true
     localStorage.setItem("caja_abierta" , cajaabierta)
+    // datos forage
 
+    var terminal = "";
+    var office = "";
+    var terminalid = "";
+    var officeid = "";
+
+    Promise.all([
+        localforage.getItem('terminal_name'),
+        localforage.getItem('office_name'),
+        localforage.getItem('office_location_id'),
+        localforage.getItem('terminal_id')
+    ]).then(function (values) {
+        terminall = values[0];
+        officee = values[1];
+        officeidd = values[2];
+        terminalidd = values[3];
+
+        localStorage.setItem("terminal_name", terminall)
+        localStorage.setItem("terminal_id", terminalidd)
+
+    }).catch(function (err) {
+        console.error('Error al recuperar datos:', err);
+    });
 
     var clave = "shift_number";
 
@@ -2048,7 +2091,7 @@ function iniciarturno() {
 
 
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeLocationId}&terminal=${id_terminal}&office_name=${oficina}&terminal_name=${nombre_terminal}`)
+        fetch(`http://apitaquillassag.dyndns.org/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
             .then(response => response.json())
             .then(data => {
 

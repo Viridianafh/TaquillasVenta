@@ -728,7 +728,7 @@ function ProcederBoleto() {
 
     console.log(JSON.stringify(InternetSale))
     // Realizar la solicitud PATCH usando fetch
-    fetch(http://apitaquillassag.dyndns.org/Home/cambiarBoleto', options)
+    fetch('http://apitaquillassag.dyndns.org/Home/cambiarBoleto', options)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Hubo un problema con la solicitud: ' + response.status);

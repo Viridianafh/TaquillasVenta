@@ -10,7 +10,7 @@
   <a href="dash.aspx" style="text-decoration: none;">
 
             <button class="btn btn-danger">
-             <ion-icon name="arrow-back-outline"></ion-icon>
+             <ion-icon name="arrow-back-outline"> atras</ion-icon>
             </button>
 
         </a>
@@ -52,7 +52,7 @@
                           <option value="-">Selecciona tu terminal</option>
                       </select>
 
-                      <button id="btncreate" class="btn btn-primary" style="height: 40px; width: 50%;">Crear</button>
+                      <button id="btncreate" class="btn btn-primary" style="height: 40px; width: 50%;">Configurar</button>
                 
                   </div>
 
@@ -70,7 +70,7 @@
                           <option value="-">Selecciona tu terminal</option>
                       </select>
                    
-                         <button id="btncambiar" class="btn btn-success" style="height: 40px; width: 50%;">Cambiar</button>
+                         <button id="btncambiar" class="btn btn-success" style="height: 40px; width: 50%;">Reasignar</button>
 
 
                   </div>
