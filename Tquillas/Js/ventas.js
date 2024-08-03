@@ -2057,9 +2057,8 @@ function iniciarturno() {
     var id_terminal = localStorage.getItem('terminal_id')
     var oficina = localStorage.getItem('office_name')
     var selectOrigen = document.getElementById("origen");
-    var cajaabierta = true
-    localStorage.setItem("caja_abierta" , cajaabierta)
-    // datos forage
+
+
 
     var terminal = "";
     var office = "";
@@ -2098,9 +2097,10 @@ function iniciarturno() {
                 console.log(data.shift)
                 localStorage.setItem('shift_number', data.shift)
                 localStorage.setItem('saleshift_id', data.saleShift)
+                var cajaabierta = true
 
-
-
+                localStorage.setItem("caja_abierta", cajaabierta)
+    // datos forage
                 const url = `http://apitaquillassag.dyndns.org/Home/descargar?url=${data.url}`;
 
 

@@ -154,8 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         var total = parseFloat(totalText);
 
-        var venta_reciente = localStorage.getItem('venta_reciente')
-        var ventareciente = parseFloat(venta_reciente)
+    
 
 
         if (monto_ingresado < total) {
@@ -227,10 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-            var restante = monto_ingresado - total
-
-            var totalventareciente = ventareciente + restante
-            localStorage.setItem('venta_reciente', totalventareciente)
 
 
 
@@ -242,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 totalPackage: localStorage.getItem('TOTALPACKAGE'),
                 userid: localStorage.getItem('id'),
                 saleshift: shift_number_to_is,
-                PaymentType: "CASH",
+                PaymentType: "cash",
                 salesmanId: localStorage.getItem('id'),
                 CashCheckpoint: "",
                 salesterminal: localStorage.getItem('terminal_id'),
@@ -264,8 +259,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(data => {
                     console.log(data);
 
+                    var venta_reciente = localStorage.getItem('venta_reciente');
+                    if (venta_reciente === null) {
+                        console.error('No se encontró venta_reciente en localStorage');
+                        venta_reciente = '0'; // Puedes inicializarlo con 0 si es necesario
+                    }
+
+                    var ventareciente = parseFloat(venta_reciente);
+                    if (isNaN(ventareciente)) {
+                        console.error('venta_reciente no es un número válido');
+                        ventareciente = 0; // Puedes inicializarlo con 0 si es necesario
+                    }
+
+                    // Asegúrate de que monto_ingresado y total sean números válidos
+                    if (isNaN(monto_ingresado) || isNaN(total)) {
+                        console.error('monto_ingresado o total no son números válidos');
+                        return; // Detén la ejecución si hay un error
+                    }
+
+             
 
 
+                    
+                        var restante = total;
+                        var totalventareciente = ventareciente + restante;
+                        localStorage.setItem('venta_reciente', totalventareciente);
+
+                        console.log('venta_reciente actualizado a:', totalventareciente);
+                    
+                  
                     var isaleid = data.isaleid;
 
                     window.location.href = "detallepaquete.aspx?isaleid=" + isaleid;
@@ -703,7 +725,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn_trip.classList.add('btn-outline-primary')
 
 
-        limpiarTabla()
+        limpiarTablaViaje()
 
         const row = document.getElementsByTagName('tbody')
 
@@ -899,6 +921,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
 //fin DOMcontent loaded
 
 async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, departing_destino, precio, Arrival, Departure, RunId, totaltime, type) {
@@ -949,7 +972,14 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
 
 }
 
+function limpiarTablaViaje() {
+    var tabla = document.getElementById('tabla-viajes');
 
+    // Eliminar todas las filas excepto la primera (encabezados)
+    while (tabla.rows.length > 1) {
+        tabla.deleteRow(1);
+    }
+}
 
 async function gettripid(RunId, type, Departure, Arrival, totaltime) {
     try {
@@ -1439,154 +1469,7 @@ function iniciarturno() {
 
 
 
-        function CerrarCajamenor() {
 
-
-            var saleshift = localStorage.getItem('saleshift_id')
-            var venta = localStorage.getItem('venta_reciente')
-            var venta_reciente = parseFloat(venta)
-
-
-            const CashCheckpoint = {
-
-                sale_shift_id: saleshift,
-                previous_amount: venta_reciente,
-                new_amount: 0
-
-            }
-
-
-            fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
-
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(CashCheckpoint)
-
-            })
-                .then(response => response.text())
-                .then(data => {
-
-                    if (data.length <= 6) {
-                        alert("ocurrio un error")
-                    } else {
-
-                        localStorage.setItem('cashcheckpoint', data);
-                        var cashcheckpoint = localStorage.getItem('cashcheckpoint');
-                        var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
-
-                        let Saleshift = salesnumberArray.map(salesnumber => {
-                            return {
-                                salesnumber: salesnumber
-                            };
-                        });
-
-                        fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
-
-                            method: 'PATCH',
-                            headers: {
-                                'Accept': 'text/plain',
-                                'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
-                            },
-                            body: JSON.stringify(Saleshift)
-
-                        })
-                            .then(response => response.text())
-                            .then(data => {
-
-
-
-                                if (data == "Operación exitosa") {
-
-                                    Swal.fire({
-                                        title: "OK",
-                                        text: `Se ha cerrado la caja exitosamente`,
-                                        icon: "success"
-                                    });
-
-                                    location.href = "informeCierre.aspx"
-
-                                } else {
-                                    Swal.fire({
-                                        title: "Error",
-                                        text: `Hubo un error al cerrar la caja`,
-                                        icon: "error"
-                                    });
-                                }
-                            })
-                            .catch(error => {
-                                alert("ocurrio un error: " + error)
-                            })
-
-
-                    }
-
-                }).catch(error => {
-
-                    alert("Ocurrio un error: " + error)
-                })
-
-
-
-        }
-
-
-
-        function CerrarCajavacia() {
-
-            alert("caja en 0")
-            var saleshift = localStorage.getItem('saleshift_id')
-            var venta = localStorage.getItem('venta_reciente')
-            var venta_reciente = parseFloat(venta)
-
-
-            const CashCheckpoint = {
-
-                sale_shift_id: saleshift,
-                previous_amount: 0,
-                new_amount: 0
-
-            }
-
-
-
-            fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
-
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(CashCheckpoint)
-
-            })
-                .then(response => response.text())
-                .then(data => {
-
-                    if (data.length <= 6) {
-                        alert("ocurrio un error")
-                    } else {
-
-                        localStorage.setItem('cashcheckpoint', data);
-                        var cashcheckpoint = localStorage.getItem('cashcheckpoint');
-
-                        location.href = "informeCierre.aspx"
-
-
-                    }
-
-
-                }).catch(error => {
-
-                    alert("Ocurrio un error: " + error)
-                })
-
-
-
-
-
-
-        }
 
         function limpiarTabla() {
             var tabla = document.getElementById('tabla-viajes');
@@ -1598,5 +1481,281 @@ function iniciarturno() {
         }
 
 
+    } else {
+       
+        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify('')
+        })
+            .then(response => response.json())
+            .then(data => {
+                var selectOrigen = document.getElementById('origen');
+
+
+                while (selectOrigen.options.length > 1) {
+                    selectOrigen.remove(1);
+                }
+
+                data.forEach(option => {
+                    var newOption = document.createElement("option");
+                    newOption.value = option.id;
+                    newOption.text = option.name;
+                    selectOrigen.appendChild(newOption);
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: "Error!",
+                    text: `${error}`,
+                    icon: "error"
+                });
+            });
+
+
+        var selectOrigen = document.getElementById('origen');
+        selectOrigen.addEventListener('change', () => {
+            var IDOrigen = selectOrigen.value;
+            var Origen = selectOrigen.options[selectOrigen.selectedIndex].text;
+
+            var data = { origen: Origen };
+
+
+            fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(responseData => {
+                    var selectDestino = document.getElementById('destino');
+
+
+                    while (selectDestino.options.length > 1) {
+                        selectDestino.remove(1);
+                    }
+
+
+                    responseData.forEach(option => {
+                        var newOption = document.createElement("option");
+                        newOption.value = option.id;
+                        newOption.text = option.name;
+                        selectDestino.appendChild(newOption);
+                    });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: "Error!",
+                        text: `${error}`,
+                        icon: "error"
+                    });
+                });
+        });
+
+
+
+
+
+
+        function searchDestiny() {
+
+            var selectOrigenUs = document.getElementById('origen');
+            var selectDestino = document.getElementById('destino');
+
+            var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
+
+
+            fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(responseData => {
+
+                    while (selectDestino.options.length > 1) {
+                        selectDestino.remove(1);
+                    }
+
+                    responseData.forEach(option => {
+                        var newOption = document.createElement("option");
+                        newOption.value = option.id;
+                        newOption.text = option.name;
+                        selectDestino.appendChild(newOption);
+                    });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: "Error!",
+                        text: `${error}`,
+                        icon: "error"
+                    });
+                });
+        }
+
+
+        document.getElementById('content-button').style.display = "none"
+        document.getElementById('content-buttons').style.display = "flex"
+        document.getElementById('content-buscador').style.display = "block"
+
     }
+}
+
+
+
+function CerrarCajamenor() {
+
+
+    var saleshift = localStorage.getItem('saleshift_id')
+    var venta = localStorage.getItem('venta_reciente')
+    var venta_reciente = parseFloat(venta)
+
+
+    const CashCheckpoint = {
+
+        sale_shift_id: saleshift,
+        previous_amount: venta_reciente,
+        new_amount: 0
+
+    }
+
+
+    fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
+
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(CashCheckpoint)
+
+    })
+        .then(response => response.text())
+        .then(data => {
+
+            if (data.length <= 6) {
+                alert("ocurrio un error")
+            } else {
+
+                localStorage.setItem('cashcheckpoint', data);
+                var cashcheckpoint = localStorage.getItem('cashcheckpoint');
+                var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
+
+                let Saleshift = salesnumberArray.map(salesnumber => {
+                    return {
+                        salesnumber: salesnumber
+                    };
+                });
+
+                fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
+
+                    method: 'PATCH',
+                    headers: {
+                        'Accept': 'text/plain',
+                        'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
+                    },
+                    body: JSON.stringify(Saleshift)
+
+                })
+                    .then(response => response.text())
+                    .then(data => {
+
+
+
+                        if (data == "Operación exitosa") {
+
+                            Swal.fire({
+                                title: "OK",
+                                text: `Se ha cerrado la caja exitosamente`,
+                                icon: "success"
+                            });
+
+                            location.href = "informeCierre.aspx"
+
+                        } else {
+                            Swal.fire({
+                                title: "Error",
+                                text: `Hubo un error al cerrar la caja`,
+                                icon: "error"
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        alert("ocurrio un error: " + error)
+                    })
+
+
+            }
+
+        }).catch(error => {
+
+            alert("Ocurrio un error: " + error)
+        })
+
+
+
+}
+
+
+
+function CerrarCajavacia() {
+
+    alert("caja en 0")
+    var saleshift = localStorage.getItem('saleshift_id')
+    var venta = localStorage.getItem('venta_reciente')
+    var venta_reciente = parseFloat(venta)
+
+
+    const CashCheckpoint = {
+
+        sale_shift_id: saleshift,
+        previous_amount: 0,
+        new_amount: 0
+
+    }
+
+
+
+    fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
+
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(CashCheckpoint)
+
+    })
+        .then(response => response.text())
+        .then(data => {
+
+            if (data.length <= 6) {
+                alert("ocurrio un error")
+            } else {
+
+                localStorage.setItem('cashcheckpoint', data);
+                var cashcheckpoint = localStorage.getItem('cashcheckpoint');
+
+                location.href = "informeCierre.aspx"
+
+
+
+            }
+
+
+        }).catch(error => {
+
+            alert("Ocurrio un error: " + error)
+        })
+
+
+
+
+
+
 }

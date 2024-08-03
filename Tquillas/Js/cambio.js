@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem("precio_anteriorcambio", e.precio)
             localStorage.setItem("asiento_anterior_cambio", e.asiento)
             localStorage.setItem('isale_cambio', e.isaleid)
+            localStorage.setItem('tickett_cam', e.ticket)
 
             tr.innerHTML = `
     
@@ -156,6 +157,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 var addedTripIds = {};
                 console.log(data)
                 var contentcards = document.getElementById("content-cards")
+
+                document.getElementById('spanTexto2').style.display = 'none'
+                document.getElementById('spanTexto').style.display = 'none'
 
                 contentcards.innerHTML = ''
 
@@ -612,6 +616,7 @@ function ProcederBoleto() {
     var saleshift = localStorage.getItem('saleshift_id')
     var  origen = localStorage.getItem('origen_cambio')
     var destino = localStorage.getItem('destino_cambio')
+    var ticketsito = localStorage.getItem('tickett_cam')
 
 
     //  alert(`${nombre}` + `${tipopasajero}` + ` ${dataid}` + ` ${asiento_anterior}` + ` ${asiento_cambio}` + ` ${precio_anterior}`)
@@ -620,11 +625,12 @@ function ProcederBoleto() {
 
 
     var Boletocambio = {
-        
-        "oldticket": oldticket,
+
+        "oldticket": ticketsito,
         "cancelUserId": user
 
     }
+    console.log (Boletocambio)
 
 
     const options = {
@@ -667,11 +673,6 @@ function ProcederBoleto() {
 
 
     localStorage.setItem('num_ventas', numero.toString())
-
-
-
-
-  
 
 
 
@@ -753,6 +754,13 @@ function ProcederBoleto() {
 
                     alert("success")
                     console.log(data)
+
+                    var precionuevo = localStorage.getItem('precionuevo')
+                    var parseprecionuevo = parseFloat(precionuevo)
+                    var ventareciente = localStorage.getItem('venta_reciente')
+                    var parseventa = parseFloat(ventareciente)
+                    var suma = parseventa + parseprecionuevo
+                    localStorage.setItem('venta_reciente', suma)
 
                     document.getElementById('spanTexto').textContent = `el nuevo folio es: ${data} puedes descargar el boleto en el menu "Buscar Boleto"`
 
