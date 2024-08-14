@@ -410,6 +410,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     var fechayhorallegada = new Date(departingDestino);
                     var horaActual = new Date();
 
+                    var formattedSalida = formatDateTime(departingOrigen);
+                    var formattedLlegada = formatDateTime(departingDestino);
+
 
                     // Obtener la hora ajustada
                     var horaAjustada = fechayhorasalida.toLocaleTimeString();
@@ -448,8 +451,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                <td>${origen}</td>
                                <td>${destino}</td>
                                <td>${bus == null ? '' : bus}</td >
-                               <td>${departingOrigen}</td>
-                               <td>${departingDestino}</td>
+                               <td>${formattedSalida}</td>
+                               <td>${formattedLlegada}</td>
                                <td>${precio} $ </td>
                                <td>
                                   <button 
@@ -475,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                 document.getElementById('section-boletos').style.display = 'block';
-                btn_trip.textContent = "Busar viaje"
+                btn_trip.textContent = "Buscar viaje"
 
                 btn_trip.classList.remove('btn-outline-primary')
                 btn_trip.classList.add('btn-success')
@@ -518,6 +521,21 @@ document.addEventListener('DOMContentLoaded', () => {
         while (tabla.rows.length > 1) {
             tabla.deleteRow(1);
         }
+    }
+
+
+
+
+    function formatDateTime(inputDateTime) {
+        var date = new Date(inputDateTime);
+
+        var day = String(date.getDate()).padStart(2, '0');
+        var month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son de 0 a 11
+        var year = String(date.getFullYear()).slice(-2); // Solo tomamos los últimos dos dígitos del año
+        var hours = String(date.getHours()).padStart(2, '0');
+        var minutes = String(date.getMinutes()).padStart(2, '0');
+
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
     }
 
 
@@ -1872,7 +1890,7 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
             Swal.fire({
                 title: "Error",
                 text: `error al contar inapam:  $ ${error}}`,
-                icon: "eror"
+                icon: "error"
             });
 
         })

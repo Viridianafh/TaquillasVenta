@@ -113,8 +113,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     </div>
                     </div>
                 <div class="card-body">
-                <h5 class="card-title">Guias de viaje</h5>
-                       <p class="card-text">generar e imprimir la guias de viajes </p>
+              <h5 class="card-title">Guías de viaje</h5>
+<p class="card-text">Generar e imprimir las guías de viaje</p>
+
                 </div>
                <div class="card-footer"><a href="guias.aspx">Ver</a></div>
             </div>

@@ -838,7 +838,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     var fechaYHoraLlegada = fechayhorallegada.toLocaleString();
 
 
-
+                    var formattedSalida = formatDateTime(departingOrigen);
+                    var formattedLlegada = formatDateTime(departingDestino);
 
                     tr.innerHTML = `
 
@@ -848,8 +849,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                <td>${origen}</td>
                                <td>${destino}</td>
                                <td>${bus == null ? '' : bus}</td >
-                               <td>${departingOrigen}</td>
-                               <td>${departingDestino}</td>
+                               <td>${formattedSalida}</td>
+                               <td>${formattedLlegada}</td>
                                
                                <td>
                                   <button 
@@ -904,6 +905,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    function formatDateTime(inputDateTime) {
+        var date = new Date(inputDateTime);
+
+        var day = String(date.getDate()).padStart(2, '0');
+        var month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son de 0 a 11
+        var year = String(date.getFullYear()).slice(-2); // Solo tomamos los últimos dos dígitos del año
+        var hours = String(date.getHours()).padStart(2, '0');
+        var minutes = String(date.getMinutes()).padStart(2, '0');
+
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+    }
 
 
 
