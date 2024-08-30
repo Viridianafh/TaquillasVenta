@@ -47,13 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
 
-        //localStorage.setItem('venta_reciente', "")
-        //localStorage.setItem('shift_number', "")
-        //localStorage.setItem('folio', "")
-        //localStorage.setItem('current_shift', "")
-        //localStorage.setItem('Total_compra', "")
-        //localStorage.setItem('num_ventas', 0)
-
         localStorage.removeItem("num_ventas");
         //localStorage.removeItem("current_shift");
         localStorage.removeItem("shift_number");

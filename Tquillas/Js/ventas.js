@@ -1032,10 +1032,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         var datosViajeString = localStorage.getItem("datos_viaje");
                         var datosViajeObj = JSON.parse(datosViajeString);
                         precio_base = datosViajeObj.precio;
+                        var origen = datosViajeObj.origen 
+                        var destino = datosViajeObj.destino 
+                        var departingOrigen = datosViajeObj.departingOrigen
                         precio_descuento = precio_base * 0.70;
                         // Iterar sobre las claves y valores del objeto
                         var totalPrecio = 0;
-
+                        var salida = formatDateTime(departingOrigen)
                         // Iterar sobre las claves y valores del objeto
 
                         for (const key in pasajeros) {
@@ -1055,6 +1058,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 fila.innerHTML =
                                     `
                                 <td>${nombre}</td>
+                                <td>${origen}</td>
+                                <td>${destino}</td>
+                                <td>${salida}</td>
                                 <td>${tipo}</td>
                                 <td id="asientoparapasajero${countpasajero}"></td>
                                 <td id="precioparapasajero">${precioPasajero}</td>
@@ -1543,7 +1549,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //pagos en efectivo
 
-
     const btnpagar_efectivo = document.getElementById('btnpagar-efectivo')
 
     btnpagar_efectivo.addEventListener('click', () => {
@@ -1563,7 +1568,6 @@ document.addEventListener('DOMContentLoaded', () => {
         var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
         var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
         var userid = localStorage.getItem('id')
-
 
 
 
@@ -1726,7 +1730,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     else {
                         Swal.fire({
-                            title: "Error!",
+                            title: "Erroro!",
                             text: `Ocurrio un error`,
                             icon: "error"
                         });
@@ -1747,7 +1751,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     })
 
-
+  
 
 
     const btn_tarjeta = document.getElementById('btn-tarjeta')
@@ -1831,6 +1835,7 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
         id = await gettripid(RunId, type, Departure, Arrival, totaltime)
 
     }
+
 
     var datos_viaje = {
 
@@ -2305,10 +2310,31 @@ function convertirAMayusculas(input) {
 }
 
 
+
 function validarNumero(input) {
 
+  var precio_base = document.getElementById('spantotaltotal').textContent
+
+
+
     input.value = input.value.replace(/[^0-9]/g, '');
+
+    var precio = parseFloat(precio_base)
+    var monto = parseFloat(input.value)
+
+    var res = monto - precio
+
+    if (res < 0 || isNaN(res)) {
+
+    document.getElementById('cambio').textContent = `` 
+    } else {
+
+    document.getElementById('cambio').textContent = `Cambio: ${res}` 
+    }
+
+
 }
+
 
 
 function generarID() {

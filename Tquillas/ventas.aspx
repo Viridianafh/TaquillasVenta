@@ -264,6 +264,9 @@
                 <thead>
                     <tr>
                         <td>Pasajero</td>
+                        <td>Origen</td>
+                        <td>Destino</td>
+                        <td>Salida</td>
                         <td>Tipo</td>
                         <td>Asiento</td>
                          <td>Precio</td>
@@ -401,6 +404,7 @@
                    <h3>Recibo: </h3>
             <input type="number" oninput="validarNumero(this)" class="form-control" style="width:320px; font-size: 1.5em;" id="txtmonto" />
 
+
             </div>
 
             <div class="container m-4">
@@ -408,6 +412,7 @@
 
             </div>
          
+                <h4 id="cambio"> </h4>
         </div>
 
 

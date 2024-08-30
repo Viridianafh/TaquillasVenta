@@ -108,7 +108,14 @@
 
 })
 
-
+function generateQRCode(text) {
+    return new Promise((resolve, reject) => {
+        QRCode.toDataURL(text, { errorCorrectionLevel: 'H' }, (error, url) => {
+            if (error) reject(error);
+            resolve(url);
+        });
+    });
+}
 
 
 async function Descargar(ticket) {
@@ -183,6 +190,14 @@ async function Descargar(ticket) {
 
 
         });
+
+        const qrCodeDataURL = await generateQRCode(ticket);
+        const qrImageBytes = await fetch(qrCodeDataURL).then(res => res.arrayBuffer());
+        const qrImage = await pdfDoc.embedPng(qrImageBytes);
+
+        // Obtener el campo de imagen 'qr' y establecer la imagen del código QR
+        const qrField = form.getButton('qr_af_image');
+        qrField.setImage(qrImage);
 
         const watermarkImageBytes = await fetch('/Assets/logoSag.png').then(res => res.arrayBuffer());
         const watermarkImage = await pdfDoc.embedPng(watermarkImageBytes);
