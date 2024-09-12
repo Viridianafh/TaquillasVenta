@@ -46,7 +46,7 @@
                           
                            <div class=".boton-descarga" role="status">
                          <!-- <a href="http://192.168.0.245:82/Home/MostrarListaAbordar?trip_id=${alldata.trip_id}" download="id.pdf" class="boton-descarga">Descargar</a>-->
-                         <button class="btn btn-dark" id="btn-showlist" onclick="verlista('${alldata[i].Id}')">Ver Lista</button>
+                         <button class="btn btn-dark" id="btn-showlist" onclick="verlista('${alldata[i].Id}', '${alldata[i].Bus}', '${alldata[i].Corrida}' )">Ver Lista</button>
                         
                             </div>
 
@@ -115,22 +115,23 @@
 
         document.getElementById('table-lista').style.display = 'none'
         document.getElementById('table-lista2').style.display = 'block'
+        document.getElementById('table-lista2').style.width = '100mm';
+        document.getElementById('allcontent').style.width = 378;
 
 
-        const tabla = document.getElementById('table-lista2');
+        const tabla = document.getElementById('allcontent');
         
 
        
 
         // Configura las opciones para html2pdf
         const opciones = {
-            margin: 10,
+            margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
             filename: 'listadeabordar.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            jsPDF: { unit: 'mm', format: [100, 270], orientation: 'portrait' } // Dimensiones en mm
         };
-
         // Utiliza html2pdf para generar el PDF y descargarlo
         html2pdf(tabla, opciones).from(tabla).save();
 
@@ -187,11 +188,12 @@ function ocultarColumna6() {
 
 
                 
-    function verlista(tripid) {
+    function verlista(tripid, bus, corrida) {
 
 
        
         limpiarTabla2()
+                    var countabordan = 0;
 
         fetch(`http://apitaquillassag.dyndns.org/Home/MostrarListaAbordar?trip_id=${tripid}`)
             .then(response => response.json())
@@ -200,6 +202,9 @@ function ocultarColumna6() {
                 var tbody = document.getElementById('table-lista').getElementsByTagName('tbody')[0];
                 var tbody2 = document.getElementById('table-lista2').getElementsByTagName('tbody')[0];
                 var tipo = "";
+
+               
+
                 data.forEach(e => {
 
                     if (e.Type == "ADULT") {
@@ -215,8 +220,30 @@ function ocultarColumna6() {
                     }
 
 
+
+
+
+
+
+
+
                     var tr = document.createElement('tr')
                     var tr2 = document.createElement('tr')
+
+
+                    var officename = localStorage.getItem('office_name')
+                    const normalizeText = (texto) => texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+                    // Compara los textos normalizados
+                    if (normalizeText(officename).localeCompare(normalizeText(e.Origin), 'es', { sensitivity: 'base' }) === 0) {
+                        // Si son iguales, incrementa el contador
+                        countabordan ++;
+                document.getElementById('countabordan').textContent = countabordan
+                       
+                    } else {
+                        console.log('Textos diferentes. Contador no cambiado.');
+                    }
+
                     tr.innerHTML = `
                     
                     <td>${e.Seat_number}</td>
@@ -253,6 +280,11 @@ function ocultarColumna6() {
                 document.getElementById('section-buscarlista').style.display = "none";
                 document.getElementById('section-lista').style.display = "block"
 
+
+                var officename = localStorage.getItem('office_name')
+                document.getElementById('buss').textContent = bus
+                document.getElementById('rutabname').textContent = corrida
+                document.getElementById('spantaquillas').textContent = officename
 
      
 

@@ -11,7 +11,6 @@
       <script src="Js/islog.js"></script>
   </header>
 
-
    
 
     <section id="section-buscarlista" >
@@ -73,13 +72,25 @@
             <button class="btn btn-primary" id="btn-guardar-lista">Descargar</button>
         </div>
 
-        <div class="container mt-5">
+        <div class="container mt-5" id="allcontent" >
 
+       
           
+              <div class="d-flex gap-3 align-items-center justify-content-arround">
+                <img src="Assets/logoSag.png" alt="Alternate Text" style="width:120px;" />
+                
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+                <p class="m-3">Taquilla: <span id="spantaquillas"></span></p>
+                <p class="m-3">Ruta: <span id="rutabname"></span></p>
+                <p class="m-3">Bus: <span id="buss"></span></p>
+                <p class="m-3">Abordan: <span id="countabordan"></span></p>
+            </div>
 
             <table id="table-lista" class="table table-hover">
 
-                <thead class="bg-dark">
+
+                <thead class="bg-dark" >
                     <tr>
                         <td><h5>Asiento</h5></td>
                         <td><h5>Nombre</h5></td>
@@ -101,17 +112,17 @@
                 </tbody>
 
         </table>  
-            <table id="table-lista2" class="table table-hover" style="display: none;">
+            <table id="table-lista2" class="table table-hover" style="display: none; width: 208px; font-size: 10px; right: -90px;  border-collapse: collapse;">
 
-                <thead class="bg-dark">
+                <thead class="bg-dark" style="font-size: 10px;">
                     <tr>
-                        <td><h5>Asiento</h5></td>
-                        <td><h5>Nombre</h5></td>
-                        <td><h5>Origen</h5></td>
-                        <td><h5>Destino</h5></td>
-                        <td><h5>Boleto</h5></td>
-                        <td><h5>Tipo</h5></td>
-                        <td><h5>Escaneado</h5></td>
+                        <td><p>Asiento</p></td>
+                        <td><p>Nombre</p></td>
+                        <td><p>Origen</p></td>
+                        <td><p>Destino</p></td>
+                        <td><p>Boleto</p></td>
+                        <td><p>Tipo</p></td>
+                        <td><p>Escaneado</p></td>
                         
 
                     </tr>
@@ -133,6 +144,7 @@
         
 
     </section>
+
      
 
 </asp:Content>

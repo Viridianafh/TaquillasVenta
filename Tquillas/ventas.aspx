@@ -167,6 +167,16 @@
                      
                   </table>
                 </div>
+            
+            <div class="container d-flex flex-wrap m-3">
+
+                <label>No. de teléfono</label>
+                <input type="text" id="phonenumber"  class="form-control m-2" style="width: 150px;"/>
+
+                <label>Correo electronico</label>
+                <input type="text" id="clientemail"  class="form-control m-2" style="width: 250px;"/>
+
+            </div>
 
 
             <div class="card gap-2 m-2 p-3" id="content-count-adulto">

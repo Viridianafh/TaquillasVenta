@@ -637,29 +637,55 @@ document.addEventListener('DOMContentLoaded', () => {
         contentinputs.appendChild(label)
         contentinputs.appendChild(input)
 
+
+        var label2 = document.createElement('label')
+        label2.textContent = "CURP: " + countnino
+    
+        var input2 = document.createElement('input')
+        input2.classList.add("form-control")
+        input2.classList.add("m-2")
+        input2.setAttribute("id", `${"input_nino_curp" + countnino}`)
+        input2.setAttribute("oninput", "convertirAMayusculas(this)")
+        contentinputs.appendChild(label2)
+        contentinputs.appendChild(input2)
+
+
+
         count_pasajeros = count_pasajeros + 1;
 
     })
 
 
     btn_restar_niño.addEventListener('click', () => {
-        if (countnino > 0) {
-            countnino = countnino - 1;
-            count_pasajeros = count_pasajeros - 1;
+        const cantidadARestar = 1; // Puedes cambiar este valor para restar más de uno a la vez
 
-            // Elimina el último input y su respectivo label
+        if (countnino >= cantidadARestar) {
+            countnino -= cantidadARestar;
+            count_pasajeros -= cantidadARestar;
+
+            // Elimina los últimos conjuntos de inputs y labels
             const contentinputs = document.getElementById('contentinputsnino');
-            const labels = contentinputs.getElementsByTagName('label');
-            const inputs = contentinputs.getElementsByTagName('input');
 
-            if (labels.length > 0 && inputs.length > 0) {
-                contentinputs.removeChild(labels[labels.length - 1]);
-                contentinputs.removeChild(inputs[inputs.length - 1]);
+            for (let i = 0; i < cantidadARestar; i++) {
+                // Asumiendo que cada niño tiene 2 labels y 2 inputs (nombre y CURP)
+                const elementosParaEliminar = 4;
+                for (let j = 0; j < elementosParaEliminar; j++) {
+                    if (contentinputs.lastChild) {
+                        contentinputs.removeChild(contentinputs.lastChild);
+                    }
+                }
             }
+
+            // Actualiza el contador visible (si lo tienes)
+            // document.getElementById('contador_ninos').textContent = countnino;
         }
-    })
 
-
+        // Puedes agregar aquí lógica adicional si no hay suficientes elementos para restar
+        if (countnino < cantidadARestar) {
+            console.log('No hay suficientes niños para restar');
+            // O muestra un mensaje al usuario
+        }
+    });
 
 
     //inicio Conteo inapam
@@ -947,8 +973,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btn_siguiente1.addEventListener('click', () => {
 
 
-        var grupos = document.querySelectorAll('div[id^="content-count-"]');
+       
         var alMenosUnDivConInputRellenado = false;
+
 
         grupos.forEach(function (grupo) {
             var inputs = grupo.querySelectorAll('input');
@@ -1333,7 +1360,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
 
-
+    0
 
         if (monto_recibido < totalapagar) {
 

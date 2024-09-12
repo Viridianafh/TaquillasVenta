@@ -1,10 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Alex\\Escritorio\\LASTUPDATES\\TRABAJO\\TaquillasVenta\\",
+  "WorkspaceRootPath": "D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|D:\\Alex\\Escritorio\\LASTUPDATES\\TRABAJO\\TaquillasVenta\\Tquillas|d:\\alex\\escritorio\\lastupdates\\trabajo\\taquillasventa\\tquillas\\js\\guias.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|D:\\Alex\\Escritorio\\LASTUPDATES\\TRABAJO\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\guias.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas|d:\\alex\\escritorio\\github\\taquillas\\1\\taquillasventa\\tquillas\\js\\ventas.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\ventas.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas|D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\tquillas\\ventas.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\ventas.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas|D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\tquillas\\miventa.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\miventa.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     }
   ],
   "DocumentGroupContainers": [
@@ -43,15 +51,39 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "guias.js",
-              "DocumentMoniker": "D:\\Alex\\Escritorio\\LASTUPDATES\\TRABAJO\\TaquillasVenta\\Tquillas\\Js\\guias.js",
-              "RelativeDocumentMoniker": "Tquillas\\Js\\guias.js",
-              "ToolTip": "D:\\Alex\\Escritorio\\LASTUPDATES\\TRABAJO\\TaquillasVenta\\Tquillas\\Js\\guias.js",
-              "RelativeToolTip": "Tquillas\\Js\\guias.js",
-              "ViewState": "AQIAALMAAAAAAAAAAAAQwMEAAAAtAAAA",
+              "Title": "ventas.js",
+              "DocumentMoniker": "D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas\\Js\\ventas.js",
+              "RelativeDocumentMoniker": "Tquillas\\Js\\ventas.js",
+              "ToolTip": "D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas\\Js\\ventas.js",
+              "RelativeToolTip": "Tquillas\\Js\\ventas.js",
+              "ViewState": "AQIAAHoDAAAAAAAAAAAgwJgEAABIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-07-21T08:19:50.524Z",
+              "WhenOpened": "2024-08-30T19:04:59.851Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "miventa.aspx",
+              "DocumentMoniker": "D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas\\miventa.aspx",
+              "RelativeDocumentMoniker": "Tquillas\\miventa.aspx",
+              "ToolTip": "D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas\\miventa.aspx",
+              "RelativeToolTip": "Tquillas\\miventa.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2024-08-30T19:15:35.719Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ventas.aspx",
+              "DocumentMoniker": "D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas\\ventas.aspx",
+              "RelativeDocumentMoniker": "Tquillas\\ventas.aspx",
+              "ToolTip": "D:\\Alex\\Escritorio\\GITHUB\\taquillas\\1\\TaquillasVenta\\Tquillas\\ventas.aspx",
+              "RelativeToolTip": "Tquillas\\ventas.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2024-08-30T18:30:36.978Z"
             }
           ]
         },
