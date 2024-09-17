@@ -108,143 +108,162 @@
 
 })
 
+
 function generateQRCode(text) {
     return new Promise((resolve, reject) => {
-        QRCode.toDataURL(text, { errorCorrectionLevel: 'H' }, (error, url) => {
-            if (error) reject(error);
-            resolve(url);
-        });
+        try {
+            const div = document.createElement('div');
+            new QRCode(div, {
+                text: text,
+                width: 128,
+                height: 128,
+            });
+
+            // Esperar un poco para asegurarse de que el QR se ha generado
+            setTimeout(() => {
+                const canvas = div.querySelector('canvas');
+                if (canvas) {
+                    canvas.toBlob(blob => {
+                        const reader = new FileReader();
+                        reader.onloadend = function () {
+                            resolve(new Uint8Array(reader.result));
+                        }
+                        reader.readAsArrayBuffer(blob);
+                    });
+                } else {
+                    const img = div.querySelector('img');
+                    if (img) {
+                        fetch(img.src)
+                            .then(res => res.arrayBuffer())
+                            .then(buffer => resolve(new Uint8Array(buffer)))
+                            .catch(reject);
+                    } else {
+                        reject(new Error('No se pudo generar el QR'));
+                    }
+                }
+            }, 100);
+        } catch (error) {
+            console.error("Error en generateQRCode:", error);
+            reject(error);
+        }
     });
 }
 
-
 async function Descargar(ticket) {
     try {
-        document.getElementById('btn-download').textContent = "Descargando..."
+        document.getElementById('btn-download').textContent = "Descargando...";
+
+        // Obtener datos del boleto
         const response = await fetch(`http://apitaquillassag.dyndns.org/Home/ConsultarBoletos?folio=${ticket}`);
         const data = await response.json();
-        console.log(data);
+        console.log("Datos del boleto:", data);
 
+        if (!data || data.length === 0) {
+            throw new Error("No se encontraron datos para el boleto");
+        }
+
+        const boleto = data[0]; // Usamos el primer elemento del array
+
+        // Cargar el PDF base
         const url = '/Assets/formticket.pdf';
         const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
-        const taquillero = localStorage.getItem('name');
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
-        //var datosViajeString = localStorage.getItem("datos_viaje");
-        //var datosViajeObj = JSON.parse(datosViajeString);
-        //precio_base = datosViajeObj.precio;
-        //var llegada = datosViajeObj.departingDestino;
-        //var corrida = datosViajeObj.corrida;
-        // Obtener la fecha actual
-        const fechaActual = new Date();
 
-        // Obtener día, mes y año
-        const día = fechaActual.getDate();
-        const mes = fechaActual.getMonth() + 1; // Se agrega 1 porque los meses se cuentan desde 0 (enero) hasta 11 (diciembre)
-        const año = fechaActual.getFullYear();
-
-        // Formatear la fecha con cuatro dígitos en el año
-        const fechaFormateada = `${día < 10 ? '0' : ''}${día}-${mes < 10 ? '0' : ''}${mes}-${año}`;
-
+        const taquillero = localStorage.getItem('name');
+        const fechaFormateada = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
         console.log("Fecha formateada:", fechaFormateada);
 
-
-
+        // Rellenar el formulario
         const form = pdfDoc.getForm();
 
-        data.map(e => {
+        // Establecer los valores de los campos de texto
+        form.getTextField('passenger_name').setText(boleto.PassengerName);
+        form.getTextField('origen').setText(boleto.Origin);
+        form.getTextField('ticket_id').setText(boleto.TicketId);
+        form.getTextField('seat').setText(boleto.SeatName);
+        form.getTextField('Destino').setText(boleto.Destination);
+        form.getTextField('departure_origen').setText(boleto.Salida);
+        form.getTextField('fecha').setText(fechaFormateada);
+        form.getTextField('saleman_name').setText(taquillero);
+        form.getTextField('subtotal').setText(String(boleto.SoldPrice));
+        form.getTextField('departure_destino').setText(boleto.llegada);
+        form.getTextField('total').setText(String(boleto.PayedPrice));
+        form.getTextField('product').setText(boleto.product);
+        form.getTextField('passenger_type').setText(boleto.PassengerType);
 
+        // Hacer los campos de solo lectura
+        ['passenger_name', 'origen', 'ticket_id', 'seat', 'Destino', 'departure_origen', 'fecha',
+            'saleman_name', 'subtotal', 'departure_destino', 'total', 'product', 'passenger_type'].forEach(field => {
+                const textField = form.getTextField(field);
+                if (textField) {
+                    textField.enableReadOnly();
+                } else {
+                    console.warn(`Campo no encontrado: ${field}`);
+                }
+            });
 
-            form.getTextField('passenger_name').setText(e.PassengerName);
-            form.getTextField('origen').setText(e.Origin);
-          
-            form.getTextField('ticket_id').setText(e.TicketId);
-            form.getTextField('seat').setText(e.SeatName);
-            form.getTextField('Destino').setText(e.Destination);
-           // form.getTextField('departure_origen').setText(departingOrigen);
-            form.getTextField('fecha').setText(fechaFormateada);
-            form.getTextField('saleman_name').setText(taquillero);
-            form.getTextField('subtotal').setText(String(e.SoldPrice));
-            form.getTextField('departure_destino').setText(e.llegada);
-            form.getTextField('departure_origen').setText(e.Salida);
-            form.getTextField('total').setText(String(e.PayedPrice));
-            form.getTextField('product').setText(e.product);
-            form.getTextField('passenger_type').setText(e.PassengerType);
-
-            form.getTextField('ticket_id').enableReadOnly();
-            form.getTextField('passenger_name').enableReadOnly();
-            form.getTextField('passenger_type').enableReadOnly();
-            form.getTextField('origen').enableReadOnly();
-            form.getTextField('seat').enableReadOnly();
-            form.getTextField('Destino').enableReadOnly();
-            form.getTextField('departure_origen').enableReadOnly();
-            form.getTextField('fecha').enableReadOnly();
-            form.getTextField('saleman_name').enableReadOnly();
-            form.getTextField('subtotal').enableReadOnly();
-            form.getTextField('departure_destino').enableReadOnly();
-            form.getTextField('total').enableReadOnly();
-            form.getTextField('product').enableReadOnly();
-
-
-
-      
-
-
-        });
-
-        const qrCodeDataURL = await generateQRCode(ticket);
-        const qrImageBytes = await fetch(qrCodeDataURL).then(res => res.arrayBuffer());
+        // Generar y añadir el QR
+        console.log("Generando QR para:", ticket);
+        const qrImageBytes = await generateQRCode(ticket);
         const qrImage = await pdfDoc.embedPng(qrImageBytes);
 
-        // Obtener el campo de imagen 'qr' y establecer la imagen del código QR
+        // Insertar el QR en el campo 'qr_af_image'
         const qrField = form.getButton('qr_af_image');
-        qrField.setImage(qrImage);
-
-        const watermarkImageBytes = await fetch('/Assets/logoSag.png').then(res => res.arrayBuffer());
-        const watermarkImage = await pdfDoc.embedPng(watermarkImageBytes);
-        const pages = pdfDoc.getPages();
-        for (const page of pages) {
-            const { width, height } = page.getSize();
-            // Definir el tamaño deseado para la imagen de marca de agua
-            const watermarkWidth = watermarkImage.width / 6; // Reducir el tamaño a la mitad
-            const watermarkHeight = watermarkImage.height / 6; // Reducir el tamaño a la mitad
-            // Calcular las coordenadas centradas para la posición de la imagen de marca de agua
-            const x = (width - watermarkWidth) / 2;
-            const y = (height - watermarkHeight) / 2;
-            // Dibujar la imagen de marca de agua en la página del PDF
-            page.drawImage(watermarkImage, {
-                x: x,
-                y: y,
-                width: watermarkWidth,
-                height: watermarkHeight,
-                opacity: 0.2,
+        if (qrField) {
+            qrField.setImage(qrImage);
+            console.log("QR añadido al campo 'qr_af_image'");
+        } else {
+            console.warn("Campo 'qr_af_image' no encontrado. Insertando QR en la página.");
+            const pages = pdfDoc.getPages();
+            const firstPage = pages[0];
+            firstPage.drawImage(qrImage, {
+                x: 50,
+                y: 50,
+                width: 100,
+                height: 100,
             });
         }
 
-        // Generar un nuevo PDF con los datos ingresados
-        const pdfBytes = await pdfDoc.save();
+        // Añadir marca de agua
+        const watermarkImageBytes = await fetch('/Assets/logoSag.png').then(res => res.arrayBuffer());
+        const watermarkImage = await pdfDoc.embedPng(watermarkImageBytes);
+        const pages = pdfDoc.getPages();
+        pages.forEach(page => {
+            const { width, height } = page.getSize();
+            page.drawImage(watermarkImage, {
+                x: (width - watermarkImage.width / 6) / 2,
+                y: (height - watermarkImage.height / 6) / 2,
+                width: watermarkImage.width / 6,
+                height: watermarkImage.height / 6,
+                opacity: 0.2,
+            });
+        });
+        console.log("Marca de agua añadida");
 
-        // Descargar el PDF resultante
+        // Generar y descargar el PDF
+        const pdfBytes = await pdfDoc.save();
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const urlObject = window.URL.createObjectURL(blob);
 
-        // Crear un enlace y hacer clic en él para iniciar la descarga
         const link = document.createElement('a');
         link.href = urlObject;
         link.download = `${ticket}.pdf`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        document.getElementById('btn-download').textContent = "Volver a Descargar"
-        // Imprimir el documento después de descargar
+
+        document.getElementById('btn-download').textContent = "Volver a Descargar";
+
+        // Abrir el PDF en una nueva pestaña
         setTimeout(() => {
             window.open(urlObject, '_blank');
         }, 1000);
+
     } catch (error) {
         console.error("Error al descargar el PDF:", error);
+        document.getElementById('btn-download').textContent = "Error al descargar";
     }
 }
-
-
 
 function SolicitarCodigo(ticket) {
 

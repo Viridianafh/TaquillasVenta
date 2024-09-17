@@ -11,7 +11,22 @@
       <script src="Js/terminalcheck.js"></script>
   </header>
      
-
+        <style>
+        .valid {
+            border: 2px solid green;
+        }
+        .invalid {
+            border: 2px solid red;
+        }
+        textarea {
+            width: 100%; /* Asegura que el textarea ocupe todo el ancho disponible */
+            box-sizing: border-box; /* Incluye el borde y el relleno en el ancho total */
+        }
+     textarea:focus {
+            border: inherit; /* Mantiene el borde actual sin aplicar el estilo de enfoque predeterminado */
+            box-shadow: none; /* Elimina cualquier sombra aplicada al enfocarse */
+        }
+    </style>
   
     <section id="section-precorte" style="display: none;">
 
@@ -171,13 +186,15 @@
             <div class="container d-flex flex-wrap m-3">
 
                 <label>No. de teléfono</label>
-                <input type="text" id="phonenumber"  class="form-control m-2" style="width: 150px;"/>
+                <textarea id="telefonocliente" class="form-control" maxlength="10" name="textarea" rows="1" cols="50" style="150px;"></textarea>
+
 
                 <label>Correo electronico</label>
-                <input type="text" id="clientemail"  class="form-control m-2" style="width: 250px;"/>
+                <textarea id="correocliente" class="form-control" maxlength="50" name="textarea" rows="1" cols="50" style="150px;"></textarea>
+
 
             </div>
-
+    
 
             <div class="card gap-2 m-2 p-3" id="content-count-adulto">
                 

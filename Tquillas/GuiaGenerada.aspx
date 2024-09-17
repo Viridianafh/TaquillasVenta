@@ -72,7 +72,7 @@
                 <h5 class="text-primary">Operador1: <span class="text-dark" id="textoperador1"></span></h5>
                 <h5 class="text-primary">Operador2: <span class="text-dark" id="textoperador2"></span></h5>
                 <h5 class="text-primary">Bus:       <span class="text-dark" id="textbus"> </span></h5>
-                <h5 class="text-primary">Anticpo:   <span class="text-dark" id="textanticipo"></span></h5>
+                <h5 class="text-primary">Anticipo:   <span class="text-dark" id="textanticipo"></span></h5>
             </div>
             
         </div>

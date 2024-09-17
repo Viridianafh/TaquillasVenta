@@ -119,11 +119,15 @@
                         <td> ${e.bus} </td>
                         <td> ${formattedDate} </td>
                         <td>
-                        <button class="btn btn-dark" onclick="generarguia('${e.route_id}', '${e.run_id}', '${e.trip_id}', '${e.bus_id}', '${e.origenid}', '${e.destinoid}', '${e.anticipo}', '${e.corrida}', '${e.origen}', '${e.destino}', '${e.operador1}', '${e.operador2}', '${e.bus}', '${e.salida}')">
 
-                          generar guia
+                        <button style="display: ${e.guiagenerada == "False" ? 'bloc': 'none'}" class="btn btn-dark" onclick="generarguia('${e.route_id}', '${e.run_id}', '${e.trip_id}', '${e.bus_id}', '${e.origenid}', '${e.destinoid}', '${e.anticipo}', '${e.corrida}', '${e.origen}', '${e.destino}', '${e.operador1}', '${e.operador2}', '${e.bus}', '${e.salida}')">
+                         generar guia
                         </button>
-                        </td>
+
+                        <button style="display: ${e.guiagenerada == "True" ? 'bloc' : 'none'}" class="btn btn-dark" onclick="verguia('${e.route_id}', '${e.run_id}', '${e.trip_id}', '${e.bus_id}', '${e.origenid}', '${e.destinoid}', '${e.anticipo}', '${e.corrida}', '${e.origen}', '${e.destino}', '${e.operador1}', '${e.operador2}', '${e.bus}', '${e.salida}')">
+                             ver guia
+                        </button>
+                      </td>
                 
                 `
                     tabla.appendChild(tr)
@@ -143,6 +147,29 @@
 
 })
 
+
+
+function verguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, anticipo, corrida, origen, destino, operador1, operador2, bus, salida) {
+
+    localStorage.setItem("route_id_guia", route_id)
+    localStorage.setItem("run_id_guia", run_id)
+    localStorage.setItem("trip_id-guia", trip_id)
+    localStorage.setItem("bus_id_guia", bus_id)
+    localStorage.setItem("origen_id_guia", origenid)
+    localStorage.setItem("destino_id_guia", destinoid)
+    localStorage.setItem("anticipo_guia", anticipo)
+    localStorage.setItem("corrida_guia", corrida)
+    localStorage.setItem("origen_guia", origen)
+    localStorage.setItem("destino_guia", destino)
+    localStorage.setItem("operador1_guia", operador1)
+    localStorage.setItem("operador2_guia", operador2)
+    localStorage.setItem("bus_guia", bus)
+    localStorage.setItem("salida_guia", salida)
+    localStorage.setItem("totalanticipo_guia", anticipo)
+
+    window.location.href ='guiagenerada.aspx'
+
+}
 
 
 function generarguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, anticipo, corrida, origen, destino, operador1, operador2, bus, salida) {
@@ -406,6 +433,7 @@ function InsertarTripStopControl(){
         .then(res => res.json())
         .then(data => {
             console.log(data)
+            window.location.href = 'guiagenerada.aspx'
         })
 
 

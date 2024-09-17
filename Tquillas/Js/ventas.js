@@ -524,6 +524,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+     
+
 
 
     function formatDateTime(inputDateTime) {
@@ -625,31 +627,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         countnino = countnino + 1
+        const contentinputs = document.getElementById('contentinputsnino')
 
         var label = document.createElement('label')
         label.textContent = "Nombre del pasajero: " + countnino
-        const contentinputs = document.getElementById('contentinputsnino')
+        contentinputs.appendChild(label)
+
         var input = document.createElement('input')
         input.classList.add("form-control")
         input.classList.add("m-2")
         input.setAttribute("id", `${"input_nino" + countnino}`)
         input.setAttribute("oninput", "convertirAMayusculas(this)")
-        contentinputs.appendChild(label)
         contentinputs.appendChild(input)
 
+        var labelspan = document.createElement('label')
+        labelspan.textContent = ""
+        labelspan.setAttribute("id", `${"label_nino_curp" + countnino}`)
+        contentinputs.appendChild(labelspan)       
 
         var label2 = document.createElement('label')
         label2.textContent = "CURP: " + countnino
-    
-        var input2 = document.createElement('input')
+        contentinputs.appendChild(label2)
+
+        var input2 = document.createElement('textarea')
         input2.classList.add("form-control")
         input2.classList.add("m-2")
+        input2.rows = 1
         input2.setAttribute("id", `${"input_nino_curp" + countnino}`)
         input2.setAttribute("oninput", "convertirAMayusculas(this)")
-        contentinputs.appendChild(label2)
+        input2.addEventListener('input', () => {
+            validarEdadestudiante(input2, labelspan);
+        });
         contentinputs.appendChild(input2)
-
-
 
         count_pasajeros = count_pasajeros + 1;
 
@@ -657,90 +666,127 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     btn_restar_niño.addEventListener('click', () => {
-        const cantidadARestar = 1; // Puedes cambiar este valor para restar más de uno a la vez
-
-        if (countnino >= cantidadARestar) {
-            countnino -= cantidadARestar;
-            count_pasajeros -= cantidadARestar;
-
-            // Elimina los últimos conjuntos de inputs y labels
+        if (countnino > 0) {
             const contentinputs = document.getElementById('contentinputsnino');
 
-            for (let i = 0; i < cantidadARestar; i++) {
-                // Asumiendo que cada niño tiene 2 labels y 2 inputs (nombre y CURP)
-                const elementosParaEliminar = 4;
-                for (let j = 0; j < elementosParaEliminar; j++) {
-                    if (contentinputs.lastChild) {
-                        contentinputs.removeChild(contentinputs.lastChild);
+            
+            const elementosAEliminar = [
+                document.getElementById(`input_nino_curp${countnino}`),
+                document.getElementById(`input_nino${countnino}`),
+                document.getElementById(`label_nino_curp${countnino}`)
+            ];
+
+            elementosAEliminar.forEach(elemento => {
+                if (elemento) {
+                    
+                    if (elemento.previousElementSibling && elemento.previousElementSibling.tagName === 'LABEL') {
+                        contentinputs.removeChild(elemento.previousElementSibling);
                     }
+
+                    contentinputs.removeChild(elemento);
                 }
+            });
+
+           
+            const labelSpan = contentinputs.lastElementChild;
+            if (labelSpan && labelSpan.tagName === 'LABEL' && labelSpan.textContent === "") {
+                contentinputs.removeChild(labelSpan);
             }
 
-            // Actualiza el contador visible (si lo tienes)
-            // document.getElementById('contador_ninos').textContent = countnino;
+            countnino--;
+            count_pasajeros--;
+
         }
 
-        // Puedes agregar aquí lógica adicional si no hay suficientes elementos para restar
-        if (countnino < cantidadARestar) {
-            console.log('No hay suficientes niños para restar');
-            // O muestra un mensaje al usuario
+        if (countnino === 0) {
+            console.log('No hay más niños para restar');
+            
         }
     });
-
 
     //inicio Conteo inapam
 
     const btn_sumar_inapam = document.getElementById('btn_sumar_inapam');
     btn_sumar_inapam.addEventListener('click', () => {
-        countinapam = countinapam + 1;
+        if (countinapam < totalInapam) {
+            countinapam = countinapam + 1;
+            const contentinputsinapam = document.getElementById('contentinputsinapam');
 
-        if (countinapam > totalInapam) {
-            btn_sumar_inapam.disabled = true;
-        } else {
             var label = document.createElement('label');
             label.textContent = "Nombre del pasajero: " + countinapam;
-
-            const contentinputsinapam = document.getElementById('contentinputsinapam');
+            contentinputsinapam.appendChild(label);
 
             var input = document.createElement('input');
             input.classList.add("form-control");
             input.classList.add("m-2");
-            input.setAttribute("id", "input_inapam" + countinapam);
+            input.setAttribute("id", `${"input_inapam" + countinapam}`);
             input.setAttribute("oninput", "convertirAMayusculas(this)");
-
-            contentinputsinapam.appendChild(label);
             contentinputsinapam.appendChild(input);
+
+            var labelspan = document.createElement('label');
+            labelspan.textContent = "";
+            labelspan.setAttribute("id", `${"label_inapam_curp" + countinapam}`);
+            contentinputsinapam.appendChild(labelspan);
+
+            var label2 = document.createElement('label');
+            label2.textContent = "CURP: " + countinapam;
+            contentinputsinapam.appendChild(label2);
+
+            var input2 = document.createElement('textarea');
+            input2.classList.add("form-control");
+            input2.classList.add("m-2");
+            input2.rows = 1;
+            input2.setAttribute("id", `${"input_inapam_curp" + countinapam}`);
+            input2.setAttribute("oninput", "convertirAMayusculas(this)");
+            input2.addEventListener('input', () => {
+                validarEdadadulta(input2, labelspan);
+            });
+            contentinputsinapam.appendChild(input2);
+
             count_pasajeros = count_pasajeros + 1;
+
+            if (countinapam >= totalInapam) {
+                btn_sumar_inapam.disabled = true;
+            }
         }
     });
 
 
     const btn_restar_inapam = document.getElementById('btn_restar_inapam');
     btn_restar_inapam.addEventListener('click', () => {
-
         if (countinapam > 0) {
+            const contentinputs = document.getElementById('contentinputsinapam');
 
-            countinapam = countinapam - 1;
+            const elementosAEliminar = [
+                document.getElementById(`input_inapam_curp${countinapam}`),
+                document.getElementById(`input_inapam${countinapam}`),
+                document.getElementById(`label_inapam_curp${countinapam}`)
+            ];
 
-            if (count_pasajeros > 0) {
+            elementosAEliminar.forEach(elemento => {
+                if (elemento) {
+                    if (elemento.previousElementSibling && elemento.previousElementSibling.tagName === 'LABEL') {
+                        contentinputs.removeChild(elemento.previousElementSibling);
+                    }
+                    contentinputs.removeChild(elemento);
+                }
+            });
 
-                count_pasajeros = count_pasajeros - 1;
+            const labelSpan = contentinputs.lastElementChild;
+            if (labelSpan && labelSpan.tagName === 'LABEL' && labelSpan.textContent === "") {
+                contentinputs.removeChild(labelSpan);
             }
+
+            countinapam--;
+            count_pasajeros--;
 
             document.getElementById('btn_sumar_inapam').disabled = false;
+        }
 
-            // Elimina el último input y su respectivo label
-            const contentinputs = document.getElementById('contentinputsinapam');
-            const labels = contentinputs.getElementsByTagName('label');
-            const inputs = contentinputs.getElementsByTagName('input');
-
-            if (labels.length > 0 && inputs.length > 0) {
-                contentinputs.removeChild(labels[labels.length - 1]);
-                contentinputs.removeChild(inputs[inputs.length - 1]);
-            }
+        if (countinapam === 0) {
+            console.log('No hay más pasajeros INAPAM para restar');
         }
     });
-
 
 
 
@@ -974,8 +1020,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
        
-        var alMenosUnDivConInputRellenado = false;
+  
 
+        var grupos = document.querySelectorAll('div[id^="content-count-"]');
+        var alMenosUnDivConInputRellenado = false;
 
         grupos.forEach(function (grupo) {
             var inputs = grupo.querySelectorAll('input');
@@ -987,6 +1035,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         });
+
 
         if (alMenosUnDivConInputRellenado) {
 
@@ -1005,6 +1054,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 var pasajeros = JSON.stringify(valoresObj)
                 localStorage.setItem('pasajeros', pasajeros)
+
+                var numerocliente = document.getElementById('telefonocliente').value
+                localStorage.setItem('numerocliente', numerocliente)
+
+                var numerocliente = document.getElementById('correocliente').value
+                localStorage.setItem('correocliente', numerocliente)
+
 
                 document.getElementById('section-pasajeros').style.display = 'none'
 
@@ -1482,7 +1538,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "salesShiftId": localStorage.getItem('saleshift_id'),
                 "saleNumber": shift_number_to_is,
                 "short_id": generarID(),
-                "tripseatlist": nuevoJson
+                "tripseatlist": nuevoJson,
+                "Email": localStorage.getItem('correocliente')
             }
 
 
@@ -1707,7 +1764,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "salesmanId": ticketuserid,
                 "salesShiftId": localStorage.getItem('saleshift_id'),
                 "saleNumber": shift_number_to_is,
-                "tripseatlist": nuevoJson
+                "tripseatlist": nuevoJson,
+                "Email": localStorage.getItem('correocliente')
             }
 
 
@@ -1723,7 +1781,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(InternetSale)
             })
-                .then(response => response.text())
+                .then(response => response.text()
                 .then(data => {
 
                     if (data.length == 8) {
@@ -1774,7 +1832,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 })
 
-        }
+        )}
 
     })
 
@@ -2578,4 +2636,125 @@ function CerrarCajavacia() {
 }
 
 
+function convertirAMayusculas(input) {
+    input.value = input.value.toUpperCase();
+}
 
+
+
+function validarEdadestudiante(input, labelspan) {
+    const curp = input.value.trim().toUpperCase();
+    const curpRegex = /^[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[0-9A-Z]{2}$/;
+
+    // Validar formato CURP
+    if (!curpRegex.test(curp)) {
+        labelspan.textContent = "CURP Inválido: formato incorrecto";
+        labelspan.style.color = "red";
+        return;
+    }
+
+    // Extraer y validar fecha de nacimiento
+    const fechaNacimientoStr = curp.slice(4, 10);
+    let anio = parseInt(fechaNacimientoStr.slice(0, 2), 10);
+    const mes = parseInt(fechaNacimientoStr.slice(2, 4), 10) - 1;
+    const dia = parseInt(fechaNacimientoStr.slice(4, 6), 10);
+
+    // Determinar el siglo
+    const anioActual = new Date().getFullYear();
+    const siglo = anio > (anioActual - 2000) ? 1900 : 2000;
+    anio = siglo + anio;
+
+    const fechaNacimiento = new Date(anio, mes, dia);
+
+    // Verificar que la fecha es válida
+    if (isNaN(fechaNacimiento.getTime()) || fechaNacimiento > new Date()) {
+        labelspan.textContent = "CURP Inválido: fecha de nacimiento incorrecta";
+        labelspan.style.color = "red";
+        return;
+    }
+
+    // Calcular la edad
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+    const m = hoy.getMonth() - fechaNacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+        edad--;
+    }
+
+    // Validar CURP
+    if (edad >= 0 && edad <= 120) {
+        labelspan.textContent = edad < 5 ? "CURP Válido (Menor de edad)" : "CURP inválido (excede la edad de 5 años)";
+        labelspan.style.color = edad < 5 ? "green" : "red";
+    } else {
+        labelspan.textContent = "CURP Inválido: edad fuera de rango";
+        labelspan.style.color = "red";
+    }
+}
+
+
+function validarEdadadulta(input, labelspan) {
+    const curp = input.value.trim().toUpperCase();
+    const curpRegex = /^[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[0-9A-Z]{2}$/;
+
+    // Validar formato CURP
+    if (!curpRegex.test(curp)) {
+        labelspan.textContent = "CURP Inválido: formato incorrecto";
+        labelspan.style.color = "red";
+        return;
+    }
+
+    // Extraer y validar fecha de nacimiento
+    const fechaNacimientoStr = curp.slice(4, 10);
+    let anio = parseInt(fechaNacimientoStr.slice(0, 2), 10);
+    const mes = parseInt(fechaNacimientoStr.slice(2, 4), 10) - 1;
+    const dia = parseInt(fechaNacimientoStr.slice(4, 6), 10);
+
+    // Determinar el siglo
+    const anioActual = new Date().getFullYear();
+    const siglo = anio > (anioActual - 2000) ? 1900 : 2000;
+    anio = siglo + anio;
+
+    const fechaNacimiento = new Date(anio, mes, dia);
+
+    // Verificar que la fecha es válida
+    if (isNaN(fechaNacimiento.getTime()) || fechaNacimiento > new Date()) {
+        labelspan.textContent = "CURP Inválido: fecha de nacimiento incorrecta";
+        labelspan.style.color = "red";
+        return;
+    }
+
+    // Calcular la edad
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+    const m = hoy.getMonth() - fechaNacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+        edad--;
+    }
+
+    // Validar CURP
+    if (edad >= 0 && edad <= 120) {
+        labelspan.textContent = edad >= 60 ? "CURP Válido (adulto mayor) " : "CURP inválido (no para inapam)";
+        labelspan.style.color = edad >= 60 ? "green" : "red";
+    } else {
+        labelspan.textContent = "CURP Inválido: edad fuera de rango";
+        labelspan.style.color = "red";
+    }
+}
+
+// Crear un nuevo textarea dinámicamente
+var countnino = 1; // Ajusta según sea necesario
+var contentinputs = document.getElementById('contentinputs');
+var input2 = document.createElement('textarea');
+input2.classList.add("form-control");
+input2.classList.add("m-2");
+input2.rows = 1;
+input2.setAttribute("id", `input_nino_curp${countnino}`);
+
+// Añadir el textarea al contenedor
+contentinputs.appendChild(input2);
+
+// Asociar eventos
+input2.addEventListener('input', function () {
+    convertirAMayusculas(this);
+    validarEdad(this);
+});
