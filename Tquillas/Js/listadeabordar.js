@@ -86,14 +86,6 @@
     })
 
 
-    function limpiarTabla() {
-        var tabla = document.getElementById('listadeabordar');
-
-        // Eliminar todas las filas excepto la primera (encabezados)
-        while (tabla.rows.length > 1) {
-            tabla.deleteRow(1);
-        }
-    }
 
 
 
@@ -116,9 +108,29 @@
         document.getElementById('table-lista').style.display = 'none'
         document.getElementById('table-lista2').style.display = 'block'
         document.getElementById('table-lista2').style.width = '100mm';
-        document.getElementById('allcontent').style.width = 378;
+        document.getElementById('allcontent').style.width = 200;
 
+        document.getElementById('spantaquillas').style.fontSize= '12px'
+        document.getElementById('rutabname').style.fontSize = '12px'
+        document.getElementById('buss').style.fontSize = '12px'
+        document.getElementById('countabordan').style.fontSize = '12px'
+        document.getElementById('countotal').style.fontSize = '12px'
+        document.getElementById('tdname').style.fontSize = '12px'
 
+        document.getElementById("main-taquilla").style.fontSize = "11px"; // Tamaño en píxeles
+        document.getElementById("main-taquilla").style.fontWeight = "600"; // Peso de fuente
+
+        document.getElementById("main-ruta").style.fontSize = "11px";    // Tamaño en píxeles
+        document.getElementById("main-ruta").style.fontWeight = "600";   // Peso de fuente
+
+        document.getElementById("main-bus").style.fontSize = "11px";     // Tamaño en píxeles
+        document.getElementById("main-bus").style.fontWeight = "600";    // Peso de fuente
+
+        document.getElementById("main-abordan").style.fontSize = "11px"; // Tamaño en píxeles
+        document.getElementById("main-abordan").style.fontWeight = "600"; // Peso de fuente
+
+        document.getElementById("main-total").style.fontSize = "11px";   // Tamaño en píxeles
+        document.getElementById("main-total").style.fontWeight = "600";  
         const tabla = document.getElementById('allcontent');
         
 
@@ -126,7 +138,7 @@
 
         // Configura las opciones para html2pdf
         const opciones = {
-            margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
+            margin: [0, -5, 0, 0], // Márgenes en mm (top, right, bottom, left)
             filename: 'listadeabordar.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
@@ -161,6 +173,21 @@
                 document.getElementById('table-lista2').style.display = 'none'
                 }
             }
+
+            document.getElementById("main-taquilla").style.fontSize = ""; // Resetear tamaño de fuente
+            document.getElementById("main-taquilla").style.fontWeight = ""; // Resetear peso de fuente
+
+            document.getElementById("main-ruta").style.fontSize = "";    // Resetear tamaño de fuente
+            document.getElementById("main-ruta").style.fontWeight = "";   // Resetear peso de fuente
+
+            document.getElementById("main-bus").style.fontSize = "";     // Resetear tamaño de fuente
+            document.getElementById("main-bus").style.fontWeight = "";    // Resetear peso de fuente
+
+            document.getElementById("main-abordan").style.fontSize = ""; // Resetear tamaño de fuente
+            document.getElementById("main-abordan").style.fontWeight = ""; // Resetear peso de fuente
+
+            document.getElementById("main-total").style.fontSize = "";   // Resetear tamaño de fuente
+            document.getElementById("main-total").style.fontWeight = ""; 
         });
 
 
@@ -191,9 +218,10 @@ function ocultarColumna6() {
     function verlista(tripid, bus, corrida) {
 
 
-       
+        limpiarTabla()
         limpiarTabla2()
-                    var countabordan = 0;
+        var countabordan = 0;
+        document.getElementById('countabordan').textContent = countabordan
 
         fetch(`http://apitaquillassag.dyndns.org/Home/MostrarListaAbordar?trip_id=${tripid}`)
             .then(response => response.json())
@@ -203,7 +231,8 @@ function ocultarColumna6() {
                 var tbody2 = document.getElementById('table-lista2').getElementsByTagName('tbody')[0];
                 var tipo = "";
 
-               
+
+                document.getElementById('countotal').textContent = data.length
 
                 data.forEach(e => {
 
@@ -224,9 +253,6 @@ function ocultarColumna6() {
 
 
 
-
-
-
                     var tr = document.createElement('tr')
                     var tr2 = document.createElement('tr')
 
@@ -238,7 +264,8 @@ function ocultarColumna6() {
                     if (normalizeText(officename).localeCompare(normalizeText(e.Origin), 'es', { sensitivity: 'base' }) === 0) {
                         // Si son iguales, incrementa el contador
                         countabordan ++;
-                document.getElementById('countabordan').textContent = countabordan
+                        document.getElementById('countabordan').textContent = countabordan
+
                        
                     } else {
                         console.log('Textos diferentes. Contador no cambiado.');
@@ -247,7 +274,7 @@ function ocultarColumna6() {
                     tr.innerHTML = `
                     
                     <td>${e.Seat_number}</td>
-                    <td>${e.Name}</td>
+                    <td id="tdname">${e.Name}</td>
                     <td>${e.Origin}</td>
                     <td>${e.Destination}</td>
                     <td>${e.Ticket}</td>
@@ -260,7 +287,7 @@ function ocultarColumna6() {
                     tr2.innerHTML = `
                     
                     <td>${e.Seat_number}</td>
-                    <td>${e.Name}</td>
+                    <td id="tdname">${e.Name}</td>
                     <td>${e.Origin}</td>
                     <td>${e.Destination}</td>
                     <td>${e.Ticket}</td>
@@ -306,6 +333,15 @@ function ocultarColumna6() {
 
 
 function limpiarTabla2() {
+    var tabla = document.getElementById('table-lista2');
+
+    // Eliminar todas las filas excepto la primera (encabezados)
+    while (tabla.rows.length > 1) {
+        tabla.deleteRow(1);
+    }
+}
+
+function limpiarTabla() {
     var tabla = document.getElementById('table-lista');
 
     // Eliminar todas las filas excepto la primera (encabezados)

@@ -1,4 +1,8 @@
-﻿function Buscar() {
+﻿
+
+
+
+function Buscar() {
     var data = document.getElementById('codcompra').value;
 
     fetch(`http://apitaquillassag.dyndns.org/Home/BuscarPaquete?ticket=${data}`)
@@ -45,4 +49,4 @@ function actualizar() {
         .catch(error => {
             alert("Hubo un error en la solicitud");
         });
-}
+    }

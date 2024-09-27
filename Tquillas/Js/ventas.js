@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-     
+
 
 
 
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var labelspan = document.createElement('label')
         labelspan.textContent = ""
         labelspan.setAttribute("id", `${"label_nino_curp" + countnino}`)
-        contentinputs.appendChild(labelspan)       
+        contentinputs.appendChild(labelspan)
 
         var label2 = document.createElement('label')
         label2.textContent = "CURP: " + countnino
@@ -669,7 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (countnino > 0) {
             const contentinputs = document.getElementById('contentinputsnino');
 
-            
+
             const elementosAEliminar = [
                 document.getElementById(`input_nino_curp${countnino}`),
                 document.getElementById(`input_nino${countnino}`),
@@ -678,7 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             elementosAEliminar.forEach(elemento => {
                 if (elemento) {
-                    
+
                     if (elemento.previousElementSibling && elemento.previousElementSibling.tagName === 'LABEL') {
                         contentinputs.removeChild(elemento.previousElementSibling);
                     }
@@ -687,7 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-           
+
             const labelSpan = contentinputs.lastElementChild;
             if (labelSpan && labelSpan.tagName === 'LABEL' && labelSpan.textContent === "") {
                 contentinputs.removeChild(labelSpan);
@@ -700,7 +700,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (countnino === 0) {
             console.log('No hay más niños para restar');
-            
+
         }
     });
 
@@ -1019,8 +1019,8 @@ document.addEventListener('DOMContentLoaded', () => {
     btn_siguiente1.addEventListener('click', () => {
 
 
-       
-  
+
+
 
         var grupos = document.querySelectorAll('div[id^="content-count-"]');
         var alMenosUnDivConInputRellenado = false;
@@ -1115,8 +1115,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         var datosViajeString = localStorage.getItem("datos_viaje");
                         var datosViajeObj = JSON.parse(datosViajeString);
                         precio_base = datosViajeObj.precio;
-                        var origen = datosViajeObj.origen 
-                        var destino = datosViajeObj.destino 
+                        var origen = datosViajeObj.origen
+                        var destino = datosViajeObj.destino
                         var departingOrigen = datosViajeObj.departingOrigen
                         precio_descuento = precio_base * 0.70;
                         // Iterar sobre las claves y valores del objeto
@@ -1373,257 +1373,234 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const btn_pagar_tarjeta = document.getElementById('btn-pagar-tarjeta')
-    btn_pagar_tarjeta.addEventListener('click', () => {
+    //const btnpagar_tarjeta = document.getElementById('btnpagar-efectivo')
 
+    //btnpagar_tarjeta.addEventListener('click', () => {
+    //    var datosViajeString = localStorage.getItem("datos_viaje");
+    //    var datosViajeObj = JSON.parse(datosViajeString);
+    //    var tipo = datosViajeObj.tipo;
+    //    var id = datosViajeObj.id
+    //    var table = document.getElementById("tablaefectivoresume");
+    //    var header = [];
+    //    var rows = [];
+    //    var ticketuserid = localStorage.getItem('id')
+    //    var saleshiftid = localStorage.getItem('saleshift')
+    //    var officelocationid = localStorage.getItem('office_location_id')
+    //    var terminalid = localStorage.getItem('terminal_id')
 
+    //    // Convertir a número y redondear a 2 decimales
+    //    var monto_recibido = parseFloat(document.getElementById("txtmonto").value);
+    //    var totalapagar = parseFloat(localStorage.getItem("Total_compra"));
 
-        var datosViajeString = localStorage.getItem("datos_viaje");
-        var datosViajeObj = JSON.parse(datosViajeString);
-        var tipo = datosViajeObj.tipo;
-        var id = datosViajeObj.id
-        var table = document.getElementById("tablacardresume");
-        var header = [];
-        var rows = [];
-        var ticketuserid = localStorage.getItem('id')
-        var saleshiftid = localStorage.getItem('saleshift')
-        var officelocationid = localStorage.getItem('office_location_id')
-        var terminalid = localStorage.getItem('terminal_id')
-        var monto_recibido = parseFloat(document.getElementById("txtmonto").value).toFixed(2)
-        var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
-        var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
-        var userid = localStorage.getItem('id')
+    //    // Redondear a 2 decimales para la comparación
+    //    monto_recibido = Math.round(monto_recibido * 100) / 100;
+    //    totalapagar = Math.round(totalapagar * 100) / 100;
 
+    //    var userid = localStorage.getItem('id')
 
-        var terminall = "";
-        var officee = "";
-        var terminalidd = "";
-        var officeidd = "";
+    //    if (parseFloat(monto_recibido) < parseFloat(totalapagar)) {
+    //        Swal.fire({
+    //            title: "Mensaje",
+    //            text: `El monto recibido debe ser mayor o igual al total a pagar`,
+    //            icon: "info"
+    //        });
+    //    } else {
 
-        Promise.all([
-            localforage.getItem('terminal_name'),
-            localforage.getItem('office_name'),
-            localforage.getItem('office_location_id'),
-            localforage.getItem('terminal_id')
-        ]).then(function (values) {
-            terminall = values[0];
-            officee = values[1];
-            officeidd = values[2];
-            terminalidd = values[3];
+    //        var shiftnumber = localStorage.getItem('shift_number')
 
-        }).catch(function (err) {
-            console.error('Error al recuperar datos:', err);
-        });
+    //        var num_ventas = localStorage.getItem('num_ventas')
 
+    //        var numero = parseInt(num_ventas)
 
-    0
+    //        numero = numero + 1
 
-        if (monto_recibido < totalapagar) {
 
-            Swal.fire({
-                title: "mensaje!",
-                text: `Debes realizar un monto mayor`,
-                icon: "info"
-            });
 
 
-        } else {
+    //        localStorage.setItem('num_ventas', numero.toString())
 
-            var shiftnumber = localStorage.getItem('shift_number')
+    //        for (var i = 0; i < table.rows[0].cells.length; i++) {
+    //            header.push(table.rows[0].cells[i].innerHTML);
+    //        }
 
-            var num_ventas = localStorage.getItem('num_ventas')
+    //        for (var i = 1; i < table.rows.length; i++) {
+    //            var row = {};
+    //            for (var j = 0; j < table.rows[i].cells.length; j++) {
+    //                row[header[j]] = table.rows[i].cells[j].innerHTML;
+    //            }
+    //            rows.push(row);
+    //        }
 
-            var numero = parseInt(num_ventas)
 
-            numero = numero + 1
 
 
 
 
-            localStorage.setItem('num_ventas', numero.toString())
+    //        //     var res = monto_recibido - totalapagar
 
-            for (var i = 0; i < table.rows[0].cells.length; i++) {
-                header.push(table.rows[0].cells[i].innerHTML);
-            }
 
-            for (var i = 1; i < table.rows.length; i++) {
-                var row = {};
-                for (var j = 0; j < table.rows[i].cells.length; j++) {
-                    row[header[j]] = table.rows[i].cells[j].innerHTML;
-                }
-                rows.push(row);
-            }
 
 
 
+    //        const json = JSON.stringify(rows);
 
 
+    //        const jsonObj = JSON.parse(json);
 
-            //     var res = monto_recibido - totalapagar
 
+    //        const nuevoJson = jsonObj.map(item => {
+    //            let tipo = "";
 
+    //            if (item.Tipo == "Adulto") {
+    //                tipo = "ADULT";
+    //            } else if (item.Tipo == "Niño") {
+    //                tipo = "CHILD";
+    //            } else if (item.Tipo == "Adulto mayor") {
+    //                tipo = "OLDER_ADULT";
+    //                console.log("Seleccionaste la opción 3");
+    //            } else if (item.Tipo == "Estudiante") {
+    //                tipo = "STUDENT";
+    //            } else {
+    //                console.log("Opción no válida");
+    //            }
 
+    //            return {
+    //                "Name": item.nombre,
+    //                "Origin": item.Origen,
+    //                "Destination": item.Destino,
+    //                "Bus": item.Bus,
+    //                "PassengerName": item.Pasajero,
+    //                "PassengerType": tipo,
+    //                "SeatName": item.Asiento,
+    //                "SoldPrice": parseFloat(item.costo),
+    //                "PayedPrice": parseFloat(item.costo),
+    //                "OriginalPrice": parseFloat(item.costo),
+    //                "Trip_ID": id,
+    //                "UserId": userid
+    //            };
+    //        });
 
 
-            const json = JSON.stringify(rows);
+    //        const nuevoJsonString = JSON.stringify(nuevoJson, null, 2);
 
+    //        var shift_number_to_is = shiftnumber + "-" + numero
+    //        alert(shift_number_to_is)
 
-            const jsonObj = JSON.parse(json);
 
 
-            const nuevoJson = jsonObj.map(item => {
-                let tipo = "";
 
-                if (item.Tipo == "Adulto") {
-                    tipo = "ADULT";
-                } else if (item.Tipo == "Niño") {
-                    tipo = "CHILD";
-                } else if (item.Tipo == "Adulto Mayor") {
-                    tipo = "OLDER_ADULT";
-                    console.log("Seleccionaste la opción 3");
-                } else if (item.Tipo == "Estudiante") {
-                    tipo = "STUDENT";
-                } else {
-                    console.log("Opción no válida");
-                }
 
-                return {
-                    "Name": item.nombre,
-                    "Origin": item.Origen,
-                    "Destination": item.Destino,
-                    "Bus": item.Bus,
-                    "PassengerName": item.Pasajero,
-                    "PassengerType": tipo,
-                    "SeatName": item.Asiento,
-                    "SoldPrice": parseFloat(item.costo),
-                    "PayedPrice": parseFloat(item.costo),
-                    "OriginalPrice": parseFloat(item.costo),
-                    "Trip_ID": id,
-                    "UserId": userid
-                };
-            });
+    //        var lista_ventas = localStorage.getItem("array_ventas")
 
+    //        var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
 
-            const nuevoJsonString = JSON.stringify(nuevoJson, null, 2);
+    //        // Añadir el nuevo valor al array
+    //        lista_ventasstr.push(shift_number_to_is);
 
-            var shift_number_to_is = shiftnumber + "-" + numero
-            alert(shift_number_to_is)
+    //        // Convertir la lista actualizada a cadena y almacenarla en localStorage
+    //        localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
 
 
 
 
+    //        const InternetSale =
+    //        {
+    //            "totalAmount": parseFloat(totalapagar),
+    //            "changeAmount": tipo != "ADULT" ? (parseFloat(totalapagar) - parseFloat(precio_base)) : 0.00,
 
-            var lista_ventas = localStorage.getItem("array_ventas")
+    //            "PaymentType": "card",
+    //            "payedAmount": parseFloat(precio_base),
+    //            "salesTerminalId": terminalidd,
+    //            "salesmanId": ticketuserid,
+    //            "salesShiftId": localStorage.getItem('saleshift_id'),
+    //            "saleNumber": shift_number_to_is,
+    //            "short_id": generarID(),
+    //            "tripseatlist": nuevoJson,
+    //            "Email": localStorage.getItem('correocliente')
+    //        }
 
-            var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
 
-            // Añadir el nuevo valor al array
-            lista_ventasstr.push(shift_number_to_is);
+    //        console.log(InternetSale)
 
-            // Convertir la lista actualizada a cadena y almacenarla en localStorage
-            localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
 
 
 
 
-            const InternetSale =
-            {
-                "totalAmount": parseFloat(totalapagar),
-                "changeAmount": tipo != "ADULT" ? (parseFloat(totalapagar) - parseFloat(precio_base)) : 0.00,
+    //        fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
+    //            method: 'POST',
+    //            headers: {
+    //                "Content-Type": "application/json"
+    //            },
+    //            body: JSON.stringify(InternetSale)
+    //        })
+    //            .then(response => response.text())
+    //            .then(data => {
 
-                "PaymentType": "card",
-                "payedAmount": parseFloat(precio_base),
-                "salesTerminalId": terminalidd,
-                "salesmanId": ticketuserid,
-                "salesShiftId": localStorage.getItem('saleshift_id'),
-                "saleNumber": shift_number_to_is,
-                "short_id": generarID(),
-                "tripseatlist": nuevoJson,
-                "Email": localStorage.getItem('correocliente')
-            }
+    //                console.log(data)
 
+    //                if (data.length == 8) {
 
-            console.log(InternetSale)
+    //                    var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
+    //                    localStorage.setItem('folio', data)
 
+    //                    if (elementoEnLocalStorage != "") {
+    //                        console.log('El elemento existe en local storage:', elementoEnLocalStorage);
 
+    //                        var ventatotal = parseFloat(elementoEnLocalStorage);
 
 
 
-            fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(InternetSale)
-            })
-                .then(response => response.text())
-                .then(data => {
+    //                        ventatotal = ventatotal + parseFloat(totalapagar);
 
-                    console.log(data)
 
-                    if (data.length == 8) {
 
-                        var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
-                        localStorage.setItem('folio', data)
+    //                        localStorage.setItem('venta_reciente', ventatotal.toString());
 
-                        if (elementoEnLocalStorage != "") {
-                            console.log('El elemento existe en local storage:', elementoEnLocalStorage);
+    //                    } else {
+    //                        console.log('El elemento no existe en local storage');
 
-                            var ventatotal = parseFloat(elementoEnLocalStorage);
+    //                        localStorage.setItem('venta_reciente', totalapagar.toString());
+    //                    }
 
 
 
-                            ventatotal = ventatotal + parseFloat(totalapagar);
+    //                    var currentsale = actualizarCurrentSale();
 
 
 
-                            localStorage.setItem('venta_reciente', ventatotal.toString());
 
-                        } else {
-                            console.log('El elemento no existe en local storage');
+    //                } else {
 
-                            localStorage.setItem('venta_reciente', totalapagar.toString());
-                        }
 
+    //                    Swal.fire({
+    //                        title: "Ocurrio Un error !",
+    //                        text: `No se Pudo capturar Exitosamente el pago`,
+    //                        icon: "error"
+    //                    });
 
+    //                }
 
-                        var currentsale = actualizarCurrentSale();
 
 
 
+    //            }).catch(error => {
 
-                    } else {
 
+    //                Swal.fire({
+    //                    title: "Ocurrio Un error !",
+    //                    text: `No se Pudo capturar Exitosamente el pago`,
+    //                    icon: "error"
+    //                });
 
-                        Swal.fire({
-                            title: "Ocurrio Un error !",
-                            text: `No se Pudo capturar Exitosamente el pago`,
-                            icon: "error"
-                        });
+    //            })
 
-                    }
 
+    //    }
 
 
 
-                }).catch(error => {
 
-
-                    Swal.fire({
-                        title: "Ocurrio Un error !",
-                        text: `No se Pudo capturar Exitosamente el pago`,
-                        icon: "error"
-                    });
-
-                })
-
-
-        }
-
-
-
-
-    })
+    //})
 
 
 
@@ -1633,52 +1610,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //pagos en efectivo
 
-    const btnpagar_efectivo = document.getElementById('btnpagar-efectivo')
+    const btnpagar_efectivo = document.getElementById('btnpagar-efectivo');
 
     btnpagar_efectivo.addEventListener('click', () => {
+        // Deshabilitar el botón para evitar múltiples clics
+        btnpagar_efectivo.disabled = true;
 
         var datosViajeString = localStorage.getItem("datos_viaje");
         var datosViajeObj = JSON.parse(datosViajeString);
         var tipo = datosViajeObj.tipo;
-        var id = datosViajeObj.id
+        var id = datosViajeObj.id;
         var table = document.getElementById("tablaefectivoresume");
         var header = [];
         var rows = [];
-        var ticketuserid = localStorage.getItem('id')
-        var saleshiftid = localStorage.getItem('saleshift')
-        var officelocationid = localStorage.getItem('office_location_id')
-        var terminalid = localStorage.getItem('terminal_id')
-        var monto_recibido = parseFloat(document.getElementById("txtmonto").value).toFixed(2)
-        var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
-        var totalapagar = parseFloat(localStorage.getItem("Total_compra")).toFixed(2)
-        var userid = localStorage.getItem('id')
+        var ticketuserid = localStorage.getItem('id');
+        var saleshiftid = localStorage.getItem('saleshift');
+        var officelocationid = localStorage.getItem('office_location_id');
+        var terminalid = localStorage.getItem('terminal_id');
 
+        // Convertir a número y redondear a 2 decimales
+        var monto_recibido = parseFloat(document.getElementById("txtmonto").value);
+        var totalapagar = parseFloat(localStorage.getItem("Total_compra"));
 
+        // Redondear a 2 decimales para la comparación
+        monto_recibido = Math.round(monto_recibido * 100) / 100;
+        totalapagar = Math.round(totalapagar * 100) / 100;
 
+        var userid = localStorage.getItem('id');
 
-
-
-        if (monto_recibido < totalapagar) {
-
+        if (parseFloat(monto_recibido) < parseFloat(totalapagar)) {
             Swal.fire({
-                title: "mensaje!",
-                text: `Debes realizar un monto mayor`,
+                title: "Mensaje",
+                text: `El monto recibido debe ser mayor o igual al total a pagar`,
                 icon: "info"
             });
-
-
+            // Volver a habilitar el botón si hay un error
+            btnpagar_efectivo.disabled = false;
         } else {
+            var shiftnumber = localStorage.getItem('shift_number');
+            var num_ventas = localStorage.getItem('num_ventas');
+            var numero = parseInt(num_ventas) + 1;
 
-            var shiftnumber = localStorage.getItem('shift_number')
-
-            var num_ventas = localStorage.getItem('num_ventas')
-
-            var numero = parseInt(num_ventas)
-
-            numero = numero + 1
-
-
-            localStorage.setItem('num_ventas', numero.toString())
+            localStorage.setItem('num_ventas', numero.toString());
 
             for (var i = 0; i < table.rows[0].cells.length; i++) {
                 header.push(table.rows[0].cells[i].innerHTML);
@@ -1692,11 +1665,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 rows.push(row);
             }
 
-            var res = monto_recibido - totalapagar
-
+            var res = monto_recibido - totalapagar;
             const json = JSON.stringify(rows);
-
-
             const jsonObj = JSON.parse(json);
 
             const nuevoJson = jsonObj.map(item => {
@@ -1706,13 +1676,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     tipo = "ADULT";
                 } else if (item.Tipo == "Niño") {
                     tipo = "CHILD";
-                } else if (item.Tipo == "Adulto Mayor") {
+                } else if (item.Tipo == "Adulto mayor") {
                     tipo = "OLDER_ADULT";
-                    console.log("Seleccionaste la opción 3");
                 } else if (item.Tipo == "Estudiante") {
                     tipo = "STUDENT";
-                } else {
-                    console.log("Opción no válida");
                 }
 
                 return {
@@ -1731,31 +1698,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             });
 
-
-
             const nuevoJsonString = JSON.stringify(nuevoJson, null, 2);
-
-
-
-
-
-
-            var shift_number_to_is = shiftnumber + "-" + numero
-            alert(shift_number_to_is)
-
-
-            var lista_ventas = localStorage.getItem("array_ventas")
-
+            var shift_number_to_is = shiftnumber + "-" + numero;
+            var lista_ventas = localStorage.getItem("array_ventas");
             var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
 
             // Añadir el nuevo valor al array
             lista_ventasstr.push(shift_number_to_is);
-
-            // Convertir la lista actualizada a cadena y almacenarla en localStorage
             localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
 
-            const InternetSale =
-            {
+            const InternetSale = {
                 "totalAmount": parseFloat(totalapagar),
                 "changeAmount": 0.00,
                 "PaymentType": "cash",
@@ -1766,13 +1718,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "saleNumber": shift_number_to_is,
                 "tripseatlist": nuevoJson,
                 "Email": localStorage.getItem('correocliente')
-            }
-
-
-            console.log(InternetSale)
-
-
-
+            };
 
             fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
                 method: 'POST',
@@ -1781,124 +1727,114 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(InternetSale)
             })
-                .then(response => response.text()
+                .then(response => response.text())
                 .then(data => {
-
                     if (data.length == 8) {
-
-                        localStorage.setItem('folio', data)
-
+                        localStorage.setItem('folio', data);
                         var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
 
-
                         if (elementoEnLocalStorage !== null) {
-                            console.log('El elemento existe en local storage:', elementoEnLocalStorage);
-
                             var ventatotal = parseFloat(elementoEnLocalStorage);
-
                             ventatotal = ventatotal + parseFloat(totalapagar);
-
                             localStorage.setItem('venta_reciente', ventatotal.toString());
-
                         } else {
-                            console.log('El elemento no existe en local storage');
-
                             localStorage.setItem('venta_reciente', totalapagar.toString());
                         }
 
-
                         var currentsale = actualizarCurrentSale();
-
-
-                    }
-
-
-                    else {
+                    } else {
                         Swal.fire({
-                            title: "Erroro!",
-                            text: `Ocurrio un error`,
+                            title: "Error!",
+                            text: `Ocurrió un error`,
                             icon: "error"
                         });
                     }
-
                 })
                 .catch(error => {
+
+                    var num_ventas = localStorage.getItem('num_ventas');
+                    var numero = parseInt(num_ventas);
+
+                    numero = numero - 1;
+                    localStorage.setItem('num_ventas', numero.toString());
 
                     Swal.fire({
                         title: "No se Pudo realizar el pago!",
                         text: `mensaje de error ${error}`,
                         icon: "error"
                     });
-
                 })
-
-        )}
-
-    })
-
-  
-
-
-    const btn_tarjeta = document.getElementById('btn-tarjeta')
-    btn_tarjeta.addEventListener('click', () => {
-
-
-
-        document.getElementById("pago-tarjeta").style.display = 'block'
-        document.getElementById("section-tipo-pago").style.display = "none"
-
-        const datosviaje = localStorage.getItem("datos_viaje")
-        const datosInternetsale = localStorage.getItem("datosInternetsale")
-
-        var tbodyrsumeefectiivo = document.getElementById("tbl-card-resume");
-
-        var datais = localStorage.getItem("datosInternetsale")
-        datais = JSON.parse(datais)
-
-        var dataviaje = localStorage.getItem("datos_viaje");
-        var datosCombinados = JSON.parse(dataviaje);
-
-        for (var i = 0; i < datais.length; i++) {
-
-
-            var tr = document.createElement("tr");
-            var tipo = datais[i].tipo
-            var type = datais[i].tipo
-            if (tipo.includes("adulto")) {
-                tipo = "Adulto"
-            } else if (tipo.includes("nino")) {
-                tipo = "Niño"
-
-            } else if (tipo.includes("inapam")) {
-                tipo = "Adulto mayor"
-
-            } else if (tipo.includes("estudiante")) {
-                tipo = "Estudiante"
-
-            }
-
-            tr.innerHTML = `
-
-                          <td>${datosCombinados.origen}</td>
-                          <td>${datosCombinados.destino}</td>
-                          <td>${datosCombinados.departingOrigen}
-                          <td>${datosCombinados.bus}</td> 
-                          <td>${datais[i].pasajero}</td>
-                          <td>${tipo}</td>
-                          <td>${datais[i].asiento}</td>
-                          <td>${datais[i].precio}</td>
-                         
-                        `;
-
-            tbodyrsumeefectiivo.appendChild(tr);
-
-
-            var totalapagar = localStorage.getItem("Total_compra")
-
-            document.getElementById("spantotalcard").innerHTML = totalapagar
+                .finally(() => {
+                    // Habilitar el botón nuevamente al finalizar la operación
+                    btnpagar_efectivo.disabled = false;
+                });
         }
+    });
 
-    })
+
+
+
+
+        //    const btn_tarjeta = document.getElementById('btn-tarjeta')
+        //    btn_tarjeta.addEventListener('click', () => {
+
+
+
+        //        document.getElementById("pago-tarjeta").style.display = 'block'
+        //        document.getElementById("section-tipo-pago").style.display = "none"
+
+        //        const datosviaje = localStorage.getItem("datos_viaje")
+        //        const datosInternetsale = localStorage.getItem("datosInternetsale")
+
+        //        var tbodyrsumeefectiivo = document.getElementById("tbl-card-resume");
+
+        //        var datais = localStorage.getItem("datosInternetsale")
+        //        datais = JSON.parse(datais)
+
+        //        var dataviaje = localStorage.getItem("datos_viaje");
+        //        var datosCombinados = JSON.parse(dataviaje);
+
+        //        for (var i = 0; i < datais.length; i++) {
+
+
+        //            var tr = document.createElement("tr");
+        //            var tipo = datais[i].tipo
+        //            var type = datais[i].tipo
+        //            if (tipo.includes("adulto")) {
+        //                tipo = "Adulto"
+        //            } else if (tipo.includes("nino")) {
+        //                tipo = "Niño"
+
+        //            } else if (tipo.includes("inapam")) {
+        //                tipo = "Adulto mayor"
+
+        //            } else if (tipo.includes("estudiante")) {
+        //                tipo = "Estudiante"
+
+        //            }
+
+        //            tr.innerHTML = `
+
+        //                          <td>${datosCombinados.origen}</td>
+        //                          <td>${datosCombinados.destino}</td>
+        //                          <td>${datosCombinados.departingOrigen}
+        //                          <td>${datosCombinados.bus}</td> 
+        //                          <td>${datais[i].pasajero}</td>
+        //                          <td>${tipo}</td>
+        //                          <td>${datais[i].asiento}</td>
+        //                          <td>${datais[i].precio}</td>
+                         
+        //                        `;
+
+        //            tbodyrsumeefectiivo.appendChild(tr);
+
+
+        //            var totalapagar = localStorage.getItem("Total_compra")
+
+        //            document.getElementById("spantotalcard").innerHTML = totalapagar
+        //        }
+
+        //    })
 
 
 })
@@ -2265,68 +2201,101 @@ function iniciarturno() {
     }
 
 
-    fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify('')
-    })
-        .then(response => response.json())
-        .then(data => {
-            var selectOrigen = document.getElementById('origen');
 
-
-            while (selectOrigen.options.length > 1) {
-                selectOrigen.remove(1);
-            }
-
-            data.forEach(option => {
-                var newOption = document.createElement("option");
-                newOption.value = option.id;
-                newOption.text = option.name;
-                selectOrigen.appendChild(newOption);
-            });
-        })
-        .catch(error => {
-            Swal.fire({
-                title: "Error!",
-                text: `${error}`,
-                icon: "error"
-            });
+    $(document).ready(function () {
+        $('#origen').select2({
+            selectOnClose: true,
+            tags: true // Permite que el usuario escriba texto que no está en la lista
         });
 
+        $('#destino').select2({
+            selectOnClose: true,
+            tags: true // Permite que el usuario escriba texto que no está en la lista
+        });
 
-    var selectOrigen = document.getElementById('origen');
-    selectOrigen.addEventListener('change', () => {
-        var IDOrigen = selectOrigen.value;
-        var Origen = selectOrigen.options[selectOrigen.selectedIndex].text;
-
-        var data = { origen: Origen };
-
-
-        fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+        // Cargar datos en el select de origen
+        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify('')
         })
-            .then(response => response.json())
-            .then(responseData => {
-                var selectDestino = document.getElementById('destino');
-
-
-                while (selectDestino.options.length > 1) {
-                    selectDestino.remove(1);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                return response.json();
+            })
+            .then(data => {
+                var selectOrigen = $('#origen');
 
+                // Limpiar opciones existentes
+                selectOrigen.empty().append('<option value="">Seleccione un origen</option>');
 
-                responseData.forEach(option => {
-                    var newOption = document.createElement("option");
-                    newOption.value = option.id;
-                    newOption.text = option.name;
-                    selectDestino.appendChild(newOption);
+                data.forEach(option => {
+                    var newOption = new Option(option.name, option.id, false, false);
+                    selectOrigen.append(newOption);
+                });
+
+                // Inicializar Select2 nuevamente para aplicar los cambios
+                selectOrigen.select2();
+
+                // Evento para establecer el foco en el campo de búsqueda al abrir el select
+                selectOrigen.on('select2:open', function () {
+                    setTimeout(function () {
+                        $('.select2-search__field').focus();
+                    }, 1);
+                });
+
+                // Agregar evento de búsqueda
+                selectOrigen.on('change', function () {
+                    var IDOrigen = selectOrigen.val();
+                    var Origen = selectOrigen.find("option:selected").text();
+
+                    var data = { origen: Origen };
+
+                    fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(responseData => {
+                            var selectDestino = $('#destino');
+
+                            // Limpiar opciones existentes
+                            selectDestino.empty().append('<option value="">Seleccione un destino</option>');
+
+                            responseData.forEach(option => {
+                                var newOption = new Option(option.name, option.id, false, false);
+                                selectDestino.append(newOption);
+                            });
+
+                            // Inicializar Select2 nuevamente para aplicar los cambios
+                            selectDestino.select2();
+
+                            // Evento para establecer el foco en el campo de búsqueda al abrir el select
+                            selectDestino.on('select2:open', function () {
+                                setTimeout(function () {
+                                    $('.select2-search__field').focus();
+                                }, 1);
+                            });
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: "Error!",
+                                text: `${error}`,
+                                icon: "error"
+                            });
+                        });
                 });
             })
             .catch(error => {
@@ -2337,6 +2306,8 @@ function iniciarturno() {
                 });
             });
     });
+
+
 
 
     function searchDestiny() {
@@ -2757,4 +2728,4 @@ contentinputs.appendChild(input2);
 input2.addEventListener('input', function () {
     convertirAMayusculas(this);
     validarEdad(this);
-});
+})

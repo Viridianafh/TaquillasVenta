@@ -20,9 +20,117 @@ localStorage.setItem("array_checkpoints", [])
 
 
 
-
-
 document.addEventListener('DOMContentLoaded', () => {
+
+
+
+
+    $(document).ready(function () {
+        $('#origen').select2({
+            selectOnClose: true,
+            tags: true // Permite que el usuario escriba texto que no está en la lista
+        });
+
+        $('#destino').select2({
+            selectOnClose: true,
+            tags: true // Permite que el usuario escriba texto que no está en la lista
+        });
+
+        // Cargar datos en el select de origen
+        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify('')
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                var selectOrigen = $('#origen');
+
+                // Limpiar opciones existentes
+                selectOrigen.empty().append('<option value="">Seleccione un origen</option>');
+
+                data.forEach(option => {
+                    var newOption = new Option(option.name, option.id, false, false);
+                    selectOrigen.append(newOption);
+                });
+
+                // Inicializar Select2 nuevamente para aplicar los cambios
+                selectOrigen.select2();
+
+                // Evento para establecer el foco en el campo de búsqueda al abrir el select
+                selectOrigen.on('select2:open', function () {
+                    setTimeout(function () {
+                        $('.select2-search__field').focus();
+                    }, 1);
+                });
+
+                // Agregar evento de búsqueda
+                selectOrigen.on('change', function () {
+                    var IDOrigen = selectOrigen.val();
+                    var Origen = selectOrigen.find("option:selected").text();
+
+                    var data = { origen: Origen };
+
+                    fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(responseData => {
+                            var selectDestino = $('#destino');
+
+                            // Limpiar opciones existentes
+                            selectDestino.empty().append('<option value="">Seleccione un destino</option>');
+
+                            responseData.forEach(option => {
+                                var newOption = new Option(option.name, option.id, false, false);
+                                selectDestino.append(newOption);
+                            });
+
+                            // Inicializar Select2 nuevamente para aplicar los cambios
+                            selectDestino.select2();
+
+                            // Evento para establecer el foco en el campo de búsqueda al abrir el select
+                            selectDestino.on('select2:open', function () {
+                                setTimeout(function () {
+                                    $('.select2-search__field').focus();
+                                }, 1);
+                            });
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: "Error!",
+                                text: `${error}`,
+                                icon: "error"
+                            });
+                        });
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: "Error!",
+                    text: `${error}`,
+                    icon: "error"
+                });
+            });
+    });
+
+
 
 
 
@@ -62,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td><input type="text" class="form-control largo"></td>
                 <td><input type="text" class="form-control peso"></td>
                 <td>
-                    <select class="form-control embalaje">
+                    <select class="form-control select2" id="embalaje">
     <option value="2071150e-088d-4764-8b70-c13cff3c2379">Bidones (Tambores) de Acero 1 de tapa no desmontable</option>
     <option value="3092251e-199e-5875-9c81-d24eff4d348a">Bidones (Tambores) de Acero 1 de tapa desmontable</option>
     <option value="4103352e-2aae-6986-ad92-e35fff5e459b">Bidones (Tambores) de Aluminio de tapa no desmontable</option>
@@ -130,6 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tableBody.appendChild(row);
 
+     
+
         row.querySelector('.precio').addEventListener('input', updateTotalPrice);
 
         // Añadir el evento de clic al botón de eliminar
@@ -138,9 +248,18 @@ document.addEventListener('DOMContentLoaded', () => {
             updateTotalPrice();
         });
 
-        updateTotalPrice();
-    });
+        const selects = document.querySelectorAll('.select2');
+        selects.forEach(select => {
+            $(select).select2();
+        });
 
+
+        updateTotalPrice();
+
+
+        
+    });
+    
     document.getElementById('show-json').addEventListener('click', () => {
         
 
@@ -244,6 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 saleshiftid: localStorage.getItem('saleshift_id'),
                 isaleid: "",
                 shortid: "",
+                Email: "sag@sag.com"
 
 
 
@@ -334,6 +454,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+
+
+    // Obtener el elemento y agregar el evento
+    document.getElementById('monto-paquete').addEventListener('input', () => {
+        // Obtener el valor del input dentro del evento
+        var monto = parseFloat(document.getElementById('monto-paquete').value);
+        var total = parseFloat(document.getElementById('total-price').textContent);
+
+        // Verificar si el monto es menor que el total
+        if (monto < total) {
+            // Si el monto es menor, no mostrar nada
+            document.getElementById('cambio').textContent = ""; // Limpiar el contenido
+        } else {
+            // Calcular el cambio
+            var res = monto - total;
+            // Asignar el resultado al elemento de cambio
+            document.getElementById('cambio').textContent = `Cambio: ${res}`;
+        }
+    });
 
 
     document.getElementById('next-button').addEventListener('click', () => {
@@ -978,7 +1117,8 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
     document.getElementById('data-clients').style.display = "block"
 
 
-
+    document.getElementById('direccion-remitente').value = origen
+    document.getElementById('direccion-destinatario').value = destino
 
 
 
@@ -1277,78 +1417,6 @@ function iniciarturno() {
             }
 
 
-            fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify('')
-            })
-                .then(response => response.json())
-                .then(data => {
-                    var selectOrigen = document.getElementById('origen');
-
-
-                    while (selectOrigen.options.length > 1) {
-                        selectOrigen.remove(1);
-                    }
-
-                    data.forEach(option => {
-                        var newOption = document.createElement("option");
-                        newOption.value = option.id;
-                        newOption.text = option.name;
-                        selectOrigen.appendChild(newOption);
-                    });
-                })
-                .catch(error => {
-                    Swal.fire({
-                        title: "Error!",
-                        text: `${error}`,
-                        icon: "error"
-                    });
-                });
-
-
-            var selectOrigen = document.getElementById('origen');
-            selectOrigen.addEventListener('change', () => {
-                var IDOrigen = selectOrigen.value;
-                var Origen = selectOrigen.options[selectOrigen.selectedIndex].text;
-
-                var data = { origen: Origen };
-
-
-                fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                })
-                    .then(response => response.json())
-                    .then(responseData => {
-                        var selectDestino = document.getElementById('destino');
-
-
-                        while (selectDestino.options.length > 1) {
-                            selectDestino.remove(1);
-                        }
-
-
-                        responseData.forEach(option => {
-                            var newOption = document.createElement("option");
-                            newOption.value = option.id;
-                            newOption.text = option.name;
-                            selectDestino.appendChild(newOption);
-                        });
-                    })
-                    .catch(error => {
-                        Swal.fire({
-                            title: "Error!",
-                            text: `${error}`,
-                            icon: "error"
-                        });
-                    });
-            });
 
 
 

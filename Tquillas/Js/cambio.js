@@ -21,8 +21,13 @@ var isaleid = ""
 document.addEventListener('DOMContentLoaded', () => {
 
 
+  
+
 
     document.getElementById('btn-buscar').addEventListener('click', async () => {
+
+        document.getElementById('spanTexto').style.display = 'none'
+        document.getElementById('spanTexto2').style.display = 'none'
         // Obtén el valor del ticket
         var ticket = document.getElementById('boletoanterior').value;
 
@@ -79,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_siguiente1 = document.getElementById('btn-siguiente1')
         .addEventListener('click', () => {
 
-
+            descuento = 0.70
             document.getElementById('section-pasajero').style.display = 'none'
             document.getElementById('bus-container').style.display = 'block'
 
@@ -90,6 +95,51 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem("tipopasajero_cambio", tipopasajero)
 
             var dataid = localStorage.getItem("tripid_cambio")
+
+            var precionuevo = parseFloat(localStorage.getItem('precionuevo'))
+
+            var origencambio = localStorage.getItem('origen_cambio')
+            var destinocambio = localStorage.getItem('destino_cambio')
+
+
+            switch (tipopasajero) {
+                case 'ADULT':
+                    precionuevo = precionuevo
+                    break;
+                case 'CHILD':
+                    precionuevo = precionuevo * descuento
+                    break;  
+                case 'STUDENT':
+                    precionuevo = precionuevo * descuento
+                    break;
+                case 'OLDER_ADULT':
+                    precionuevo = precionuevo * descuento
+                    break;
+                        
+            }
+
+
+
+
+            let tabla = document.getElementById('table-ticket-nuevo');
+
+            // Crea una nueva fila
+            let nuevaFila = tabla.insertRow(); // Agrega una nueva fila al final de la tabla
+
+            // Crea celdas para la nueva fila
+            let celdaNombre = nuevaFila.insertCell(0);
+            let celdaOrigen = nuevaFila.insertCell(1);
+            let celdaDestino = nuevaFila.insertCell(2);
+            let celdaAsiento = nuevaFila.insertCell(3);
+            let celdaPrecio = nuevaFila.insertCell(4); // Columna de Precio
+            let celdaTicket = nuevaFila.insertCell(5);
+
+            celdaNombre.innerHTML = Nombre; // Cambia esto según sea necesario
+            celdaOrigen.innerHTML = origencambio; // Cambia esto según sea necesario
+            celdaDestino.innerHTML = destinocambio; // Cambia esto según sea necesario
+            celdaAsiento.innerHTML = `<p id="seatrow"></p>`; // Cambia esto según sea necesario
+            celdaPrecio.innerHTML = precionuevo; // Asigna el valor del precio
+            celdaTicket.innerHTML = `<p id="ticketrow"></p>`; // 
 
             crearasientos(tipo, dataid)
 
@@ -151,6 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => response.json())
             .then(data => {
+
+
+
                 console.log(data)
 
                 var alldata = data
@@ -223,16 +276,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     contentcards.innerHTML += `
 
-                    <div class="card m-2" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">${origen} - ${destino}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Salida: ${departingOrigen} llegada: ${departingDestino}</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">precio: $ ${precio}</h6>
-                        <p class="card-text">corrida: ${corrida}</p>
-                        <p class="card-text">tipo: ${tipo}</p>
-                        <button class="btn btn-primary" onClick=" enviardata('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}', '${isaleid}')">escoger</button>
-                    </div>
-                </div> 
+                        <div class="card m-2" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">${origen} - ${destino}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Salida: ${departingOrigen} llegada: ${departingDestino}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">precio: $ ${precio}</h6>
+                            <p class="card-text">corrida: ${corrida}</p>
+                            <p class="card-text">tipo: ${tipo}</p>
+                            <button class="btn btn-primary" onClick=" enviardata('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}', '${isaleid}')">escoger</button>
+                        </div>
+                    </div> 
 
                     `
 
@@ -287,6 +340,11 @@ async function enviardata(id, corrida, tipo, origen, destino, bus, departingOrig
     document.getElementById('section-pasajero').style.display = "block"
 
 
+    document.getElementById('newcardbody').style.display = 'block'
+
+    var table = await document.getElementById('table-ticket-nuevo').getElementsByTagName('tbody')[0]
+    var tr = await document.createElement('tr')
+    tr.innerHTML = ``
 
 }
 
@@ -414,64 +472,100 @@ async function BuscarBoletoUno(ticket) {
 
 
 function iniciarCambio() {
-    fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify('')
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            var selectOrigen = document.getElementById('origen');
-            // Limpia las opciones actuales del select
-            selectOrigen.innerHTML = ""; // Esta línea limpia las opciones actuales del select
-
-            data.forEach(option => {
-                var newOption = document.createElement("option");
-                newOption.value = option.name;
-                newOption.text = option.name;
-                selectOrigen.appendChild(newOption);
-            });
-        })
-        .catch(error => {
-            Swal.fire({
-                title: "Error!",
-                text: `${error}`,
-                icon: "error"
-            });
+    $(document).ready(function () {
+        $('#origen').select2({
+            selectOnClose: true,
+            tags: true // Permite que el usuario escriba texto que no está en la lista
         });
 
-    var selectOrigen = document.getElementById('origen');
-    selectOrigen.addEventListener('change', () => {
-        var IDOrigen = selectOrigen.value;
-        var Origen = selectOrigen.options[selectOrigen.selectedIndex].text;
+        $('#destino').select2({
+            selectOnClose: true,
+            tags: true // Permite que el usuario escriba texto que no está en la lista
+        });
 
-        var data = { origen: Origen };
-
-        fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+        // Cargar datos en el select de origen
+        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify('')
         })
-            .then(response => response.json())
-            .then(responseData => {
-                var selectDestino = document.getElementById('destino');
-                // Limpia las opciones actuales del select destino
-                selectDestino.innerHTML = ""; // Esta línea limpia las opciones actuales del select
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                var selectOrigen = $('#origen');
 
-                responseData.forEach(option => {
-                    var newOption = document.createElement("option");
-                    newOption.value = option.name;
-                    newOption.text = option.name;
-                    selectDestino.appendChild(newOption);
+                // Limpiar opciones existentes
+                selectOrigen.empty().append('<option value="">Seleccione un origen</option>');
+
+                data.forEach(option => {
+                    var newOption = new Option(option.name, option.name, false, false);
+                    selectOrigen.append(newOption);
+                });
+
+                // Inicializar Select2 nuevamente para aplicar los cambios
+                selectOrigen.select2();
+
+                // Evento para establecer el foco en el campo de búsqueda al abrir el select
+                selectOrigen.on('select2:open', function () {
+                    setTimeout(function () {
+                        $('.select2-search__field').focus();
+                    }, 1);
+                });
+
+                // Agregar evento de búsqueda
+                selectOrigen.on('change', function () {
+                    var IDOrigen = selectOrigen.val();
+                    var Origen = selectOrigen.find("option:selected").text();
+
+                    var data = { origen: Origen };
+
+                    fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(responseData => {
+                            var selectDestino = $('#destino');
+
+                            // Limpiar opciones existentes
+                            selectDestino.empty().append('<option value="">Seleccione un destino</option>');
+
+                            responseData.forEach(option => {
+                                var newOption = new Option(option.name, option.name, false, false);
+                                selectDestino.append(newOption);
+                            });
+
+                            // Inicializar Select2 nuevamente para aplicar los cambios
+                            selectDestino.select2();
+
+                            // Evento para establecer el foco en el campo de búsqueda al abrir el select
+                            selectDestino.on('select2:open', function () {
+                                setTimeout(function () {
+                                    $('.select2-search__field').focus();
+                                }, 1);
+                            });
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: "Error!",
+                                text: `${error}`,
+                                icon: "error"
+                            });
+                        });
                 });
             })
             .catch(error => {
@@ -482,13 +576,13 @@ function iniciarCambio() {
                 });
             });
     });
+
+
 }
 
 
 
-
 function crearasientos(tipo, id) {
-
 
 
     Promise.all([
@@ -517,15 +611,21 @@ function crearasientos(tipo, id) {
 
         if (statusData.length === 0) {
             seatElement.classList.add('btn-primary');
+           
+        
+
         } else {
             const seatStatus = statusData.find(status => status.asiento == seat.name);
             if (seatStatus && seatStatus.status === 'OCCUPIED') {
                 seatElement.classList.add('btn-danger');
+                
+
             } else {
                 seatElement.classList.add('btn-primary');
+             
+
             }
         }
-
 
 
         seatElement.addEventListener('click', () => {
@@ -533,6 +633,7 @@ function crearasientos(tipo, id) {
                 // Si el botón ya tiene la clase 'btn-danger', quitarla y restar del contador
                 seatElement.classList.remove('btn-danger');
                 seatElement.classList.add('btn-primary');
+                document.getElementById('seatrow').textContent = ""
                 seatcounter -= 1;
 
             } else {
@@ -545,12 +646,12 @@ function crearasientos(tipo, id) {
                     numseat = seat.name;
 
                     localStorage.setItem("asiento_cambio", seat.name)
+                    document.getElementById('seatrow').textContent = seat.name
 
                     seatcounter += 1;
                 }
             }
         });
-
 
 
 
@@ -561,6 +662,7 @@ function crearasientos(tipo, id) {
 
         var res = precio_anterior - precionuevo
 
+        document.getElementById('spanTexto2').style.display = 'block'
         document.getElementById('spanTexto2').textContent = `la diferencia de precio es de: ${res} `
 
         return seatElement;
@@ -569,15 +671,13 @@ function crearasientos(tipo, id) {
 
 
     function renderSeats(seatData, statusdata) {
+
         const floor1 = document.getElementById('floor-1');
         const floor2 = document.getElementById('floor-2');
-
         seatData.forEach(seat => {
-
             if (seat.type == "BATHROOM" || seat.type == "DOOR") {
 
             } else {
-
                 const seatElement = createSeatElement(seat, statusdata);
                 if (seat.floor === "1") {
                     floor1.appendChild(seatElement);
@@ -585,8 +685,6 @@ function crearasientos(tipo, id) {
                     floor2.appendChild(seatElement);
                 }
             }
-
-
         });
     }
 
@@ -614,13 +712,12 @@ function ProcederBoleto() {
     var user = localStorage.getItem('id')
     var terminal = localStorage.getItem('terminal_id')
     var saleshift = localStorage.getItem('saleshift_id')
-    var  origen = localStorage.getItem('origen_cambio')
+    var origen = localStorage.getItem('origen_cambio')
     var destino = localStorage.getItem('destino_cambio')
     var ticketsito = localStorage.getItem('tickett_cam')
 
 
     //  alert(`${nombre}` + `${tipopasajero}` + ` ${dataid}` + ` ${asiento_anterior}` + ` ${asiento_cambio}` + ` ${precio_anterior}`)
-
 
 
 
@@ -630,7 +727,8 @@ function ProcederBoleto() {
         "cancelUserId": user
 
     }
-    console.log (Boletocambio)
+
+    console.log(Boletocambio)
 
 
     const options = {
@@ -644,23 +742,18 @@ function ProcederBoleto() {
 
 
 
-
     if (tipopasajero == "Adulto") {
-            tipo = "ADULT";
+        tipo = "ADULT";
     } else if (tipopasajero == "Niño") {
-            tipo = "CHILD";
+        tipo = "CHILD";
     } else if (tipopasajero == "Adulto Mayor") {
-            tipo = "OLDER_ADULT";
-            console.log("Seleccionaste la opción 3");
+        tipo = "OLDER_ADULT";
+        console.log("Seleccionaste la opción 3");
     } else if (tipopasajero == "Estudiante") {
-            tipo = "STUDENT";
-        } else {
-            console.log("Opción no válida");
-        }
-
-       
-
-
+        tipo = "STUDENT";
+    } else {
+        console.log("Opción no válida");
+    }
 
 
     var shiftnumber = localStorage.getItem('shift_number')
@@ -673,9 +766,6 @@ function ProcederBoleto() {
 
 
     localStorage.setItem('num_ventas', numero.toString())
-
-
-
 
 
 
@@ -702,10 +792,10 @@ function ProcederBoleto() {
         "PassengerName": nombre,
         "PassengerType": tipopasajero,
         "SeatName": asiento_cambio,
-        "SoldPrice": parseFloat( precio_nuevo),
+        "SoldPrice": parseFloat(precio_nuevo),
         "PayedPrice": parseFloat(precio_nuevo),
         "OriginalPrice": parseFloat(precio_nuevo),
-        "Trip_ID": dataid  ,
+        "Trip_ID": dataid,
         "UserId": user
 
     }
@@ -722,7 +812,8 @@ function ProcederBoleto() {
         "salesShiftId": saleshift,
         "saleNumber": shift_number_to_is,
         "short_id": generarID(),
-        "tripseatlist": [tripseats]
+        "tripseatlist": [tripseats],
+        "Email": "devs@sag.com"
     }
 
 
@@ -738,9 +829,6 @@ function ProcederBoleto() {
         })
         .then(data => {
             console.log('Solicitud PATCH exitosa:', data);
-
-
-
 
             fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
                 method: 'POST',
@@ -762,22 +850,17 @@ function ProcederBoleto() {
                     var suma = parseventa + parseprecionuevo
                     localStorage.setItem('venta_reciente', suma)
 
+                    document.getElementById('spanTexto').style.display = 'block'
                     document.getElementById('spanTexto').textContent = `el nuevo folio es: ${data} puedes descargar el boleto en el menu "Buscar Boleto"`
-
-
                 })
                 .catch(error => {
                     alert(error)
                 })
-
-
         })
         .catch(error => {
             console.error('Error al realizar la solicitud PATCH:', error);
             // Aquí puedes manejar errores de la solicitud
         });
-   
-
 }
 
 

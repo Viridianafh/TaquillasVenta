@@ -45,7 +45,7 @@
         <div class="d-flex gap-2 flex-direction-column">
 
            
-        <select class="form-select" style="width: 250px;" id="origen">
+        <select class="select2" style="width: 250px;" id="origen">
           
         </select>
 

@@ -1,63 +1,52 @@
-﻿document.addEventListener('DOMContentLoaded', (event) => {
+﻿
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Inicializar Select2
+        $('.select2').select2();
 
-
-
-
-    //Swal.fire({
-    //    title: "Modulo en Desarrollo",
-    //    text: 'Te notificaremos cuando esté listo para ti',
-    //    icon: "warning",
-    //    confirmButtonColor: '#3085d6',
-    //    confirmButtonText: 'OK'
-    //}).then((result) => {
-    //    if (result.isConfirmed) {
-    //        // Redirigir al menú
-    //        window.location.href = "dash.aspx";
-    //    }
-    //});
-
-
-
-
-    fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify('')
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
+        // Cargar datos en el select de origen
+        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify('')
         })
-        .then(data => {
-            var selectOrigen = document.getElementById('origen');
-            // Limpia las opciones actuales del select
-            selectOrigen.innerHTML = ""; // Esta línea limpia las opciones actuales del select
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                var selectOrigen = $('#origen');
+                // Limpia las opciones actuales del select
+                selectOrigen.empty(); // Esta línea limpia las opciones actuales del select
+                selectOrigen.append(new Option("Seleccionar Opción", "")); // Opción por defecto
 
-            data.forEach(option => {
-                var newOption = document.createElement("option");
-                newOption.value = option.name;
-                newOption.text = option.name;
-                selectOrigen.appendChild(newOption);
+                data.forEach(option => {
+                    var newOption = new Option(option.name, option.name, false, false);
+                    selectOrigen.append(newOption);
+                });
+
+                // Re-inicializar Select2 después de agregar las opciones
+                selectOrigen.select2();
+
+                // Agregar el evento change después de que se hayan cargado las opciones
+                selectOrigen.on('change', function () {
+                    var selectedValue = $(this).val(); // Obtener el valor seleccionado
+                    Buscarbegins(selectedValue); // Llamar a la función de búsqueda
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: "Error!",
+                    text: `${error}`,
+                    icon: "error"
+                });
             });
-        })
-        .catch(error => {
-            Swal.fire({
-                title: "Error!",
-                text: `${error}`,
-                icon: "error"
-            });
-        });
+    
 
-    var selectOrigen = document.getElementById('origen');
-    selectOrigen.addEventListener('change', () => {
 
-        var data = selectOrigen.value
-        Buscarbegins(data)
-    })
 
     function Buscarbegins(data) {
         var tabla = document.getElementById('tabla-begins').getElementsByTagName('tbody')[0]

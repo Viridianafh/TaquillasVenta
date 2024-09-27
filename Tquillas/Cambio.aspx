@@ -32,7 +32,7 @@
   
     <div class="col">
        
-     <h5 class="card-title m-2">datos del ticket</h5>
+     <h5 class="card-title m-2 text-danger">datos del viejo Boleto</h5>
 
               <div class="card-body">
 
@@ -61,7 +61,38 @@
 
         </div>
  
-  </div>
+             <div class="col">
+
+            <div class="card-body" style="display:none;" id="newcardbody">
+                      <h5 class="card-title m-2 text-success">Nuevo Boleto</h5>
+
+                <table class="table table-bordered" id="table-ticket-nuevo" >
+                   
+                    <thead>
+                        <tr>
+                          <th>Nombre</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Asiento</th>
+                            <th>Precio</th>
+                            <th>Ticket</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                           
+                           
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            
+
+        </div>
+ 
+
+  
 
 
         <section id="section-viaje" class="container m-2 p-2 border-top" style="display:none;">
@@ -71,14 +102,17 @@
                  <h5>Paso 1. buscar viaje...</h5>
             <div>
                 <label>Origen</label>
-                <select class="form-control" id="origen" style="width: 220px;">
+                <select class="form-control select2" id="origen" style="width: 220px;">
                    
                 </select>
+                <br />
+                <br />
                 <label>Destino</label>
-                <select class="form-control" id="destino" style="width: 220px;">
+                <select class="form-control select2" id="destino" style="width: 220px;">
                    
                 </select>
-
+                <br />
+                <br />
                 <label>Fecha: </label>
                 <input type="date" class="form-control" id="fecha" style="width: 220px;" />
 

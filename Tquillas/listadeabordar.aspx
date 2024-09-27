@@ -81,10 +81,11 @@
                 
             </div>
             <div class="d-flex align-items-center justify-content-center">
-                <p class="m-3">Taquilla: <span id="spantaquillas"></span></p>
-                <p class="m-3">Ruta: <span id="rutabname"></span></p>
-                <p class="m-3">Bus: <span id="buss"></span></p>
-                <p class="m-3">Abordan: <span id="countabordan"></span></p>
+                <p id="main-taquilla" class="m-3">Taquilla: <span id="spantaquillas"></span></p>
+                <p id="main-ruta"     class="m-3">Ruta: <span id="rutabname"></span></p>
+                <p id="main-bus"       class="m-3">Bus: <span id="buss"></span></p>
+                <p id="main-abordan"   class="m-3">Abordan: <span id="countabordan"></span></p>
+                <p id="main-total"  class="m-3">TotalAbordaje: <span id="countotal"></span></p>
             </div>
 
             <table id="table-lista" class="table table-hover">
@@ -112,7 +113,7 @@
                 </tbody>
 
         </table>  
-            <table id="table-lista2" class="table table-hover" style="display: none; width: 208px; font-size: 10px; right: -90px;  border-collapse: collapse;">
+            <table id="table-lista2" class="table table-hover" style="display: none; width: 100px; font-size: 8px; font-weight:700;">
 
                 <thead class="bg-dark" style="font-size: 10px;">
                     <tr>

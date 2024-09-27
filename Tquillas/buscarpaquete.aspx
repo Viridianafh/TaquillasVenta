@@ -5,6 +5,9 @@
    
         <script src="Js/terminalcheck.js"></script>
         <script src="Js/islog.js"></script>
+        <script src="Js/buscarpaquete.js"></script>
+
+
     </header>
 
     <style>
@@ -25,7 +28,7 @@
 
             <input type="text" id="codcompra" class="form-control"  />
 
-            <button class="btn btn-dark" onclick="Buscar()">Buscar</button>
+            <button class="btn btn-dark" onclick="Buscar()">Buscar paquete</button>
 
         </div>
 

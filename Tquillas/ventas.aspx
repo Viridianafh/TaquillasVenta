@@ -70,13 +70,13 @@
             <div class="container p-5 ">
                 <div class="container m-3">
                     <label for="origen">Origen: </label>
-                    <select id="origen" class="form form-select" style="width: 320px;">
+                    <select id="origen" class="select2" style="width: 320px;">
                         <option value="default">Seleccionar Opción</option>
                     </select>
                 </div>
                 <div class="container m-3">
                     <label for="destino">Destino: </label>
-                    <select id="destino" class="form form-select" style="width: 320px;">
+                    <select id="destino" class="select2" style="width: 320px;">
                         <option value="default">Seleccionar Opción</option>
                     </select>
                 </div>

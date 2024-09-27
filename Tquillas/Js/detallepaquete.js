@@ -66,37 +66,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 })
 
-
-async function generateQRCode(text) {
+function generateQRCode(text) {
     return new Promise((resolve, reject) => {
         try {
-            QRCode.toDataURL(text, { errorCorrectionLevel: 'H' }, (error, url) => {
-                if (error) {
-                    console.error('QRCode generation failed', error);
-                    reject(error);
-                } else {
-                    resolve(url);
-                }
+            const div = document.createElement('div');
+            new QRCode(div, {
+                text: text,
+                width: 128,
+                height: 128,
             });
-        } catch (e) {
-            console.error('QRCode.toDataURL not available. Trying canvas method...', e);
-            try {
-                const canvas = document.createElement('canvas');
-                QRCode.toCanvas(canvas, text, { errorCorrectionLevel: 'H' }, (error) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(canvas.toDataURL());
-                    }
-                });
-            } catch (canvasError) {
-                reject(canvasError);
-            }
+
+            // Esperar un poco para asegurarse de que el QR se ha generado
+            setTimeout(() => {
+                const img = div.querySelector('img');
+                if (img) {
+                    resolve(img.src);
+                } else {
+                    reject(new Error('No se pudo generar el QR'));
+                }
+            }, 100);
+        } catch (error) {
+            console.error("Error en generateQRCode:", error);
+            reject(error);
         }
     });
 }
-
-
 async function Descargarguia(Origen, Destino, Folio, Total, Corrida, IdGuia, IdSale, Remitente, Destinatario) {
     try {
         // Descargar el formulario PDF
