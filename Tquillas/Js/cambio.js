@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
 
-
+            localStorage.setItem('precionuevo', precionuevo)
 
             let tabla = document.getElementById('table-ticket-nuevo');
 
@@ -154,12 +154,46 @@ document.addEventListener('DOMContentLoaded', () => {
         var tabla = document.getElementById(`${id}`).getElementsByTagName('tbody')[0];
         var tr = document.createElement('tr');
 
+        document.getElementById('cancelarCambio').disabled = false 
+
         data.map(e => {
 
             localStorage.setItem("precio_anteriorcambio", e.precio)
             localStorage.setItem("asiento_anterior_cambio", e.asiento)
             localStorage.setItem('isale_cambio', e.isaleid)
             localStorage.setItem('tickett_cam', e.ticket)
+
+
+
+            let salesData = localStorage.getItem('salesNumbersolds');
+
+            // Inicializar el array de ventas
+            let salesArray;
+
+            // Verificar si hay datos y analizarlos, o inicializar un array vacío
+            if (salesData) {
+                try {
+                    salesArray = JSON.parse(salesData);
+                } catch (error) {
+                    console.error("Error al analizar JSON:", error);
+                    salesArray = []; // Inicializar un array vacío en caso de error
+                }
+            } else {
+                salesArray = []; // No hay datos, inicializar un array vacío
+            }
+
+            // Añadir el nuevo número de venta al array (incluso si ya existe)
+            salesArray.push(e.salenumber);
+
+            // Guardar el array actualizado en localStorage
+            localStorage.setItem('salesNumbersolds', JSON.stringify(salesArray));
+
+
+
+
+localStorage.setItem('numero_venta_viejo', e.salenumber);
+
+
 
             tr.innerHTML = `
     
@@ -189,6 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             buscarviajes(origen, destino, fecha)
         })
+
+
 
 
 
@@ -235,8 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     RunId = alldata[i].RunId
                     totaltime = alldata[i].totaltime
                     isaleid = alldata[i].isaleid
-
-
 
 
 
@@ -453,7 +487,6 @@ async function gettripid(RunId, type, Departure, Arrival, totaltime) {
 
 
 
-
 async function BuscarBoletoUno(ticket) {
     try {
         const response = await fetch(`http://apitaquillassag.dyndns.org/Home/GetDataTicket?ticket=${ticket}`);
@@ -468,6 +501,7 @@ async function BuscarBoletoUno(ticket) {
         console.error('Hubo un error:', error);
     }
 }
+
 
 
 
@@ -577,8 +611,8 @@ function iniciarCambio() {
             });
     });
 
-
 }
+
 
 
 
@@ -654,7 +688,6 @@ function crearasientos(tipo, id) {
         });
 
 
-
         var precio_anteriorcambo = localStorage.getItem('precio_anteriorcambio')
         var nuevo = localStorage.getItem('precionuevo')
         var precio_anterior = parseFloat(precio_anteriorcambo)
@@ -667,7 +700,6 @@ function crearasientos(tipo, id) {
 
         return seatElement;
     }
-
 
 
     function renderSeats(seatData, statusdata) {
@@ -687,8 +719,8 @@ function crearasientos(tipo, id) {
             }
         });
     }
-
 }
+
 
 
 
@@ -716,10 +748,7 @@ function ProcederBoleto() {
     var destino = localStorage.getItem('destino_cambio')
     var ticketsito = localStorage.getItem('tickett_cam')
 
-
     //  alert(`${nombre}` + `${tipopasajero}` + ` ${dataid}` + ` ${asiento_anterior}` + ` ${asiento_cambio}` + ` ${precio_anterior}`)
-
-
 
     var Boletocambio = {
 
@@ -739,6 +768,7 @@ function ProcederBoleto() {
         },
         body: JSON.stringify(Boletocambio)
     };
+
 
 
 
@@ -766,8 +796,6 @@ function ProcederBoleto() {
 
 
     localStorage.setItem('num_ventas', numero.toString())
-
-
 
     var shift_number_to_is = shiftnumber + "-" + numero
     alert(shift_number_to_is)
@@ -842,6 +870,8 @@ function ProcederBoleto() {
 
                     alert("success")
                     console.log(data)
+                    document.getElementById('seatrow').textContent = data
+                    document.getElementById('seatrow').style.backgroundColor = green
 
                     var precionuevo = localStorage.getItem('precionuevo')
                     var parseprecionuevo = parseFloat(precionuevo)
@@ -891,4 +921,37 @@ function limpiarTabla() {
     while (tabla.rows.length > 1) {
         tabla.deleteRow(1);
     }
+}
+
+
+
+function CancelarOperacion() {
+
+    let salesData = localStorage.getItem('salesNumbersolds');
+
+    // Verificar si hay datos y analizarlos
+    if (salesData) {
+        try {
+            let salesArray = JSON.parse(salesData);
+
+            // Verificar si el array tiene elementos
+            if (salesArray.length > 0) {
+                // Eliminar el último elemento del array
+                salesArray.pop();
+
+                // Actualizar localStorage con el nuevo array
+                localStorage.setItem('salesNumbersolds', JSON.stringify(salesArray));
+                console.log("Última venta eliminada");
+            } else {
+                console.log("El array de ventas está vacío, no hay nada que eliminar");
+            }
+        } catch (error) {
+            console.error("Error al analizar JSON:", error);
+        }
+    } else {
+        console.log("No hay datos de ventas en localStorage");
+    }
+
+    alert("Operacion cancelada")
+    document.getElementById('cancelarCambio').disabled = true
 }

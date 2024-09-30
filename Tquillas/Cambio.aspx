@@ -182,8 +182,12 @@
 
     </section>
 
+    <div class="d-flex gap-5">
+        <button class="btn btn-success mt-5" id="procederCambio" onclick="ProcederBoleto()" >Proceder Cambio</button>
+            <button class="btn btn-danger mt-5" id="cancelarCambio" onclick="CancelarOperacion()"  disabled="true">Cancelar Operacion</button>
+    </div>
 
-            <button class="btn btn-danger mt-5" id="procederCambio" onclick="ProcederBoleto()" >Proceder Cambio</button>
+          
 
     <h1 id="spanTexto2"></h1>
     <h4 id="spanTexto"></h4>

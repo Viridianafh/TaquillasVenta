@@ -328,8 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const row = document.getElementsByTagName('tbody')
 
-
-
         var Origen = document.getElementById('origen')
         Origen = Origen.options[Origen.selectedIndex].text;
 
