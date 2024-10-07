@@ -117,7 +117,7 @@ fetch(`http://apitaquillassag.dyndns.org/Home/verprecorte?cashcheckpoint=${cashc
             document.getElementById('reporte-total-iniciocaja').innerHTML = 0
             document.getElementById('reporte-total-seretiro').innerHTML = e.SeRetiro
             document.getElementById('queda-encaja').innerHTML = e.QuedaEnCaja
-            document.getElementById('reporte-total').innerHTML = e.SeRetiro
+            document.getElementById('reporte-total').innerHTML = e.Total
 
 
 
@@ -154,11 +154,11 @@ fetch(`http://apitaquillassag.dyndns.org/Home/vercashcheckpoint?saleshiftID=${sa
         setTimeout(() => {
             // Generar el PDF después de 5 segundos
             const opciones = {
-                margin: 10,
-                filename: `precortedecaja.pdf`,
+                margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
+                filename: 'listadeabordar.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                jsPDF: { unit: 'mm', format: [100, 270], orientation: 'portrait' } // Dimensiones en mm
             };
 
             const contenidoDiv = document.getElementById('informe');

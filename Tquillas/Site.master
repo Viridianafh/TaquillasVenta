@@ -50,7 +50,7 @@
         //    storeName: 'keyValueStore', // Nombre del espacio de almacenamiento
         //    description: 'Almacenamiento para mi app por Alexis Hernandez'
         //});
-   
+
 </script>
     
 </head> 
@@ -154,5 +154,27 @@
                 <p>&copy; <%: DateTime.Now.Year %> - Sag Autobuses</p>
             </footer>
    
+
+    <script>
+
+        // Obtener el valor de 'caja_abierta' desde localStorage
+        var estaabierta = localStorage.getItem('caja_abierta');
+
+        // Validar si existe y si está en true o false
+        if (!estaabierta || estaabierta === 'false') {
+            // Si no existe o es false, mostrar la alerta
+            Swal.fire({
+                title: '¡Atención!',
+                text: 'Debe iniciar turno para poder usar el sistema. (para ello vaya a venta de boletos  o a enviar paquetes e inicie turno)',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            // Si existe y es true, se permite continuar con el uso del sistema
+            console.log('Turno iniciado, puede usar el sistema.');
+        }
+
+
+    </script>
 </body>
 </html>

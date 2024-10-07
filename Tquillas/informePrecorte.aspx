@@ -59,16 +59,7 @@
                 
                 <h4>Recibe:  <hr/></h4>
             </div>
-
-
-
-
-
         </div>
-
-
-
-
 
     </div>
 
@@ -79,11 +70,11 @@
 
 
         const opciones = {
-            margin: 10,
-            filename: `precortedecaja.pdf`,
+            margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
+            filename: 'listadeabordar.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            jsPDF: { unit: 'mm', format: [100, 270], orientation: 'portrait' } // Dimensiones en mm
         };
 
         document.getElementById('botonDescargar').addEventListener('click', () => {

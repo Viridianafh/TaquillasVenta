@@ -21,65 +21,121 @@
         var Fecha_entrada= document.getElementById('fecha').value
         var Fecha_salida = document.getElementById('fecha2').value
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/ListaDeViajes?fechainicio=${Fecha_entrada}&fechafinal=${Fecha_salida}`, {
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
+       
+        let currentPage = 1; // Página inicial
+        const rowsPerPage = 10; // Número de filas por página
 
-                var tbody = document.getElementsByTagName('tbody')[0]; // Get the first tbody element
-                var alldata = data
-                for (i = 0; i < alldata.length; i++) { 
-                    console.log(alldata[i])
+        // Función para renderizar la tabla con paginación
+        
+        let filteredData = []; // Datos filtrados
 
+        // Función para renderizar la tabla con paginación y búsqueda
+        function renderTable(data, page) {
+            const tbody = document.getElementsByTagName('tbody')[0];
+            tbody.innerHTML = ''; // Limpiar tabla
 
-                    var tr = document.createElement('tr');  
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const pageData = data.slice(start, end);
 
+            for (let i = 0; i < pageData.length; i++) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+            <td>${pageData[i].Corrida}</td>
+            <td>${pageData[i].Bus}</td>
+            <td>${pageData[i].origen_viaje}</td>
+            <td>${pageData[i].Destino}</td>
+            <td>${pageData[i].Departure}</td>
+            <td>
+                <button class="btn btn-dark" id="btn-showlist" 
+                    onclick="verlista('${pageData[i].Id}', '${pageData[i].Bus}', '${pageData[i].Corrida}')">Ver Lista
+                </button>
+            </td>
+        `;
+                tbody.appendChild(tr);
+            }
+        }
 
-                    tr.innerHTML = `
+        // Función para filtrar los datos según el valor de búsqueda
+        function filterData(searchTerm) {
+            searchTerm = searchTerm.toLowerCase();
+            filteredData = alldata.filter(item =>
+                item.Corrida.toLowerCase().includes(searchTerm) ||
+                item.Bus.toLowerCase().includes(searchTerm) ||
+                item.origen_viaje.toLowerCase().includes(searchTerm) ||
+                item.Destino.toLowerCase().includes(searchTerm) ||
+                item.Departure.toLowerCase().includes(searchTerm)
+            );
 
-                           <td>${alldata[i].Corrida}</td>
-                           <td>${alldata[i].Bus}</td>
-                           <td>${alldata[i].origen_viaje}</td>
-                           <td>${alldata[i].Destino}</td>
-                           <td>${alldata[i].Departure}</td>    
-                          
-                           <div class=".boton-descarga" role="status">
-                         <!-- <a href="http://192.168.0.245:82/Home/MostrarListaAbordar?trip_id=${alldata.trip_id}" download="id.pdf" class="boton-descarga">Descargar</a>-->
-                         <button class="btn btn-dark" id="btn-showlist" onclick="verlista('${alldata[i].Id}', '${alldata[i].Bus}', '${alldata[i].Corrida}' )">Ver Lista</button>
-                        
-                            </div>
+            // Resetear la paginación después de filtrar
+            currentPage = 1;
+            renderTable(filteredData, currentPage);
+            renderPagination(filteredData.length);
+        }
 
-                   `;   
-                   
-                    tbody.appendChild(tr);
+        // Función para crear botones de paginación
 
+        function renderPagination(totalRows) {
+            const paginationContainer = document.getElementById('pagination');
+            paginationContainer.innerHTML = ''; // Limpiar la paginación previa
+
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.classList.add('btn', 'btn-primary', 'mx-1');
+
+                // Si es la página actual, agregar la clase 'active'
+                if (i === currentPage) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('btn-primary');
+                    button.classList.add('btn-outline-primary'); // Solo outline para los demás botones
                 }
 
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    renderTable(filteredData, currentPage); // Re-renderizar tabla con datos filtrados
+                    renderPagination(filteredData.length); // Actualizar paginación
+                });
 
+                paginationContainer.appendChild(button);
+            }
+        }
 
-                
+        fetch(`http://apitaquillassag.dyndns.org/Home/ListaDeViajes?fechainicio=${Fecha_entrada}&fechafinal=${Fecha_salida}`, {})
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
 
-                button_Buscar.textContent = ""
-                button_Buscar.textContent = "Buscar"
-                button_Buscar.classList.remove('btn-success')
-                button_Buscar.classList.add('btn-primary')
+                alldata = data;
+                filteredData = alldata; // Inicialmente, los datos filtrados son los mismos
+
+                renderTable(filteredData, currentPage);
+                renderPagination(filteredData.length);
+
+                button_Buscar.textContent = "Buscar";
+                button_Buscar.classList.remove('btn-success');
+                button_Buscar.classList.add('btn-primary');
             })
             .catch(error => {
-
                 Swal.fire({
                     title: 'Error al traer los datos!',
                     text: `mensaje de error:(${error})`,
                     icon: 'error',
                     confirmButtonText: 'OK'
-                })
+                });
 
+                button_Buscar.textContent = "Buscar";
+                button_Buscar.classList.remove('btn-success');
+                button_Buscar.classList.add('btn-primary');
+            });
 
-                button_Buscar.textContent = ""
-                button_Buscar.textContent = "Buscar"
-                button_Buscar.classList.remove('btn-success')
-                button_Buscar.classList.add('btn-primary')
-            } );
+        // Añadir evento al campo de búsqueda
+        document.getElementById('searchInput').addEventListener('input', function () {
+            filterData(this.value);
+        });
 
 
 

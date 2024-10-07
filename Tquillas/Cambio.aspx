@@ -75,7 +75,7 @@
                             <th>Destino</th>
                             <th>Asiento</th>
                             <th>Precio</th>
-                            <th>Ticket</th>
+                            <th>Folio</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -160,7 +160,7 @@
             </select>
             
             <button class="btn btn-primary mt-2" id="btn-siguiente1" >Siguiente</button>
-      
+      ()
 
         </section>
 

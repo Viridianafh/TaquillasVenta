@@ -364,11 +364,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     Swal.fire({
                         title: 'Error!',
-                        text: 'No existen viajes. Prueba para otra fecha u otro destino',
+                        text: 'No existen viajes. Prueba para otra fecha lu otro destino',
                         icon: 'error',
                         confirmButtonText: 'Cool'
                     })
-                }
+                } 
 
                 var tbody = document.getElementsByTagName('tbody')[0]; // Get the first tbody element
                 var alldata = data
@@ -1618,6 +1618,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var datosViajeObj = JSON.parse(datosViajeString);
         var tipo = datosViajeObj.tipo;
         var id = datosViajeObj.id;
+        var originalprice = datosViajeObj.precio;
         var table = document.getElementById("tablaefectivoresume");
         var header = [];
         var rows = [];
@@ -1689,8 +1690,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     "PassengerType": tipo,
                     "SeatName": item.Asiento,
                     "SoldPrice": parseFloat(item.costo),
-                    "PayedPrice": parseFloat(item.costo),
-                    "OriginalPrice": parseFloat(item.costo),
+                    "PayedPrice": 0.0,
+                    "OriginalPrice": parseFloat(originalprice),
                     "Trip_ID": id,
                     "UserId": userid
                 };
@@ -1704,12 +1705,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Añadir el nuevo valor al array
             lista_ventasstr.push(shift_number_to_is);
             localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
-
+            var changeamount = parseFloat(monto_recibido) - parseFloat(totalapagar)
             const InternetSale = {
                 "totalAmount": parseFloat(totalapagar),
-                "changeAmount": 0.00,
+                "changeAmount": changeamount,
                 "PaymentType": "cash",
-                "payedAmount": parseFloat(precio_base),
+                "payedAmount": parseFloat(monto_recibido),
                 "salesTerminalId": terminalid,
                 "salesmanId": ticketuserid,
                 "salesShiftId": localStorage.getItem('saleshift_id'),
@@ -1718,6 +1719,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Email": localStorage.getItem('correocliente')
             };
 
+
+            console.log(JSON.stringify(InternetSale))
+
+            alert("OK")
+           
             fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
                 method: 'POST',
                 headers: {
@@ -1971,7 +1977,6 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
             });
 
         })
-
 }
 
 
@@ -2024,6 +2029,7 @@ function agregaratabla(elemt) {
 
 }
 
+
 function quitartabla(element) {
     // Decrementar countpasajerofinal
     countpasajerofinal--;
@@ -2043,7 +2049,6 @@ function quitartabla(element) {
 
 
 
-
 function procesardatosViaje() {
 
     var tabla = document.getElementById("tabla-pasajeros")
@@ -2057,9 +2062,7 @@ function procesardatosViaje() {
         var fila = filas[i];
         var celdas = fila.getElementsByTagName('td');
 
-
         var filaDatos = {};
-
 
         for (var j = 0; j < celdas.length; j++) {
 
@@ -2081,11 +2084,8 @@ function procesardatosViaje() {
     document.getElementById("section-asientos").style.display = "none"
     document.getElementById("section-tipo-pago").style.display = "block"
 
-
-
-
-
 }
+
 
 
 function iniciarturno() {
@@ -2099,7 +2099,6 @@ function iniciarturno() {
     var id_terminal = localStorage.getItem('terminal_id')
     var oficina = localStorage.getItem('office_name')
     var selectOrigen = document.getElementById("origen");
-
 
 
     var terminal = "";
@@ -2121,16 +2120,13 @@ function iniciarturno() {
         localStorage.setItem("terminal_name", terminall)
         localStorage.setItem("terminal_id", terminalidd)
 
-    }).catch(function (err) {
-        console.error('Error al recuperar datos:', err);
+    }).catch(function (error) {
+        console.error('Error al recuperar datos:', error);
     });
 
     var clave = "shift_number";
 
-
     if (localStorage.getItem(clave) == null) {
-
-
 
         fetch(`http://apitaquillassag.dyndns.org/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
             .then(response => response.json())
@@ -2177,9 +2173,7 @@ function iniciarturno() {
                     })
                     .catch(error => {
                         console.error(error);
-
                     });
-
             })
 
         Swal.fire({
@@ -2196,22 +2190,21 @@ function iniciarturno() {
 
     } else {
 
-    }
-
+}
 
 
     $(document).ready(function () {
         $('#origen').select2({
             selectOnClose: true,
-            tags: true // Permite que el usuario escriba texto que no está en la lista
+            tags: true 
         });
 
         $('#destino').select2({
             selectOnClose: true,
-            tags: true // Permite que el usuario escriba texto que no está en la lista
+            tags: true 
         });
 
-        // Cargar datos en el select de origen
+
         fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
             method: 'POST',
             headers: {
@@ -2228,25 +2221,22 @@ function iniciarturno() {
             .then(data => {
                 var selectOrigen = $('#origen');
 
-                // Limpiar opciones existentes
+                
                 selectOrigen.empty().append('<option value="">Seleccione un origen</option>');
 
                 data.forEach(option => {
                     var newOption = new Option(option.name, option.id, false, false);
                     selectOrigen.append(newOption);
                 });
-
-                // Inicializar Select2 nuevamente para aplicar los cambios
+                
                 selectOrigen.select2();
 
-                // Evento para establecer el foco en el campo de búsqueda al abrir el select
                 selectOrigen.on('select2:open', function () {
                     setTimeout(function () {
                         $('.select2-search__field').focus();
                     }, 1);
                 });
 
-                // Agregar evento de búsqueda
                 selectOrigen.on('change', function () {
                     var IDOrigen = selectOrigen.val();
                     var Origen = selectOrigen.find("option:selected").text();
@@ -2269,7 +2259,6 @@ function iniciarturno() {
                         .then(responseData => {
                             var selectDestino = $('#destino');
 
-                            // Limpiar opciones existentes
                             selectDestino.empty().append('<option value="">Seleccione un destino</option>');
 
                             responseData.forEach(option => {
@@ -2277,10 +2266,8 @@ function iniciarturno() {
                                 selectDestino.append(newOption);
                             });
 
-                            // Inicializar Select2 nuevamente para aplicar los cambios
                             selectDestino.select2();
 
-                            // Evento para establecer el foco en el campo de búsqueda al abrir el select
                             selectDestino.on('select2:open', function () {
                                 setTimeout(function () {
                                     $('.select2-search__field').focus();
@@ -2304,7 +2291,6 @@ function iniciarturno() {
                 });
             });
     });
-
 
 
 
@@ -2358,7 +2344,6 @@ function iniciarturno() {
 
 
 
-
 function convertirAMayusculas(input) {
     input.value = input.value.toUpperCase();
 }
@@ -2368,8 +2353,6 @@ function convertirAMayusculas(input) {
 function validarNumero(input) {
 
   var precio_base = document.getElementById('spantotaltotal').textContent
-
-
 
     input.value = input.value.replace(/[^0-9]/g, '');
 

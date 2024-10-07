@@ -162,7 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('add-row').addEventListener('click', () => {
         const row = document.createElement('tr');
+        let rowCount = 0;
 
+        rowCount++;
         row.innerHTML = `
                 <td><input type="text" class="form-control descripcion"></td>
                 <td><input type="text" class="form-control alto"></td>
@@ -170,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td><input type="text" class="form-control largo"></td>
                 <td><input type="text" class="form-control peso"></td>
                 <td>
-                    <select class="form-control select2" id="embalaje">
+                   <select class="form-control select2" id="embalaje-${rowCount}">
     <option value="2071150e-088d-4764-8b70-c13cff3c2379">Bidones (Tambores) de Acero 1 de tapa no desmontable</option>
     <option value="3092251e-199e-5875-9c81-d24eff4d348a">Bidones (Tambores) de Acero 1 de tapa desmontable</option>
     <option value="4103352e-2aae-6986-ad92-e35fff5e459b">Bidones (Tambores) de Aluminio de tapa no desmontable</option>
@@ -235,14 +237,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td><input type="text" class="form-control precio"></td>
                 <td><button class="btn btn-danger btn-sm delete-button">Eliminar</button></td>
             `;
-
         tableBody.appendChild(row);
 
-     
+        // Aplicar select2 a cada select recién creado
+        $(`#embalaje-${rowCount}`).select2();
 
+        // Añadir eventos de actualización y eliminación
         row.querySelector('.precio').addEventListener('input', updateTotalPrice);
 
-        // Añadir el evento de clic al botón de eliminar
         row.querySelector('.delete-button').addEventListener('click', () => {
             row.remove();
             updateTotalPrice();
@@ -289,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ancho: row.querySelector('.ancho').value.trim(),
                     largo: row.querySelector('.largo').value.trim(),
                     peso: row.querySelector('.peso').value.trim(),
-                    embalaje: row.querySelector('.embalaje').value,
+                    embalaje: row.querySelector('select').value, // Selecciona el select de la fila
                     precio: row.querySelector('.precio').value.trim()
                 };
             });

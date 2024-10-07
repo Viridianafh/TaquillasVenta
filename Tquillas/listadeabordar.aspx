@@ -44,6 +44,17 @@
              </center>  
     <br />
 
+            <div class="d-flex justify-content-between">
+
+                
+            <div id="pagination" class="my-3"></div> <!-- Contenedor de paginación -->
+<div class="search-container">
+    <input type="text" class="form-control" id="searchInput" placeholder="Buscar...">
+</div>
+            </div>
+
+
+
   <table class="table table-hover" id="listadeabordar">
                     <thead >
                         <tr class="table table-striped table-dark" >
