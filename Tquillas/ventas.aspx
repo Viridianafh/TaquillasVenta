@@ -420,27 +420,41 @@
 
         </div>
 
+
+        
+       
+
         <div class="container">
-            <div class="container">
-
-
-                 <h2>Total: <span id="spantotaltotal"></span></h2>
+    <div class="row">
+        <!-- Columna de Pago -->
+        <div class="col-md-6">
+            <h2>Total: <span id="spantotaltotal"></span></h2>
+            
+            <div class="container m-4">
+                <h3>Recibo: </h3>
+                <input type="number" oninput="validarNumero(this)" class="form-control" style="width:320px; font-size: 1.5em;" id="txtmonto" />
             </div>
 
             <div class="container m-4">
-                   <h3>Recibo: </h3>
-            <input type="number" oninput="validarNumero(this)" class="form-control" style="width:320px; font-size: 1.5em;" id="txtmonto" />
-
-
+                <button class="btn btn-success" id="btnpagar-efectivo" style="width: 320px;">Pagar</button>
             </div>
 
-            <div class="container m-4">
-                 <button class="btn btn-success" id="btnpagar-efectivo" style="width: 320px; ">Pagar</button>
-
-            </div>
-         
-                <h4 id="cambio"> </h4>
+            <h4 id="cambio"></h4>
         </div>
+
+        <!-- Columna de Promoción -->
+        <div class="col-md-6">
+            <div class="container m-5" id="contentpromo" style="display:block;">
+                <h4>Promoción: <span id="namepromo"></span></h4>
+                <p id="resanuncio" style="display:none"></p>
+                <input placeholder="ingresa el código promocional" type="text" id="codpromo" class="form-control m-2" style="width:250px;" />
+                <button class="btn btn-dark" id="btnaplicarpromo">Aplicar Promoción</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 

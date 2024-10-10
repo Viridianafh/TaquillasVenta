@@ -1017,7 +1017,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btn_siguiente1.addEventListener('click', () => {
 
 
+        var correocliente = document.getElementById('correocliente').value
 
+        localStorage.setItem('correo_cliente', correocliente)
 
 
         var grupos = document.querySelectorAll('div[id^="content-count-"]');
@@ -1315,6 +1317,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById("pago-efectivo").style.display = 'block'
         document.getElementById("section-tipo-pago").style.display = "none"
+
+        var datosViajeString = localStorage.getItem("datos_viaje");
+        var datosViajeObj = JSON.parse(datosViajeString);
+        var origen = datosViajeObj.origen;
+        var destino = datosViajeObj.destino;
+
+
+        if ((origen == "Mexico Central" && destino == "Veracruz Central") || (origen == "Veracruz Central" && destino == "Mexico Central")) {
+
+
+            document.getElementById('contentpromo').style.display = "block"
+        } else {
+            document.getElementById('contentpromo').style.display = "none"
+        }
+
+
 
         const datosviaje = localStorage.getItem("datos_viaje")
         const datosInternetsale = localStorage.getItem("datosInternetsale")
@@ -2373,7 +2391,6 @@ function validarNumero(input) {
 }
 
 
-
 function generarID() {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let id = '';
@@ -2385,8 +2402,6 @@ function generarID() {
 
     return id;
 }
-
-
 
 
 
@@ -2432,9 +2447,8 @@ function actualizarCurrentSale() {
 
         })
 
-
-
 }
+
 
 
 
