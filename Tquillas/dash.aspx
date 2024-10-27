@@ -104,6 +104,16 @@
                     <div class="card-footer"><a href="buscarpaquete.aspx">Ver</a></div>
                 </div>
 
+                  
+                <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
+                    <div><ion-icon name="list-outline" style="font-size: 80px;"></ion-icon></div>
+                    <div class="card-body">
+                        <h5 class="card-title">Lista de paquetes</h5>
+                        <p class="card-text">Busca los paquetes de un viaje </p>
+                    </div>
+                    <div class="card-footer"><a href="listadepaquete.aspx">Ver</a></div>
+                </div>
+
                
 
               

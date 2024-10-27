@@ -185,11 +185,34 @@ async function Descargar(ticket) {
         form.getTextField('departure_origen').setText(boleto.Salida);
         form.getTextField('fecha').setText(fechaFormateada);
         form.getTextField('saleman_name').setText(taquillero);
-        form.getTextField('subtotal').setText(String(boleto.SoldPrice));
+        form.getTextField('subtotal').setText(String(boleto.PayedPrice));
         form.getTextField('departure_destino').setText(boleto.llegada);
-        form.getTextField('total').setText(String(boleto.PayedPrice));
+        form.getTextField('total').setText(String(boleto.SoldPrice));
         form.getTextField('product').setText(boleto.product);
-        form.getTextField('passenger_type').setText(boleto.PassengerType);
+
+    
+        switch (boleto.PassengerType) {
+            case "ADULT":
+                await form.getTextField('passenger_type').setText("Adulto");
+                break;
+            case "OLDER_ADULT":
+                await form.getTextField('passenger_type').setText("Inapam");
+                break;
+            case "CHILD":
+                await form.getTextField('passenger_type').setText("Niño");
+                break;
+            case "STUDENT":
+                await form.getTextField('passenger_type').setText("Estudiante");
+                break;
+            default:
+                await form.getTextField('passenger_type').setText("??");
+                break;
+        }
+
+            
+
+
+       
 
         // Hacer los campos de solo lectura
         ['passenger_name', 'origen', 'ticket_id', 'seat', 'Destino', 'departure_origen', 'fecha',
@@ -341,6 +364,7 @@ function cancelarBoleto() {
 
         "oldticket": boleto,
         "cancelUserId": userid,
+        "saleshift": localStorage.getItem('saleshift_id')
                                                                                       
     }
 
@@ -362,12 +386,18 @@ function cancelarBoleto() {
         .then(data => {
             console.log('Recurso eliminado:', data);
 
+
             Swal.fire({
                 title: "Cambios Realizados",
-
                 text: 'Boleto Cancelado',
                 icon: "success"
+            }).then((result) => {
+                if (result.isConfirmed || result.isDismissed) {
+                    location.reload();
+                }
             });
+
+
         })
         .catch(error => {
             console.error('Error:', error);

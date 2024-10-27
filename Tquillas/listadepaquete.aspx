@@ -1,11 +1,11 @@
-﻿<%@ Page Title="listadeabordar" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="listadeabordar.aspx.cs" Inherits="About" %>
+﻿<%@ Page Title="listadeabordar" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="listadepaquete.aspx.cs" Inherits="About" %>
 
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
  
   <header>
-          <script src="Js/listadeabordar.js"></script>
+          <script src="Js/listadepaquete.js"></script>
           <link  rel="stylesheet" href="Css/listadeabordar.css"/>
       <script src="Js/terminalcheck.js"></script>
       <script src="Js/islog.js"></script>
@@ -19,7 +19,7 @@
 
 
 
-           <div class=h1> Lista de abordar </div>   
+           <div class=h1> Lista de paquetes </div>   
         <div class="container p-5" flex=10; align-items: flex-start;>
 
              <a href="dash.aspx" style="text-decoration: none;">
@@ -89,17 +89,15 @@
           
               <div class="d-flex gap-3 align-items-center justify-content-arround">
                 <img src="Assets/logoSag.png" alt="Alternate Text" style="width:120px;" />
-                
+                 <p id="main-fecha" class="m-3">fecha salida: <span id="spanfecha"></span></p>
             </div>
-            <p id="main-fecha" class="m-3">fecha salida: <span id="spanfecha"></span></p>
             <div class="d-flex align-items-center justify-content-center">
-                   
-
+               
                 <p id="main-taquilla" class="m-3">Taquilla: <span id="spantaquillas"></span></p>
                 <p id="main-ruta"     class="m-3">Ruta: <span id="rutabname"></span></p>
                 <p id="main-bus"       class="m-3">Bus: <span id="buss"></span></p>
-                <p id="main-abordan"   class="m-3">Abordan: <span id="countabordan"></span></p>
-                <p id="main-total"  class="m-3">TotalAbordaje: <span id="countotal"></span></p>
+                <p id="main-abordan"   class="m-3">EquipajeTaquilla: <span id="countabordan"></span></p>
+                <p id="main-total"  class="m-3">Totalequipaje: <span id="countotal"></span></p>
             </div>
 
             <table id="table-lista" class="table table-hover">
@@ -107,15 +105,12 @@
 
                 <thead class="bg-dark" >
                     <tr>
-                        <td><h5>Asiento</h5></td>
-                        <td><h5>Nombre</h5></td>
+                        <td><h5>Descripcion</h5></td>
                         <td><h5>Origen</h5></td>
                         <td><h5>Destino</h5></td>
+                        <td><h5>Envia</h5></td>
+                        <td><h5>Recibe</h5></td>
                         <td><h5>Boleto</h5></td>
-                        <td><h5>Tipo</h5></td>
-                        <td><h5>Escaneado</h5></td>
-                        <td id="h4escaneado"><h5>Escaneado por: </h5></td>
-
                     </tr>
 
                 </thead>
@@ -131,15 +126,13 @@
 
                 <thead class="bg-dark" style="font-size: 10px;">
                     <tr>
-                        <td><p>Asiento</p></td>
-                        <td><p>Nombre</p></td>
+                        <td><p>Descripcion</p></td>
                         <td><p>Origen</p></td>
                         <td><p>Destino</p></td>
+                        <td><p>Envia</p></td>
+                        <td><p>Recibe</p></td>
                         <td><p>Boleto</p></td>
-                        <td><p>Tipo</p></td>
-                        <td><p>Escaneado</p></td>
                         
-
                     </tr>
 
                 </thead>

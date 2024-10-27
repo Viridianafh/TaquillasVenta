@@ -21,7 +21,23 @@ var isaleid = ""
 document.addEventListener('DOMContentLoaded', () => {
 
 
-  
+
+    document.getElementById('procederCambio').disabled = true
+
+    localStorage.setItem('asiento_anterior_cambio', "")
+    localStorage.setItem('asiento_cambio', "")
+    localStorage.setItem('asiento_cambio', "")
+    localStorage.setItem('asiento_cambio', "")
+    localStorage.setItem('isale_cambio', "")
+    localStorage.setItem('origen_cambio', "")
+    localStorage.setItem('precio_Total_cambio', "")
+    localStorage.setItem('precio_anteriorcambio', "")
+    localStorage.setItem('precionuevo', "")
+    localStorage.setItem('precionuevo', "")
+    localStorage.setItem('precionuevo', "")
+    localStorage.setItem('precionuevo', "")
+    localStorage.setItem('tickett_cam', "")
+
 
 
     document.getElementById('btn-buscar').addEventListener('click', async () => {
@@ -46,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Llama a la función para buscar el boleto
             const data1 = await BuscarBoletoUno(ticket);
+            document.getElementById('procederCambio').disabled = false
             document.getElementById('bus-container').style.display = 'none'
             var contentcards = document.getElementById("content-cards")
             var floor1 = document.getElementById('floor-1')
@@ -242,7 +259,7 @@ localStorage.setItem('numero_venta_viejo', e.salenumber);
 
 
                 console.log(data)
-
+                var tipos
                 var alldata = data
                 var addedTripIds = {};
                 console.log(data)
@@ -294,13 +311,13 @@ localStorage.setItem('numero_venta_viejo', e.salenumber);
 
 
                     if (tipo == "premium-id") {
-                        tipo = "Primera"
+                        tipos = "Primera"
                     }
                     else if (tipo == "normal-id") {
-                        tipo = "Plus"
+                        tipos = "Plus"
                     }
                     else if (tipo == "de5a7752-a52c-41b0-a01e-99d51f73abde") {
-                        tipo = "Básico"
+                        tipos = "Básico"
                     }
 
 
@@ -317,7 +334,7 @@ localStorage.setItem('numero_venta_viejo', e.salenumber);
                             <h6 class="card-subtitle mb-2 text-muted">Salida: ${departingOrigen} llegada: ${departingDestino}</h6>
                             <h6 class="card-subtitle mb-2 text-muted">precio: $ ${precio}</h6>
                             <p class="card-text">corrida: ${corrida}</p>
-                            <p class="card-text">tipo: ${tipo}</p>
+                            <p class="card-text">tipo: ${tipos}</p>
                             <button class="btn btn-primary" onClick=" enviardata('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}', '${isaleid}')">escoger</button>
                         </div>
                     </div> 
@@ -398,7 +415,14 @@ function contarInapam(id) {
 
                 // eliminar de las opciones de tipo de pasajero
 
-                document.getElementById('"option-inapam"').style.display = 'none'
+                Swal.fire({
+                    title: "¡Atención!",
+                    text: `la cantidad de Inapam para este viaje ha llegado a su limite`,
+                    icon: "warning"
+                });
+
+
+                document.getElementById('option-inapam').style.display = 'none'
             }
 
 
@@ -424,7 +448,7 @@ function ContarEstudiante(id) {
 
 
             if (data.valor != "enabled") {
-
+                
                 document.getElementById('option-estudiante').style.display = "none"
             }
 
@@ -439,9 +463,8 @@ function ContarEstudiante(id) {
 
                         if (cant_students == 6) {
 
+                          
                             document.getElementById('option-estudiante').style.display = "none"
-
-
                         }
 
                     }).catch(error => {
@@ -696,10 +719,12 @@ function crearasientos(tipo, id) {
         var precionuevo = parseFloat(nuevo)
 
         var res = precionuevo - precio_anterior
-        localStorage.setItem('precio_Total_cambio', res)
 
         document.getElementById('spanTexto2').style.display = 'block'
         document.getElementById('spanTexto2').textContent = `la diferencia de precio es de: ${res} Pesos `
+
+        localStorage.setItem('diferencia_cambio', res)
+
 
         return seatElement;
     }
@@ -731,20 +756,6 @@ function ProcederBoleto() {
 
     var tipopasajero = localStorage.getItem('tipopasajero_cambio')
 
-
-
-    let cancelaciones = localStorage.getItem('cancelaciones');
-
-    // Si existe, convertir a número y aumentar en 1
-    if (cancelaciones) {
-        cancelaciones = parseInt(cancelaciones, 10) + 1;
-    } else {
-        // Si no existe, inicializar en 0 y luego aumentar
-        cancelaciones = 1;
-    }
-
-    // Guardar el nuevo valor en localStorage
-    localStorage.setItem('cancelaciones', cancelaciones);
 
 
     var texto = document.getElementById('seatrow').textContent
@@ -780,7 +791,8 @@ function ProcederBoleto() {
         var Boletocambio = {
 
             "oldticket": ticketsito,
-            "cancelUserId": user
+            "cancelUserId": user,
+            "saleshift": localStorage.getItem('saleshift_id')
 
         }
 
@@ -879,6 +891,8 @@ function ProcederBoleto() {
                 "tripseatlist": [tripseats],
                 "Email": "devs@sag.com"
             }
+
+
         } else {
 
             const tripseats = {
@@ -902,8 +916,8 @@ function ProcederBoleto() {
             {
                  "totalAmount": parseFloat(localStorage.getItem('precio_Total_cambio')),
                 "changeAmount": parseFloat(localStorage.getItem('precio_anteriorcambio')),
-                "PaymentType": "cash",
-                "payedAmount": parseFloat(localStorage.getItem('precio_Total_cambio')),
+                 "PaymentType": "cash",
+                 "payedAmount": parseFloat(localStorage.getItem('precio_Total_cambio') == 0 ? localStorage.getItem("precio_anteriorcambio") : localStorage.getItem('precio_Total_cambio')),
                 "salesTerminalId": terminal,
                 "salesmanId": user,
                 "salesShiftId": saleshift,
@@ -940,6 +954,21 @@ function ProcederBoleto() {
                 })
                     .then(response => response.text())
                     .then(data => {
+
+
+                        let cancelaciones = localStorage.getItem('cancelaciones');
+
+                        // Si existe, convertir a número y aumentar en 1
+                        if (cancelaciones) {
+                            cancelaciones = parseInt(cancelaciones, 10) + 1;
+                        } else {
+                            // Si no existe, inicializar en 0 y luego aumentar
+                            cancelaciones = 1;
+                        }
+
+                        // Guardar el nuevo valor en localStorage
+                        localStorage.setItem('cancelaciones', cancelaciones);
+
 
                         alert("success")
                         console.log(data)
@@ -1050,6 +1079,23 @@ function CancelarOperacion() {
         console.log("No hay datos de ventas en localStorage");
     }
 
-    alert("Operacion cancelada")
+
+    Swal.fire({
+        title: "Cambios Realizados",
+        text: 'Boleto Cancelado',
+        icon: "success"
+    }).then((result) => {
+        if (result.isConfirmed || result.isDismissed) {
     document.getElementById('cancelarCambio').disabled = true
+            location.reload();
+        }
+    });
+
+
+  
+
 }
+
+
+
+

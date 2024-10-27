@@ -67,12 +67,8 @@ fetch(`http://apitaquillassag.dyndns.org/Home/verprecorte?cashcheckpoint=${cashc
 
 
 
-
-
-
     //todo lo que carga del DOM
 document.addEventListener('DOMContentLoaded', () => {
-
 
     const btnregresar = document.getElementById('button-regresar')
         .addEventListener('click', () => {

@@ -84,159 +84,135 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    // Función para realizar el primer fetch (Precorte)
+    function precorteFetch(CashCheckpoint) {
+        return fetch('http://apitaquillassag.dyndns.org/Home/Precorte', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(CashCheckpoint)
+        })
+            .then(response => response.text());
+    }
 
+    // Función para actualizar el cash checkpoint y cancelar evento
+    function actualizarCashCheckpoint(cashcheckpoint, saleshift) {
+        return fetch(`http://apitaquillassag.dyndns.org/Home/actualizar_caschekpoint_cancelevent?cashCheckpoint=${cashcheckpoint}&Saleshift=${saleshift}`, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'text/plain',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json());
+    }
 
-    const btn_retirar_precorte = document.getElementById('btn-retirar-precorte')
+    // Función para agregar cash checkpoint
+    function agregarCashCheckpoint(cashcheckpoint, Saleshift) {
+        return fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'text/plain',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(Saleshift)
+        })
+            .then(response => response.text());
+    }
+
+    // Función principal que maneja el evento click
+    const btn_retirar_precorte = document.getElementById('btn-retirar-precorte');
     btn_retirar_precorte.addEventListener('click', () => {
 
-
-
-        var saleshift = localStorage.getItem('saleshift_id')
-        var monto = document.getElementById('monto-precorte').value
-        var monto_retirar = parseFloat(monto)
-
-
+        const saleshift = localStorage.getItem('saleshift_id');
+        const monto = document.getElementById('monto-precorte').value;
+        const monto_retirar = parseFloat(monto);
 
         if (monto_retirar <= 0) {
-
-            alert("no puedes  retirar esta cantidad")
-            var ventas = localStorage.getItem('array_ventas')
-            var arrayventas = JSON.parse(ventas)
-            console.log(arrayventas)
-
-
+            alert("No puedes retirar esta cantidad");
+            const ventas = localStorage.getItem('array_ventas');
+            const arrayventas = JSON.parse(ventas);
+            console.log(arrayventas);
         } else {
-
-
-            var venta = localStorage.getItem('venta_reciente')
-            var venta_reciente = parseFloat(venta)
-
-            var sobrante = venta_reciente - monto_retirar
-
+            const venta = localStorage.getItem('venta_reciente');
+            const venta_reciente = parseFloat(venta);
+            const sobrante = venta_reciente - monto_retirar;
 
             const CashCheckpoint = {
-
                 sale_shift_id: saleshift,
                 previous_amount: monto_retirar,
                 new_amount: sobrante
+            };
 
-            }
-
-
-            fetch('http://apitaquillassag.dyndns.org/Home/Precorte', {
-
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(CashCheckpoint)
-
-            })
-                .then(response => response.text())
+            // Primer fetch para precorte
+            precorteFetch(CashCheckpoint)
                 .then(data => {
-
                     if (data.length <= 6) {
-
-
-
                         Swal.fire({
-                            title: "Error!",
-                            text: `${error}`,
+                            title: "Error al guardar precorte!",
+                            text: `Error al guardar: ${data}`,
                             icon: "error"
                         });
-
-
-
-
-                        window.locarion.reload()
-
+                        window.location.reload();
                     } else {
-
-
-
                         localStorage.setItem('cashcheckpoint', data);
+                        const cashcheckpoint = localStorage.getItem('cashcheckpoint');
+                        const salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
 
-                        var cashcheckpoint = localStorage.getItem('cashcheckpoint');
-
-                        var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
-
-                        let Saleshift = salesnumberArray.map(salesnumber => {
-                            return {
-                                salesnumber: salesnumber
-                            };
-                        });
+                        const Saleshift = salesnumberArray.map(salesnumber => ({
+                            salesnumber: salesnumber
+                        }));
 
                         console.log(Saleshift);
 
+                        // Segundo fetch para actualizar cash checkpoint y cancelar evento
+                        actualizarCashCheckpoint(cashcheckpoint, saleshift)
+                            .then(result => {
+                              
+                                    // Tercer fetch para agregar cash checkpoint
+                                    agregarCashCheckpoint(cashcheckpoint, Saleshift)
+                                        .then(data => {
+                                            if (data === "Operación exitosa") {
+                                                Swal.fire({
+                                                    title: "Puedes continuar!",
+                                                    text: "Se abre de nuevo la caja",
+                                                    icon: "success"
+                                                });
+                                                location.href = "informePrecorte.aspx";
 
-
-                        fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
-
-                            method: 'PATCH',
-                            headers: {
-                                'Accept': 'text/plain',
-                                'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
-                            },
-                            body: JSON.stringify(Saleshift)
-
-                        })
-                            .then(response => response.text())
-                            .then(data => {
-
-
-
-                                if (data == "Operación exitosa") {
-                                    Swal.fire({
-                                        title: "Puedes Continuar!",
-                                        text: `se abre de nevo la caja`,
-                                        icon: "success"
-                                    });
-
-
-                                    location.href = "informePrecorte.aspx"
-
-                                    if (ventasls < 3000) {
-
-                                    } else {
-
-                                        localStorage.setItem('venta_reciente', sobrante.toString())
-
-                                    }
-
-
-                                } else {
-
-
-                                    Swal.fire({
-                                        title: "Error!",
-                                        text: `Hubo un error`,
-                                        icon: "error"
-                                    });
-
-                                }
-
-                            }).catch(error => {
-
-                                Swal.fire({
-                                    title: "Error!",
-                                    text: `Hubo un error: mensaje ${error}`,
-                                    icon: "error"
-                                });
-
-                            })
+                                                const ventasls = parseFloat(localStorage.getItem('venta_reciente'));
+                                                if (ventasls >= 3000) {
+                                                    localStorage.setItem('venta_reciente', sobrante.toString());
+                                                }
+                                            } else {
+                                                Swal.fire({
+                                                    title: "Error!",
+                                                    text: "Hubo un error",
+                                                    icon: "error"
+                                                });
+                                            }
+                                        })
+                                        .catch(error => {
+                                            Swal.fire({
+                                                title: "Error!",
+                                                text: `Hubo un error: mensaje ${error}`,
+                                                icon: "error"
+                                            });
+                                        });
+                                
+                            });
                     }
-                }).catch(error => {
-
+                })
+                .catch(error => {
                     Swal.fire({
                         title: "Error!",
                         text: `Hubo un error: mensaje ${error}`,
                         icon: "error"
                     });
-
-                })
+                });
         }
-    })
-
+    });
 
 
 
@@ -350,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
+        //fetch(`https://localhost:5001/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
 
         })
             .then(response => response.json())
@@ -1017,6 +994,8 @@ document.addEventListener('DOMContentLoaded', () => {
     btn_siguiente1.addEventListener('click', () => {
 
 
+
+
         var correocliente = document.getElementById('correocliente').value
 
         localStorage.setItem('correo_cliente', correocliente)
@@ -1039,107 +1018,116 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (alMenosUnDivConInputRellenado) {
 
+            if (document.getElementById("telefonocliente").value == "") {
 
-            if (countadulto != 0 || countinapam != 0 || countstudent != 0 || countnino != 0) {
-
-                var inputs = document.querySelectorAll('input');
-                var valoresObj = {};
-                inputs.forEach(function (input) {
-                    var id = input.id;
-                    var valor = input.value;
-                    valoresObj[id] = valor;
+                Swal.fire({
+                    title: "mensaje!",
+                    text: "agrega un numero de telefono",
+                    icon: "info"
                 });
 
-                console.log(valoresObj);
+            } else {
 
-                var pasajeros = JSON.stringify(valoresObj)
-                localStorage.setItem('pasajeros', pasajeros)
+                if (countadulto != 0 || countinapam != 0 || countstudent != 0 || countnino != 0) {
 
-                var numerocliente = document.getElementById('telefonocliente').value
-                localStorage.setItem('numerocliente', numerocliente)
-
-                var numerocliente = document.getElementById('correocliente').value
-                localStorage.setItem('correocliente', numerocliente)
-
-
-                document.getElementById('section-pasajeros').style.display = 'none'
-
-                var datosViajeString = localStorage.getItem("datos_viaje");
-                var datosViajeObj = JSON.parse(datosViajeString);
-                var tipo = datosViajeObj.tipo;
-                var id = datosViajeObj.id
-
-                fetch(`http://apitaquillassag.dyndns.org/Home/Asientos?Servicelvl=${tipo}`)
-                    .then((response) => response.json())
-                    .then((seatData) => {
-
-                        // Hacer otra solicitud fetch para obtener datos de ocupación
-
-                        fetch(`http://apitaquillassag.dyndns.org/Home/listarAsientosOcupados?TripId=${id}`)
-                            .then((response) => response.json())
-                            .then((occupiedSeats) => {
-                                // Llamar a la función para construir el mapa de asientos
-                                document.getElementById("section-asientos").style.display = "block"
-                                creartabalapasejro();
-
-
-                                buildSeatMap(seatData, occupiedSeats);
-
-                            })
-                            .catch((error) => {
-
-                                Swal.fire({
-                                    title: "Error!",
-                                    text: `error al listar asientos: ${error}`,
-                                    icon: "error"
-                                });
-                            });
-                    })
-                    .catch((error) => {
-                        Swal.fire({
-                            title: "Error!",
-                            text: `${error}`,
-                            icon: "error"
-                        });
+                    var inputs = document.querySelectorAll('input');
+                    var valoresObj = {};
+                    inputs.forEach(function (input) {
+                        var id = input.id;
+                        var valor = input.value;
+                        valoresObj[id] = valor;
                     });
 
+                    console.log(valoresObj);
 
-                function creartabalapasejro() {
+                    var pasajeros = JSON.stringify(valoresObj)
+                    localStorage.setItem('pasajeros', pasajeros)
 
-                    const pasajerosJSON = localStorage.getItem('pasajeros');
+                    var numerocliente = document.getElementById('telefonocliente').value
+                    localStorage.setItem('numerocliente', numerocliente)
 
-                    if (pasajerosJSON) {
-                        const pasajeros = JSON.parse(pasajerosJSON);
-                        const tablaPasajeros = document.getElementById('tabla-pasajeros');
-                        const tbody = tablaPasajeros.querySelector('tbody');
-                        var datosViajeString = localStorage.getItem("datos_viaje");
-                        var datosViajeObj = JSON.parse(datosViajeString);
-                        precio_base = datosViajeObj.precio;
-                        var origen = datosViajeObj.origen
-                        var destino = datosViajeObj.destino
-                        var departingOrigen = datosViajeObj.departingOrigen
-                        precio_descuento = precio_base * 0.70;
-                        // Iterar sobre las claves y valores del objeto
-                        var totalPrecio = 0;
-                        var salida = formatDateTime(departingOrigen)
-                        // Iterar sobre las claves y valores del objeto
-
-                        for (const key in pasajeros) {
-                            if (pasajeros.hasOwnProperty(key) && key !== "fecha" && key !== "" && pasajeros[key] !== "") {
-                                const nombre = pasajeros[key];
-                                const tipo = key.split('_')[1] || "otro"; // Obtener el tipo desde el nombre de la clave
+                    var numerocliente = document.getElementById('correocliente').value
+                    localStorage.setItem('correocliente', numerocliente)
 
 
-                                // Calcular el precio para el pasajero
-                                const precioPasajero = tipo.includes("adulto") ? precio_base : precio_descuento.toFixed(2);
+                    document.getElementById('section-pasajeros').style.display = 'none'
 
-                                // Acumular el precio al total
-                                totalPrecio += parseFloat(precioPasajero);
+                    var datosViajeString = localStorage.getItem("datos_viaje");
+                    var datosViajeObj = JSON.parse(datosViajeString);
+                    var tipo = datosViajeObj.tipo;
+                    var id = datosViajeObj.id
 
-                                // Crear una nueva fila en la tabla
-                                const fila = document.createElement('tr');
-                                fila.innerHTML =
-                                    `
+                    fetch(`http://apitaquillassag.dyndns.org/Home/Asientos?Servicelvl=${tipo}`)
+                        .then((response) => response.json())
+                        .then((seatData) => {
+
+                            // Hacer otra solicitud fetch para obtener datos de ocupación
+
+                            fetch(`http://apitaquillassag.dyndns.org/Home/listarAsientosOcupados?TripId=${id}`)
+                                .then((response) => response.json())
+                                .then((occupiedSeats) => {
+                                    // Llamar a la función para construir el mapa de asientos
+                                    document.getElementById("section-asientos").style.display = "block"
+                                    creartabalapasejro();
+
+
+                                    buildSeatMap(seatData, occupiedSeats);
+
+                                })
+                                .catch((error) => {
+
+                                    Swal.fire({
+                                        title: "Error!",
+                                        text: `error al listar asientos: ${error}`,
+                                        icon: "error"
+                                    });
+                                });
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                title: "Error!",
+                                text: `${error}`,
+                                icon: "error"
+                            });
+                        });
+
+
+                    function creartabalapasejro() {
+
+                        const pasajerosJSON = localStorage.getItem('pasajeros');
+
+                        if (pasajerosJSON) {
+                            const pasajeros = JSON.parse(pasajerosJSON);
+                            const tablaPasajeros = document.getElementById('tabla-pasajeros');
+                            const tbody = tablaPasajeros.querySelector('tbody');
+                            var datosViajeString = localStorage.getItem("datos_viaje");
+                            var datosViajeObj = JSON.parse(datosViajeString);
+                            precio_base = datosViajeObj.precio;
+                            var origen = datosViajeObj.origen
+                            var destino = datosViajeObj.destino
+                            var departingOrigen = datosViajeObj.departingOrigen
+                            precio_descuento = precio_base * 0.70;
+                            // Iterar sobre las claves y valores del objeto
+                            var totalPrecio = 0;
+                            var salida = formatDateTime(departingOrigen)
+                            // Iterar sobre las claves y valores del objeto
+
+                            for (const key in pasajeros) {
+                                if (pasajeros.hasOwnProperty(key) && key !== "fecha" && key !== "" && pasajeros[key] !== "") {
+                                    const nombre = pasajeros[key];
+                                    const tipo = key.split('_')[1] || "otro"; // Obtener el tipo desde el nombre de la clave
+
+
+                                    // Calcular el precio para el pasajero
+                                    const precioPasajero = tipo.includes("adulto") ? precio_base : precio_descuento.toFixed(2);
+
+                                    // Acumular el precio al total
+                                    totalPrecio += parseFloat(precioPasajero);
+
+                                    // Crear una nueva fila en la tabla
+                                    const fila = document.createElement('tr');
+                                    fila.innerHTML =
+                                        `
                                 <td>${nombre}</td>
                                 <td>${origen}</td>
                                 <td>${destino}</td>
@@ -1149,129 +1137,135 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td id="precioparapasajero">${precioPasajero}</td>
 
                                 `;
-                                document.getElementById('span_total_orasi').innerHTML = totalPrecio.toFixed(2)
+                                    document.getElementById('span_total_orasi').innerHTML = totalPrecio.toFixed(2)
 
 
 
 
-                                localStorage.setItem('Total_compra', totalPrecio.toFixed(2))
-                                // Agregar la fila al cuerpo de la tabla
-                                tbody.appendChild(fila);
-                                countpasajero++
+                                    localStorage.setItem('Total_compra', totalPrecio.toFixed(2))
+                                    // Agregar la fila al cuerpo de la tabla
+                                    tbody.appendChild(fila);
+                                    countpasajero++
+                                }
                             }
                         }
                     }
-                }
 
-                function buildSeatMap(seatData, occupiedSeats) {
+                    function buildSeatMap(seatData, occupiedSeats) {
 
-                    var datosViajeString = localStorage.getItem("datos_viaje");
-                    var datosViajeObj = JSON.parse(datosViajeString);
-                    var tipo = datosViajeObj.tipo;
-                    if (tipo == "Plus") {
+                        var datosViajeString = localStorage.getItem("datos_viaje");
+                        var datosViajeObj = JSON.parse(datosViajeString);
+                        var tipo = datosViajeObj.tipo;
+                        if (tipo == "Plus") {
 
-                        document.getElementById('content-floor-indicator').style.display = "flex"
-                    } else {
-                        document.getElementById('content-floor-indicator').style.display = "none"
-
-
-                    }
-
-
-                    var parent = document.getElementById('content_seat');
-
-                    parent.innerHTML = '';
-
-                    var seatcounter = 1;
-
-
-                    seatData.forEach(e => {
-
-
-
-                        var seatElement = document.createElement('div');
-                        seatElement.className = `div${e.name} container`;
-                        seatElement.id = 'content';
-
-                        var buttonElement = document.createElement('button');
-                        buttonElement.id = `Asientos`;
-                        buttonElement.value = `${e.name == "00" || e.name == "113" ? "WC" : e.name}`
-                        buttonElement.style.width = '80px';
-                        buttonElement.style.height = '80px';
-                        buttonElement.style.display = e.name === "01" || e.name === "05" || e.name === "00" || e.name === "113" ? 'none' : 'flex';
-                        buttonElement.style.alignItems = 'flex-start';
-                        buttonElement.style.justifyContent = 'center';
-                        buttonElement.style.padding = '5px';
-
-                        var h4Element = document.createElement('h6');
-                        var content = (e.floor === "1") ? e.name : `${e.name}/${e.floor}`;
-                        h4Element.textContent = (e.name === "00" || e.name === "113") ? "WC" : content;
-
-                        var imgElement = document.createElement('img');
-                        imgElement.src = `${e.name == "00" || e.name == "113" ? 'Assets/toilet.png' : 'Assets/asiento.png'}`;
-                        imgElement.style.width = '45px';
-                        imgElement.style.height = '45px';
-                        imgElement.style.objectFit = 'cover';
-                        imgElement.style.alignSelf = 'end';
-                        imgElement.style.transform = "scaleX(-1)";
-
-                        buttonElement.appendChild(h4Element);
-                        buttonElement.appendChild(imgElement);
-
-                        seatElement.appendChild(buttonElement);
-
-                        parent.appendChild(seatElement);
-
-                        // Verificar si el asiento está entre el 1 y el 8
-                        if (parseInt(e.name) >= 5 && parseInt(e.name) <= 8) {
-                            seatElement.style.marginRight = tipo == "Plus" ? '50px' : '0px'; // Agregar margen inferior para separarlos visualmente
-                        }
-
-                        if (occupiedSeats.some(seat => seat.asiento == parseInt(e.name))) {
-                            buttonElement.className = 'btn btn-danger';
+                            document.getElementById('content-floor-indicator').style.display = "flex"
                         } else {
-                            buttonElement.className = 'btn btn-primary';
+                            document.getElementById('content-floor-indicator').style.display = "none"
 
-                            buttonElement.addEventListener('click', () => {
-                                if (buttonElement.value == "WC") {
-                                    alert("No puedes seleccionar este elemento");
-                                } else {
-                                    if (buttonElement.className === 'btn btn-primary') {
-                                        if (countasientos < count_pasajeros) {
-                                            buttonElement.className = 'btn btn-success';
-                                            countasientos = countasientos + 1;
-                                            //countpasajero = countpasajero - 1;
-                                            agregaratabla(buttonElement.value);
-                                        } else {
-                                            Swal.fire({
-                                                title: "Mensaje!",
-                                                text: `No puedes escojer mas boletos`,
-                                                icon: "info"
-                                            });
-                                        }
-                                    } else {
-                                        buttonElement.className = 'btn btn-primary'
-                                        countasientos = countasientos - 1;
-                                        // countpasajero = countpasajero + 1;
-                                        quitartabla(buttonElement.value);
-                                    }
-                                }
-                            });
+
                         }
 
-                        seatcounter++;
+
+                        var parent = document.getElementById('content_seat');
+
+                        parent.innerHTML = '';
+
+                        var seatcounter = 1;
+
+
+                        seatData.forEach(e => {
+
+
+
+                            var seatElement = document.createElement('div');
+                            seatElement.className = `div${e.name} container`;
+                            seatElement.id = 'content';
+
+                            var buttonElement = document.createElement('button');
+                            buttonElement.id = `Asientos`;
+                            buttonElement.value = `${e.name == "00" || e.name == "113" ? "WC" : e.name}`
+                            buttonElement.style.width = '80px';
+                            buttonElement.style.height = '80px';
+                            buttonElement.style.display = e.name === "01" || e.name === "05" || e.name === "00" || e.name === "113" ? 'none' : 'flex';
+                            buttonElement.style.alignItems = 'flex-start';
+                            buttonElement.style.justifyContent = 'center';
+                            buttonElement.style.padding = '5px';
+
+                            var h4Element = document.createElement('h6');
+                            var content = (e.floor === "1") ? e.name : `${e.name}/${e.floor}`;
+                            h4Element.textContent = (e.name === "00" || e.name === "113") ? "WC" : content;
+
+                            var imgElement = document.createElement('img');
+                            imgElement.src = `${e.name == "00" || e.name == "113" ? 'Assets/toilet.png' : 'Assets/asiento.png'}`;
+                            imgElement.style.width = '45px';
+                            imgElement.style.height = '45px';
+                            imgElement.style.objectFit = 'cover';
+                            imgElement.style.alignSelf = 'end';
+                            imgElement.style.transform = "scaleX(-1)";
+
+                            buttonElement.appendChild(h4Element);
+                            buttonElement.appendChild(imgElement);
+
+                            seatElement.appendChild(buttonElement);
+
+                            parent.appendChild(seatElement);
+
+                            // Verificar si el asiento está entre el 1 y el 8
+                            if (parseInt(e.name) >= 5 && parseInt(e.name) <= 8) {
+                                seatElement.style.marginRight = tipo == "Plus" ? '50px' : '0px'; // Agregar margen inferior para separarlos visualmente
+                            }
+
+                            if (occupiedSeats.some(seat => seat.asiento == parseInt(e.name))) {
+                                buttonElement.className = 'btn btn-danger';
+                            } else {
+                                buttonElement.className = 'btn btn-primary';
+
+                                buttonElement.addEventListener('click', () => {
+                                    if (buttonElement.value == "WC") {
+                                        alert("No puedes seleccionar este elemento");
+                                    } else {
+                                        if (buttonElement.className === 'btn btn-primary') {
+                                            if (countasientos < count_pasajeros) {
+                                                buttonElement.className = 'btn btn-success';
+                                                countasientos = countasientos + 1;
+                                                //countpasajero = countpasajero - 1;
+                                                agregaratabla(buttonElement.value);
+                                            } else {
+                                                Swal.fire({
+                                                    title: "Mensaje!",
+                                                    text: `No puedes escojer mas boletos`,
+                                                    icon: "info"
+                                                });
+                                            }
+                                        } else {
+                                            buttonElement.className = 'btn btn-primary'
+                                            countasientos = countasientos - 1;
+                                            // countpasajero = countpasajero + 1;
+                                            quitartabla(buttonElement.value);
+                                        }
+                                    }
+                                });
+                            }
+
+                            seatcounter++;
+                        });
+                    }
+                } else {
+
+                    Swal.fire({
+                        title: "mensaje!",
+                        text: "Debes Seleccionar Una opcion",
+                        icon: "info"
                     });
                 }
-            } else {
 
-                Swal.fire({
-                    title: "mensaje!",
-                    text: "Debes Seleccionar Una opcion",
-                    icon: "info"
-                });
+            } 
+
+
             }
 
-        } else {
+           
+        else {
 
             Swal.fire({
                 title: "mensaje!",
@@ -1327,7 +1321,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if ((origen == "Mexico Central" && destino == "Veracruz Central") || (origen == "Veracruz Central" && destino == "Mexico Central")) {
 
 
-            document.getElementById('contentpromo').style.display = "block"
+            document.getElementById('contentpromo').style.display = "none"
         } else {
             document.getElementById('contentpromo').style.display = "none"
         }
@@ -2153,9 +2147,7 @@ function iniciarturno() {
                 console.log(data.shift)
                 localStorage.setItem('shift_number', data.shift)
                 localStorage.setItem('saleshift_id', data.saleShift)
-                var cajaabierta = true
 
-                localStorage.setItem("caja_abierta", cajaabierta)
     // datos forage
                 const url = `http://apitaquillassag.dyndns.org/Home/descargar?url=${data.url}`;
 
@@ -2205,6 +2197,10 @@ function iniciarturno() {
         localStorage.setItem("array_ventas", arrayventas)
 
         localStorage.setItem('venta_reciente', 0)
+        var cajaabierta = true
+
+        localStorage.setItem("caja_abierta", cajaabierta)
+
 
     } else {
 
@@ -2224,6 +2220,7 @@ function iniciarturno() {
 
 
         fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+        //fetch('https://localhost:5001/Home/Origen', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -2262,6 +2259,7 @@ function iniciarturno() {
                     var data = { origen: Origen };
 
                     fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                    //fetch('https://localhost:5001/Home/Destino', {
                         method: 'POST',
                         headers: {
                             "Content-Type": "application/json"
@@ -2321,6 +2319,7 @@ function iniciarturno() {
 
 
         fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+        //fetch('https://localhost:5001/Home/Destino', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"

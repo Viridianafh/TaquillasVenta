@@ -48,7 +48,7 @@
             <td>${pageData[i].Departure}</td>
             <td>
                 <button class="btn btn-dark" id="btn-showlist"
-                    onclick="verlista('${pageData[i].Id}', '${pageData[i].Bus}', '${pageData[i].Corrida}', '${pageData[i].Departure}')">Ver Lista
+                    onclick="verlista('${pageData[i].Id}', '${pageData[i].Bus}', '${pageData[i].Corrida}', '${pageData[i].Departure}' )">Ver Lista
                 </button>
             </td>
         `;
@@ -166,29 +166,27 @@
         document.getElementById('table-lista2').style.width = '100mm';
         document.getElementById('allcontent').style.width = 200;
 
-        document.getElementById('spantaquillas').style.fontSize= '10px'
-        document.getElementById('rutabname').style.fontSize = '10px'
-        document.getElementById('buss').style.fontSize = '10px'
-        document.getElementById('countabordan').style.fontSize = '10px'
-        document.getElementById('countotal').style.fontSize = '10px'
-        document.getElementById('tdname').style.fontSize = '10px'
+        document.getElementById('spantaquillas').style.fontSize= '12px'
+        document.getElementById('rutabname').style.fontSize = '12px'
+        document.getElementById('buss').style.fontSize = '12px'
+        document.getElementById('countotal').style.fontSize = '12px'
 
         document.getElementById("main-taquilla").style.fontSize = "11px"; // Tamaño en píxeles
-        document.getElementById("main-taquilla").style.fontWeight = "600";
-
-
-        document.getElementById("main-fecha").style.fontSize = "11px"; // Tamaño en píxeles
-        document.getElementById("main-fecha").style.fontWeight = "600"; // Peso de fuente
+        document.getElementById("main-taquilla").style.fontWeight = "600"; // Peso de fuente
 
         document.getElementById("main-ruta").style.fontSize = "11px";    // Tamaño en píxeles
-        document.getElementById("main-ruta").style.fontWeight = "600";   // Peso de fuente
+        document.getElementById("main-ruta").style.fontWeight = "600";
+
+        document.getElementById("main-fecha").style.fontSize = "11px";    // Tamaño en píxeles
+        document.getElementById("main-fecha").style.fontWeight = "600";   // Peso de fuente
 
         document.getElementById("main-bus").style.fontSize = "11px";     // Tamaño en píxeles
         document.getElementById("main-bus").style.fontWeight = "600";    // Peso de fuente
 
-        document.getElementById("main-abordan").style.fontSize = "11px"; // Tamaño en píxeles
-        document.getElementById("main-abordan").style.fontWeight = "600"; // Peso de fuente
+        document.getElementById("main-abordan").style.fontSize = "11px";     // Tamaño en píxeles
+        document.getElementById("main-abordan").style.fontWeight = "600";    // Peso de fuente
 
+   
         document.getElementById("main-total").style.fontSize = "11px";   // Tamaño en píxeles
         document.getElementById("main-total").style.fontWeight = "600";  
         const tabla = document.getElementById('allcontent');
@@ -198,7 +196,7 @@
 
         // Configura las opciones para html2pdf
         const opciones = {
-            margin: [0, -7, 0, 0], // Márgenes en mm (top, right, bottom, left)
+            margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
             filename: 'listadeabordar.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
@@ -251,8 +249,6 @@
         });
 
 
-    
-
     })
 
    
@@ -276,107 +272,79 @@ function ocultarColumna6() {
 
                 
     function verlista(tripid, bus, corrida, departure) {
-
+        var countabordan = 0;
 
         limpiarTabla()
         limpiarTabla2()
-        var countabordan = 0;
-        document.getElementById('countabordan').textContent = countabordan
+    
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/MostrarListaAbordar?trip_id=${tripid}`)
+        fetch(`http://apitaquillassag.dyndns.org/Home/ListarPaquetes?trip_id=${tripid}`)
             .then(response => response.json())
             .then(data => {
 
+                document.getElementById("spanfecha").textContent = departure;
+                document.getElementById("spantaquillas").textContent = localStorage.getItem('office_name').toString();
+                document.getElementById("rutabname").textContent = corrida
+                document.getElementById("buss").textContent = bus
+
                 var tbody = document.getElementById('table-lista').getElementsByTagName('tbody')[0];
                 var tbody2 = document.getElementById('table-lista2').getElementsByTagName('tbody')[0];
-                var tipo = "";
 
+                document.getElementById('countotal').textContent = data.length;
 
-                document.getElementById('countotal').textContent = data.length
-
+                // Iterar sobre los elementos en el array 'data'
                 data.forEach(e => {
+                    var tr = document.createElement('tr');
+                    var tr2 = document.createElement('tr');
 
-                    if (e.Type == "ADULT") {
-                        tipo = "Adulto"
-                    } else if (e.Type == "CHILD") {
-                        tipo = "Niño"
-                    }
-                    else if (e.Type == "OLDER_ADULT") {
-                        tipo = "Adulto Mayor"
-                    }
-                    else if (e.Type == "STUDENT") {
-                        tipo = "Estudiante"
-                    }
-
-
-
-
-
-
-                    var tr = document.createElement('tr')
-                    var tr2 = document.createElement('tr')
 
 
                     var officename = localStorage.getItem('office_name')
                     const normalizeText = (texto) => texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
                     // Compara los textos normalizados
-                    if (normalizeText(officename).localeCompare(normalizeText(e.Origin), 'es', { sensitivity: 'base' }) === 0) {
+                    if (normalizeText(officename).localeCompare(normalizeText(e.StartingStopId), 'es', { sensitivity: 'base' }) === 0) {
                         // Si son iguales, incrementa el contador
-                        countabordan ++;
+                        countabordan++;
                         document.getElementById('countabordan').textContent = countabordan
 
-                       
+
                     } else {
                         console.log('Textos diferentes. Contador no cambiado.');
                     }
 
+
+
                     tr.innerHTML = `
-                    
-                    <td>${e.Seat_number}</td>
-                    <td id="tdname">${e.Name}</td>
-                    <td>${e.Origin}</td>
-                    <td>${e.Destination}</td>
-                    <td>${e.Ticket}</td>
-                    <td>${tipo}</td>
-                    <td>${e.IsScanned == "USED" ? "SI" : "NO"} </td>
-                    <td>${e.ScannedBy } </td>
-                        
-                    
-                    `
+                <td>${e.Concept}</td>
+                
+                <td>${e.StartingStopId}</td>
+                <td>${e.EndingStopId}</td>
+                <td>${e.SenderName}</td>
+                <td>${e.ReceiverName}</td>
+                <td>${e.TicketId}</td>
+            `;
+
                     tr2.innerHTML = `
-                    
-                    <td>${e.Seat_number}</td>
-                    <td id="tdname">${e.Name}</td>
-                    <td>${e.Origin}</td>
-                    <td>${e.Destination}</td>
-                    <td>${e.Ticket}</td>
-                    <td>${tipo}</td>
-                    <td>${e.IsScanned == "USED" ? "SI" : "NO"} </td>
-                  
-                        
-                    
-                    `
-                    tbody.appendChild(tr)
-                    tbody2.appendChild(tr2)
+                <td>${e.Concept}</td>
+              
+                <td>${e.StartingStopId}</td>
+                <td>${e.EndingStopId}</td>
+                <td>${e.SenderName}</td>
+                <td>${e.ReceiverName}</td>
+                <td>${e.TicketId}</td>
+            `;
 
-                    console.log(e)
+                    tbody.appendChild(tr);
+                    tbody2.appendChild(tr2);
 
-                })
+                    console.log(e); // Ver los datos del elemento actual
+                });
 
                 document.getElementById('section-buscarlista').style.display = "none";
-                document.getElementById('section-lista').style.display = "block"
-
-
-                var officename = localStorage.getItem('office_name')
-                document.getElementById('buss').textContent = bus
-                document.getElementById('rutabname').textContent = corrida
-                document.getElementById('spantaquillas').textContent = officename
-                document.getElementById('spanfecha').textContent = departure
-
-     
-
+                document.getElementById('section-lista').style.display = "block";
             })
+
             .catch(error => {
 
 
@@ -410,8 +378,6 @@ function limpiarTabla() {
         tabla.deleteRow(1);
     }
 }
-
-
 
 
 

@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${e.Remitente}</td>
                 <td>${e.Destinatario}</td>
                 <td>${e.IdGuia}</td>
-                  <td><button class="btn btn-primary" onclick="Descargarguia('${e.Origen}', '${e.Destino}', '${e.Folio}', '${e.Total}', '${e.Corrida}', '${e.IdGuia}', '${e.IdSale}', '${e.Remitente}',  '${e.Destinatario}'  )">Descargar</button></td>
-                <td><button class="btn btn-dark" onclick="Descargar('${e.Origen}', '${e.Destino}', '${e.Folio}', '${e.Total}', '${e.Corrida}')">Descargar</button></td>
+                  <td><button class="btn btn-primary" onclick="Descargarguia( '${e.Descripcion}',  '${e.Origen}', '${e.Destino}', '${e.Folio}', '${e.Total}', '${e.Corrida}', '${e.IdGuia}', '${e.IdSale}', '${e.Remitente}',  '${e.Destinatario}'  )">Descargar</button></td>
+                <td><button class="btn btn-dark" onclick="Descargar( '${e.Descripcion }', '${e.Origen}', '${e.Destino}', '${e.Folio}', '${e.Total}', '${e.Corrida}')">Descargar</button></td>
             
                 `;
                 tabla.appendChild(tr)
@@ -91,7 +91,7 @@ function generateQRCode(text) {
         }
     });
 }
-async function Descargarguia(Origen, Destino, Folio, Total, Corrida, IdGuia, IdSale, Remitente, Destinatario) {
+async function Descargarguia(Descripcion ,Origen, Destino, Folio, Total, Corrida, IdGuia, IdSale, Remitente, Destinatario) {
     try {
         // Descargar el formulario PDF
         const url = '/Assets/etiqueta.pdf';
@@ -115,10 +115,12 @@ async function Descargarguia(Origen, Destino, Folio, Total, Corrida, IdGuia, IdS
         form.getTextField('idticket').setText(IdGuia);
         form.getTextField('remitente').setText(Remitente);
         form.getTextField('destinatario').setText(Destinatario);
+        form.getTextField('description').setText(Descripcion);
+     
      
 
         // Hacer los campos de solo lectura
-        ['folio', 'origen', 'destino', 'corrida', 'sale', 'idticket','remitente', 'destinatario'].forEach(field => form.getTextField(field).enableReadOnly());
+        ['folio', 'origen', 'destino', 'corrida', 'sale', 'idticket','remitente', 'destinatario', 'description'].forEach(field => form.getTextField(field).enableReadOnly());
 
         // Generar el código QR con el mensaje "hola"
         const qrCodeDataURL = await generateQRCode(IdGuia);
@@ -173,7 +175,7 @@ async function Descargarguia(Origen, Destino, Folio, Total, Corrida, IdGuia, IdS
 
 
 
-async function Descargar(Origen, Destino, Folio, Total, Corrida) {
+async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
     try {
         // Descargar el formulario PDF
         const url = '/Assets/ticketpaquete.pdf';
@@ -195,10 +197,11 @@ async function Descargar(Origen, Destino, Folio, Total, Corrida) {
         form.getTextField('corrida').setText(Corrida);
         form.getTextField('total').setText(Total);
         form.getTextField('taquillero').setText(taquillero);
+        form.getTextField('description').setText(Descripcion);
 
 
         // Hacer los campos de solo lectura
-        ['folio', 'origen', 'destino', 'corrida', 'total', 'taquillero'].forEach(field => form.getTextField(field).enableReadOnly());
+        ['folio', 'origen', 'destino', 'corrida', 'total', 'taquillero', 'description'].forEach(field => form.getTextField(field).enableReadOnly());
 
         // Generar el código QR con el mensaje "hola"
         const qrCodeDataURL = await generateQRCode(Folio);
