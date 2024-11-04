@@ -730,6 +730,7 @@ function crearasientos(tipo, id) {
     }
 
 
+
     function renderSeats(seatData, statusdata) {
 
         const floor1 = document.getElementById('floor-1');
@@ -868,7 +869,7 @@ function ProcederBoleto() {
                 "PassengerName": nombre,
                 "PassengerType": tipopasajero,
                 "SeatName": asiento_cambio,
-                "SoldPrice": 0.0,
+                "SoldPrice": parseFloat(localStorage.getItem('precionuevo')),
                 "PayedPrice": 0.0,
                 "OriginalPrice": parseFloat(localStorage.getItem("nuevo_precio_cambio")),
                 "Trip_ID": dataid,
@@ -876,13 +877,12 @@ function ProcederBoleto() {
             }
 
 
-
             InternetSale =
             {
-                "totalAmount": 0.0,
-                "changeAmount":0.0,
+                "totalAmount": parseFloat(localStorage.getItem('nuevo_precio_cambio')),
+                "changeAmount": 0.0,
                 "PaymentType": "cash",
-                "payedAmount": 0.0,
+                "payedAmount": parseFloat(localStorage.getItem('precionuevo')),
                 "salesTerminalId": terminal,
                 "salesmanId": user,
                 "salesShiftId": saleshift,
@@ -914,10 +914,10 @@ function ProcederBoleto() {
 
              InternetSale =
             {
-                 "totalAmount": parseFloat(localStorage.getItem('precio_Total_cambio')),
+                "totalAmount": parseFloat(localStorage.getItem('precio_Total_cambio')),
                 "changeAmount": parseFloat(localStorage.getItem('precio_anteriorcambio')),
-                 "PaymentType": "cash",
-                 "payedAmount": parseFloat(localStorage.getItem('precio_Total_cambio') == 0 ? localStorage.getItem("precio_anteriorcambio") : localStorage.getItem('precio_Total_cambio')),
+                "PaymentType": "cash",
+                "payedAmount": parseFloat(localStorage.getItem('precio_Total_cambio') == 0 ? localStorage.getItem("precio_anteriorcambio") : localStorage.getItem('precio_Total_cambio')),
                 "salesTerminalId": terminal,
                 "salesmanId": user,
                 "salesShiftId": saleshift,
@@ -1042,6 +1042,7 @@ function limpiarTabla() {
         tabla.deleteRow(1);
     }
 }
+
 function limpiarTabla2() {
     var tabla = document.getElementById('table-ticket-nuevo');
     // Eliminar todas las filas excepto la primera (encabezados)
@@ -1090,9 +1091,6 @@ function CancelarOperacion() {
             location.reload();
         }
     });
-
-
-  
 
 }
 

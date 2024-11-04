@@ -98,8 +98,11 @@ async function Descargarguia(Descripcion ,Origen, Destino, Folio, Total, Corrida
         const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
         const taquillero = localStorage.getItem('name');
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
-       
 
+        const jsonviaje = localStorage.getItem('datos_viaje')
+        const viaje = JSON.parse(jsonviaje)
+        const salida = viaje.departingOrigen
+        const llegada = viaje.departingDestino
         // Obtener la fecha actual
  
 
@@ -116,11 +119,13 @@ async function Descargarguia(Descripcion ,Origen, Destino, Folio, Total, Corrida
         form.getTextField('remitente').setText(Remitente);
         form.getTextField('destinatario').setText(Destinatario);
         form.getTextField('description').setText(Descripcion);
+        form.getTextField('salida').setText(salida);
+        form.getTextField('llegada').setText(llegada);
      
      
 
         // Hacer los campos de solo lectura
-        ['folio', 'origen', 'destino', 'corrida', 'sale', 'idticket','remitente', 'destinatario', 'description'].forEach(field => form.getTextField(field).enableReadOnly());
+        ['folio', 'origen', 'destino', 'corrida', 'sale', 'idticket','remitente', 'destinatario', 'description','salida', 'llegada'].forEach(field => form.getTextField(field).enableReadOnly());
 
         // Generar el código QR con el mensaje "hola"
         const qrCodeDataURL = await generateQRCode(IdGuia);
@@ -183,7 +188,26 @@ async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
         const taquillero = localStorage.getItem('name');
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
+        const jsonviaje = localStorage.getItem('datos_viaje')
+        const viaje = JSON.parse(jsonviaje)
 
+        const envioJSON = localStorage.getItem('REMIDES');
+
+        // Convertir el JSON a un objeto
+        const envio = JSON.parse(envioJSON);
+
+
+
+        // Obtener las variables del remitente
+        const nombreRemitente = envio.NombreRemitente;
+        const direccionRemitente = envio.DireccionRemitente;
+        const phoneRemitente = envio.PhoneRemitente;
+        const correoRemitente = envio.CorreoRemitente;
+
+        const nombreDestinatario = envio.NombreDestinatario
+        const phoneDestinatario = envio.PhoneDestinatario
+        const salida = viaje.departingOrigen
+        const llegada = viaje.departingDestino
         // Obtener la fecha actual
 
 
@@ -198,10 +222,16 @@ async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
         form.getTextField('total').setText(Total);
         form.getTextField('taquillero').setText(taquillero);
         form.getTextField('description').setText(Descripcion);
+        form.getTextField('nombreemisor').setText(nombreRemitente);
+        form.getTextField('telemisor').setText(phoneRemitente);
+        form.getTextField('nombrereceptor').setText(nombreDestinatario);
+        form.getTextField('telreceptor').setText(phoneDestinatario);
+        form.getTextField('fechasalida').setText(salida);
+        form.getTextField('fechallegada').setText(llegada);
 
 
         // Hacer los campos de solo lectura
-        ['folio', 'origen', 'destino', 'corrida', 'total', 'taquillero', 'description'].forEach(field => form.getTextField(field).enableReadOnly());
+        ['folio', 'origen', 'destino', 'corrida', 'total', 'taquillero', 'description', 'nombreemisor', 'telemisor', 'nombrereceptor', 'telreceptor', 'fechasalida', 'fechallegada' ].forEach(field => form.getTextField(field).enableReadOnly());
 
         // Generar el código QR con el mensaje "hola"
         const qrCodeDataURL = await generateQRCode(Folio);

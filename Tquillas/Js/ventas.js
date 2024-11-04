@@ -501,8 +501,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-
     function formatDateTime(inputDateTime) {
         var date = new Date(inputDateTime);
 
@@ -540,7 +538,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tabla.deleteRow(1);
         }
     }
-
 
 
 
