@@ -414,18 +414,13 @@ function contarInapam(id) {
             if (cant_inapam == 4) {
 
                 // eliminar de las opciones de tipo de pasajero
-
                 Swal.fire({
                     title: "¡Atención!",
                     text: `la cantidad de Inapam para este viaje ha llegado a su limite`,
                     icon: "warning"
                 });
-
-
                 document.getElementById('option-inapam').style.display = 'none'
             }
-
-
         })
         .catch(error => {
 
@@ -526,7 +521,6 @@ async function BuscarBoletoUno(ticket) {
         console.error('Hubo un error:', error);
     }
 }
-
 
 
 
@@ -984,6 +978,9 @@ function ProcederBoleto() {
 
                         document.getElementById('spanTexto').style.display = 'block'
                         document.getElementById('spanTexto').textContent = `el nuevo folio es: ${data} puedes descargar el boleto en el menu "Buscar Boleto"`
+
+
+                        Descargar(data)
                     })
                     .catch(error => {
                         alert(error)
@@ -1097,3 +1094,143 @@ function CancelarOperacion() {
 
 
 
+
+
+
+
+async function Descargar(ticket) {
+    try {
+       
+
+        // Obtener datos del boleto
+        const response = await fetch(`http://apitaquillassag.dyndns.org/Home/ConsultarBoletos?folio=${ticket}`);
+        const data = await response.json();
+        console.log("Datos del boleto:", data);
+
+        if (!data || data.length === 0) {
+            throw new Error("No se encontraron datos para el boleto");
+        }
+
+        const boleto = data[0]; // Usamos el primer elemento del array
+
+        // Cargar el PDF base
+        const url = '/Assets/formticketB.pdf';
+        const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
+        const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+
+        const taquillero = localStorage.getItem('name');
+        const fechaFormateada = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        console.log("Fecha formateada:", fechaFormateada);
+
+        // Rellenar el formulario
+        const form = pdfDoc.getForm();
+
+        // Establecer los valores de los campos de texto
+        form.getTextField('passenger_name').setText(boleto.PassengerName);
+        form.getTextField('origen').setText(boleto.Origin);
+        form.getTextField('ticket_id').setText(boleto.TicketId);
+        form.getTextField('seat').setText(boleto.SeatName);
+        form.getTextField('Destino').setText(boleto.Destination);
+        form.getTextField('departure_origen').setText(boleto.Salida);
+        form.getTextField('fecha').setText(`fecha venta: ${fechaFormateada}`);
+        form.getTextField('saleman_name').setText(`Taquiller@: ${taquillero}`);
+
+        form.getTextField('subtotal').setText(String(boleto.PayedPrice));
+        form.getTextField('departure_destino').setText(boleto.llegada);
+        form.getTextField('total').setText(String(boleto.SoldPrice));
+        form.getTextField('product').setText(boleto.product);
+
+
+        switch (boleto.PassengerType) {
+            case "ADULT":
+                await form.getTextField('passenger_type').setText("Adulto");
+                break;
+            case "OLDER_ADULT":
+                await form.getTextField('passenger_type').setText("Inapam");
+                break;
+            case "CHILD":
+                await form.getTextField('passenger_type').setText("Niño");
+                break;
+            case "STUDENT":
+                await form.getTextField('passenger_type').setText("Estudiante");
+                break;
+            default:
+                await form.getTextField('passenger_type').setText("??");
+                break;
+        }
+
+
+
+        // Hacer los campos de solo lectura
+        ['passenger_name', 'origen', 'ticket_id', 'seat', 'Destino', 'departure_origen', 'fecha',
+            'saleman_name', 'subtotal', 'departure_destino', 'total', 'product', 'passenger_type'].forEach(field => {
+                const textField = form.getTextField(field);
+                if (textField) {
+                    textField.enableReadOnly();
+                } else {
+                    console.warn(`Campo no encontrado: ${field}`);
+                }
+            });
+
+        // Generar y añadir el QR
+        console.log("Generando QR para:", ticket);
+        const qrImageBytes = await generateQRCode(ticket);
+        const qrImage = await pdfDoc.embedPng(qrImageBytes);
+
+        // Insertar el QR en el campo 'qr_af_image'
+        const qrField = form.getButton('qr_af_image');
+        if (qrField) {
+            qrField.setImage(qrImage);
+            console.log("QR añadido al campo 'qr_af_image'");
+        } else {
+            console.warn("Campo 'qr_af_image' no encontrado. Insertando QR en la página.");
+            const pages = pdfDoc.getPages();
+            const firstPage = pages[0];
+            firstPage.drawImage(qrImage, {
+                x: 50,
+                y: 50,
+                width: 100,
+                height: 100,
+            });
+        }
+
+        // Añadir marca de agua
+        const watermarkImageBytes = await fetch('/Assets/logoSag.png').then(res => res.arrayBuffer());
+        const watermarkImage = await pdfDoc.embedPng(watermarkImageBytes);
+        const pages = pdfDoc.getPages();
+        pages.forEach(page => {
+            const { width, height } = page.getSize();
+            page.drawImage(watermarkImage, {
+                x: (width - watermarkImage.width / 6) / 2,
+                y: (height - watermarkImage.height / 6) / 2,
+                width: watermarkImage.width / 6,
+                height: watermarkImage.height / 6,
+                opacity: 0.2,
+            });
+        });
+        console.log("Marca de agua añadida");
+
+        // Generar y descargar el PDF
+        const pdfBytes = await pdfDoc.save();
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const urlObject = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = urlObject;
+        link.download = `${ticket}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+      
+
+        // Abrir el PDF en una nueva pestaña
+        setTimeout(() => {
+            window.open(urlObject, '_blank');
+        }, 1000);
+
+    } catch (error) {
+        console.error("Error al descargar el PDF:", error);
+      
+    }
+}

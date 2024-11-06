@@ -48,7 +48,7 @@
             <td>${pageData[i].Departure}</td>
             <td>
                 <button class="btn btn-dark" id="btn-showlist"
-                    onclick="verlista('${pageData[i].Id}', '${pageData[i].Bus}', '${pageData[i].Corrida}', '${pageData[i].Departure}')">Ver Lista
+                    onclick="verlista('${pageData[i].Id}', '${pageData[i].Bus}', '${pageData[i].Corrida}', '${pageData[i].Departure}', '${pageData[i].origen_viaje}', '${pageData[i].Destino}')">Ver Lista
                 </button>
             </td>
         `;
@@ -192,7 +192,14 @@
         document.getElementById("main-total").style.fontSize = "11px";   // Tamaño en píxeles
         document.getElementById("main-total").style.fontWeight = "600";  
         const tabla = document.getElementById('allcontent');
-        
+
+
+        document.getElementById('spanOri').style.fontSize = "11px";
+        document.getElementById('spanOri').style.fontWeight = "600";
+        document.getElementById('spanDes').style.fontSize = "11px";
+        document.getElementById('spanDes').style.fontWeight = "600";
+
+
 
        
 
@@ -275,7 +282,7 @@ function ocultarColumna6() {
 
 
                 
-    function verlista(tripid, bus, corrida, departure) {
+    function verlista(tripid, bus, corrida, departure, orige, destino) {
 
 
         limpiarTabla()
@@ -373,6 +380,9 @@ function ocultarColumna6() {
                 document.getElementById('rutabname').textContent = corrida
                 document.getElementById('spantaquillas').textContent = officename
                 document.getElementById('spanfecha').textContent = departure
+
+                document.getElementById('spanOri').textContent = orige
+                document.getElementById('spanDes').textContent = destino
 
      
 

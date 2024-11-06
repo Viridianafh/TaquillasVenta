@@ -1255,11 +1255,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         icon: "info"
                     });
                 }
-
             } 
-
-
-            }
+        }
 
            
         else {
@@ -1270,12 +1267,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: "info"
             });
         }
-
-
-
-
     })
-
 
 
 
@@ -1298,9 +1290,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     })
-
-
-
 
 
     const btn_efectivo = document.getElementById("btn-efectivo")
@@ -2720,3 +2709,8 @@ input2.addEventListener('input', function () {
     convertirAMayusculas(this);
     validarEdad(this);
 })
+
+
+
+
+

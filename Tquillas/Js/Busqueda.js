@@ -71,7 +71,7 @@
                             <td>${data[i].seat_name}</td>
                             <td>${data[i].status}</td>
                             <td>
-                            <button class="btn btn-dark" id="btn-download" onclick="Descargar('${data[i].ticket_id}');"> <ion-icon name="download-outline"></ion-icon>Descargar</button>
+                            <button class="btn btn-dark" id="btn-download" onclick="Descargar('${data[i].ticket_id}', '${data[i].payment_provider}', '${data[i].date_created}');"> <ion-icon name="download-outline"></ion-icon>Descargar</button>
                              
                                   <td>
                             ${data[i].status !== 'USED' ? `
@@ -149,7 +149,7 @@ function generateQRCode(text) {
     });
 }
 
-async function Descargar(ticket) {
+async function Descargar(ticket, tipopago, date) {
     try {
         document.getElementById('btn-download').textContent = "Descargando...";
 
@@ -165,7 +165,7 @@ async function Descargar(ticket) {
         const boleto = data[0]; // Usamos el primer elemento del array
 
         // Cargar el PDF base
-        const url = '/Assets/formticket.pdf';
+        const url = '/Assets/formticketB.pdf';
         const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
@@ -183,8 +183,9 @@ async function Descargar(ticket) {
         form.getTextField('seat').setText(boleto.SeatName);
         form.getTextField('Destino').setText(boleto.Destination);
         form.getTextField('departure_origen').setText(boleto.Salida);
-        form.getTextField('fecha').setText(fechaFormateada);
-        form.getTextField('saleman_name').setText(taquillero);
+        form.getTextField('fecha').setText(`fecha venta: ${date}`);
+        form.getTextField('saleman_name').setText(tipopago == 'BOOTH' ? `Taquiller@: ${taquillero}` : `Mediante: ${tipopago}`);
+
         form.getTextField('subtotal').setText(String(boleto.PayedPrice));
         form.getTextField('departure_destino').setText(boleto.llegada);
         form.getTextField('total').setText(String(boleto.SoldPrice));

@@ -243,7 +243,22 @@
 
         var terminal = document.getElementById('select_terminal_cambiar').value
         var iduser = localStorage.getItem('id')
- 
+        const terminalname = document.getElementById("select_terminal_crear")
+        const selectedOption = terminalname.selectedOptions[0];
+        const terminal_name = selectedOption.textContent;
+
+        localStorage.setItem('terminal_name', terminal_name)
+
+        localforage.setItem('terminal_name', terminal_name).then(function () {
+            console.log('Terminal name guardado con éxito.');
+        }).catch(function (err) {
+            console.error('Error al guardar el terminal name:', err);
+        });
+
+
+        var terminal = document.getElementById('select_terminal_crear').value
+        var iduser = localStorage.getItem('id')
+        var office_location_id = localStorage.getItem('office_location_id')
 
         fetch(`http://apitaquillassag.dyndns.org/Home/CambiarConf?id_user=${iduser}&terminal=${terminal}`)
 
