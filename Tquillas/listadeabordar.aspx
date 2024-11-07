@@ -91,7 +91,7 @@
                 <img src="Assets/logoSag.png" alt="Alternate Text" style="width:120px;" />
                 
             </div>
-            <p id="main-fecha" class="m-3">fecha salida: <span id="spanfecha"></span></p>
+            <p id="main-fecha" class="m-3">Fecha salida: <span id="spanfecha"></span></p>
             <p id="main-fecha" class="m-3">Origen: <span id="spanOri"></span></p>
             <p id="main-fecha" class="m-3">Destino: <span id="spanDes"></span></p>
             <div class="d-flex align-items-center justify-content-center">

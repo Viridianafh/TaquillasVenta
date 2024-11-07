@@ -22,94 +22,96 @@
         <button class="btn btn-primary m-2" id="botonDescargar">Descargar</button>
     </div>
 
-    <div class="container" id="informe">
+    <div class="container" >
 
         <h2>Informe Cierre Caja <span id="usuario"></span></h2>
         <p><strong> <span id="dates"></span></strong> </p>
         <p><span id="shift_number"></span></p>
         <br>
 
+        <div class="container" id="content">
+        <h2>Informe Precorte de Caja <span id="usuario"></span></h2>
+        <p><strong> <span id="dates"></span></strong> </p>
+        <br>
+
         <div class="container">
-
-            <h4>Oficina: <span id="reporte-oficina"></span></h4>
-            <h4>Terminal: <span id="reporte-terminal"></span></h4>
-
-            <br />
+        
 
             <div class="container d-flex">
-
-                <div class="container">
-
-                    <p>Cantidad de boletos Vendido en Efectivo: <span id="reporte-total-efectivo"></span></p>
-                    <p>Cantidad de boletos Vendido en TC: <span id="reporte-total-tc"></span></p>
-                    <p>Cantidad de boletos Vendido en Monedero E.: <span id="reporte-total-me"></span></p>
-                    <p>Cantidad de boletos Vendido en Dep: <span id="reporte-total-DEP"></span></p>
-                    <p>Cancelaciones: <span id="reporte-cancelaciones"></span></p>
+                <div class="table-responsive">
+                    <table class="table table-hover" id="datatable">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Fecha De Venta</th>
+                                <th>Número De Venta</th>
+                                <th>Id Del Boleto</th>
+                                <th>Nombre De Pasajero</th>
+                                <th>Tipo De Pasajero</th>
+                                <th>Origen</th>
+                                <th>Destino</th>
+                                <th>Precio De Venta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Tu contenido aquí -->
+                        </tbody>
+                    </table>
                 </div>
-
-
-                <div class="container m-3">
-
-                    <p>Total Vendido en Taquilla: <span id="reporte-total-venta"></span></p>
-                    <p>La caja inicio con: <span id="reporte-total-iniciocaja"></span></p>
-                    <p>Se retiró : <span id="reporte-total-seretiro"></span></p>
-                    <p>Queda en Caja: <span id="queda-encaja"></span></p>
-                </div>
-
             </div>
-
-            <div class="container">
-                <table class="table table-hover" id="tbl-retiro">
-                    <thead>
-                        <tr>
-                            <th>Fecha Del Retiro:</th>
-                            <th>Hora Del Retiro:</th>
-                            <th>Se Retiro:</th>
-                            <th>Quedo en Caja:</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                      
-                    </tbody>
-                </table>
-
-            </div>
-
-
-
-            <div class="container" style="margin-top: 50px;">
-
-                <p>La taquillera entrega la cantidad de: $ <span id="reporte-total"></span></p>
-
-                <h4>Entrega: <span id="reporte-taquillero"></span><hr/></h4>
-                
-                <h4>Recibe:  <hr/></h4>
-            </div>
-
-
         </div>
 
-    </div>
+        <div id="informe">
+            <h5>Resumen Cierre</h5>
+            <br />
+            <h6>Taquillero: <span id="taquillero"></span></h6>
+            <h6>Turno: <span id="turno"></span></h6>
+            <h6>Oficina: <span id="oficina"></span></h6>
+            <h6>Terminal: <span id="terminal"></span></h6>
+            <br />
+            <h6>Cantidad cancelación: <span id="cant-cancel"></span></h6>
+            <h6>Cantidad paquetes: <span id="cant-package"></span></h6>
+            <h6>Cantidad venta: <span id="cant-sale"></span></h6>
+            <br />
+           
+            
+            <h6>Total efectivo: <span id="total-cash"></span></h6>
+            <h6>Total tarjeta: <span id="total-card"></span></h6>
+            <h6>Total cancelación: <span id="total-cancel"></span></h6>
+            <h6>Total venta: <span id="total-venta"></span></h6>
+            <h6>Total paquetes: <span id="total-pack"></span></h6>
+             <h6>El total es de: <span id="total-monto"></span></h6>
+        
+            <br />
+            <p>Entrega: <span id="reporte-taquillero"></span><hr /></p>
+            <p>Recibe: <hr /></p>
+        </div>
 
 
-    <script>
 
 
-        const opciones = {
-            margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
-            filename: 'listadeabordar.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: [100, 270], orientation: 'portrait' } // Dimensiones en mm
-        };
 
-        document.getElementById('botonDescargar').addEventListener('click', () => {
-            const contenidoDiv = document.getElementById('informe');
-            html2pdf(contenidoDiv, opciones);
-        });
+        <script>
+            const opciones = {
+                margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
+                filename: 'listadeabordar.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: [83, 297], orientation: 'portrait' } // 83 mm de ancho y altura indefinida
+            };
 
-    </script>
+            document.getElementById('botonDescargar').addEventListener('click', () => {
+                const contenidoDiv = document.getElementById('informe');
+
+                // Agregar clase temporal para forzar estilos
+                contenidoDiv.classList.add('pdf-download');
+
+                html2pdf().from(contenidoDiv).set(opciones).save().then(() => {
+                    // Eliminar la clase temporal después de descargar
+                    contenidoDiv.classList.remove('pdf-download');
+                });
+            });
+        </script>
 
 
 

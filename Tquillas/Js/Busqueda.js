@@ -161,8 +161,16 @@ async function Descargar(ticket, tipopago, date) {
         if (!data || data.length === 0) {
             throw new Error("No se encontraron datos para el boleto");
         }
-
         const boleto = data[0]; // Usamos el primer elemento del array
+
+        const taquilleroResponse = await fetch(`http://apitaquillassag.dyndns.org/Home/buscartaquilleroporticket?id=${boleto.TicketId}`);
+        if (!taquilleroResponse.ok) {
+            throw new Error('Error en la solicitud para obtener el nombre del taquillero');
+        }
+        const taquilleroData = await taquilleroResponse.json();
+        var nametaquillero = "";
+        taquilleroData.forEach(e => { nametaquillero = e.name.length == 0  ? "INTERNET" : e.name; });
+
 
         // Cargar el PDF base
         const url = '/Assets/formticketB.pdf';
@@ -170,9 +178,8 @@ async function Descargar(ticket, tipopago, date) {
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
         const taquillero = localStorage.getItem('name');
-        const fechaFormateada = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        console.log("Fecha formateada:", fechaFormateada);
-
+       
+       
         // Rellenar el formulario
         const form = pdfDoc.getForm();
 
@@ -182,13 +189,25 @@ async function Descargar(ticket, tipopago, date) {
         form.getTextField('ticket_id').setText(boleto.TicketId);
         form.getTextField('seat').setText(boleto.SeatName);
         form.getTextField('Destino').setText(boleto.Destination);
-        form.getTextField('departure_origen').setText(boleto.Salida);
-        form.getTextField('fecha').setText(`fecha venta: ${date}`);
-        form.getTextField('saleman_name').setText(tipopago == 'BOOTH' ? `Taquiller@: ${taquillero}` : `Mediante: ${tipopago}`);
+        form.getTextField('departure_origen').setText(formatearfecha(boleto.Salida));
+        form.getTextField('fecha').setText(`Fecha venta: ${date}`);
+        form.getTextField('saleman_name').setText(tipopago == 'BOOTH' ? `Vendido por: ${nametaquillero}` : `Mediante: ${tipopago}`);
 
         form.getTextField('subtotal').setText(String(boleto.PayedPrice));
-        form.getTextField('departure_destino').setText(boleto.llegada);
+        form.getTextField('departure_destino').setText(formatearfecha(boleto.llegada));
+
         form.getTextField('total').setText(String(boleto.SoldPrice));
+
+
+        const precioSinIVA = boleto.PayedPrice / (1 + 16 / 100);
+
+        // Calcular el IVA
+        const iva = boleto.PayedPrice - precioSinIVA;
+
+        
+
+
+        form.getTextField('IVA').setText(String(iva.toFixed(2)));
         form.getTextField('product').setText(boleto.product);
 
     
@@ -216,7 +235,7 @@ async function Descargar(ticket, tipopago, date) {
        
 
         // Hacer los campos de solo lectura
-        ['passenger_name', 'origen', 'ticket_id', 'seat', 'Destino', 'departure_origen', 'fecha',
+        ['passenger_name', 'origen', 'ticket_id', 'seat', 'Destino', 'departure_origen', 'fecha', 'IVA',
             'saleman_name', 'subtotal', 'departure_destino', 'total', 'product', 'passenger_type'].forEach(field => {
                 const textField = form.getTextField(field);
                 if (textField) {
@@ -406,6 +425,33 @@ function cancelarBoleto() {
 
     
 
+}
+
+
+function formatearfecha(fechain) {
+
+
+
+
+    let fecha = new Date(fechain);
+
+    // Extraemos el día, mes, año, horas, minutos y segundos
+    let dia = fecha.getDate();
+    let mes = fecha.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
+    let anio = fecha.getFullYear();
+    let horas = fecha.getHours();
+    let minutos = fecha.getMinutes();
+    let segundos = fecha.getSeconds();
+
+    // Formateamos los valores a dos dígitos (añadiendo ceros si es necesario)
+    dia = dia < 10 ? '0' + dia : dia;
+    mes = mes < 10 ? '0' + mes : mes;
+    horas = horas < 10 ? '0' + horas : horas;
+    minutos = minutos < 10 ? '0' + minutos : minutos;
+    segundos = segundos < 10 ? '0' + segundos : segundos;
+    let fechaFormateada = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+
+    return fechaFormateada
 }
 
  

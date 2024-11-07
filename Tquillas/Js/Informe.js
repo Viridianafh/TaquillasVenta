@@ -7,7 +7,7 @@ let lastCancelPrice = null;
 let lastCancelVenta// Variable para almacenar el precio del último CANCEL
 
 
-fetch(`https://localhost:5001/Home/detalleventapentaho?saleshift=${saleshift}`)
+fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${saleshift}`)
     .then(response => response.json())
     .then(data => {
 
@@ -20,15 +20,23 @@ fetch(`https://localhost:5001/Home/detalleventapentaho?saleshift=${saleshift}`)
         // Primero, sumar todas las ventas
         let totalVentas = 0;
         let totalCancelaciones = 0;
+  
+
         let totalPaquetes = 0;
+        var countcancel =0
+        var countventa =0
+        var countpackage =0
 
         data.forEach(e => {
             if (e.Tipo === "VENTA") {
                 totalVentas += e.PrecioDeVenta || 0;
+                countventa ++
             } else if (e.Tipo === "CANCEL") {
                 totalCancelaciones += e.PrecioDeVenta || 0;
+                countcancel ++
             } else if (e.Tipo === "PAQUETE") {
                 totalPaquetes += e.PrecioDeVenta || 0;
+                countpackage ++
             }
         });
 
@@ -59,26 +67,62 @@ fetch(`https://localhost:5001/Home/detalleventapentaho?saleshift=${saleshift}`)
          
         });
 
+        fetch(`https://localhost:5001/Home/sumaventa?sale_id=${saleshift}`)
+            .then(res => res.json())  // Esperar la respuesta en formato JSON
+            .then(data => {
+                // Procesar los datos obtenidos
+                console.log(data);
+
+                // Asignar los valores de las variables a partir de los datos obtenidos
+                let totalcard = parseFloat(data.venta_tarjeta) || 0;  // Convertir a float, si no es un número, asignar 0
+                let totalcash = parseFloat(data.venta_efectivo) || 0;  // Convertir a float, si no es un número, asignar 0
+
+                // Calcular el total final
+                let totalFinal = totalcash + totalcard;// Si es necesario, suma el total
+
+                // Actualizar el DOM con los nuevos valores
+                document.getElementById('total-monto').textContent = totalFinal;
+                document.getElementById('total-cash').textContent = totalcash;
+                document.getElementById('total-card').textContent = totalcard;
+                document.getElementById('total-pack').textContent = totalPaquetes;
+                
+
+                document.getElementById("taquillero").textContent = localStorage.getItem('name');
+                document.getElementById("turno").textContent = localStorage.getItem('shift_number')
+                document.getElementById("oficina").textContent = localStorage.getItem('office_name')
+                document.getElementById("terminal").textContent = localStorage.getItem('terminal_name')
+                document.getElementById("cant-cancel").textContent = countcancel
+                document.getElementById("cant-package").textContent = countpackage
+                document.getElementById("cant-sale").textContent = countventa
+                document.getElementById("total-cancel").textContent = totalCancelaciones
+                document.getElementById("total-venta").textContent = totalVentas
+
+                document.getElementById("reporte-taquillero").textContent = localStorage.getItem('name')
+
+                // Configurar las opciones para generar el PDF
+
+                setTimeout(() => {
+                    const opciones = {
+                        margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
+                        filename: 'detalle.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'mm', format: [100, 270], orientation: 'portrait' } // Dimensiones en mm
+                    };
+
+                    // Generar el PDF después de cargar todos los datos
+                    const contenidoDiv = document.getElementById('informe');
+                    html2pdf(contenidoDiv, opciones);
+
+
+                }, 6000)
+            })
+            .catch(error => {
+                console.error('Error al obtener los datos:', error);
+            });
+
         // Mostrar el total en el elemento con id 'reporte-total'
-        document.getElementById('total-monto').textContent = totalFinal
-
-        // Configurar las opciones para generar el PDF
-
-        setTimeout(() => {
-            const opciones = {
-                margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
-                filename: 'detalle.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: [100, 270], orientation: 'portrait' } // Dimensiones en mm
-            };
-
-            // Generar el PDF después de cargar todos los datos
-            const contenidoDiv = document.getElementById('informe');
-            html2pdf(contenidoDiv, opcionesPDF);
-
-
-        }, 3000)
+      
    
     })
     .catch(error => {

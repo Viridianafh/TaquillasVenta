@@ -93,6 +93,11 @@ function generateQRCode(text) {
 }
 async function Descargarguia(Descripcion ,Origen, Destino, Folio, Total, Corrida, IdGuia, IdSale, Remitente, Destinatario) {
     try {
+
+
+       
+        // Creamos la fecha en el nuevo formato dd/mm/yyyy h:mm:ss
+     
         // Descargar el formulario PDF
         const url = '/Assets/etiqueta.pdf';
         const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
@@ -104,8 +109,11 @@ async function Descargarguia(Descripcion ,Origen, Destino, Folio, Total, Corrida
         const salida = viaje.departingOrigen
         const llegada = viaje.departingDestino
         // Obtener la fecha actual
- 
 
+
+
+
+        
         // Obtener el formulario del PDF
         const form = pdfDoc.getForm();
 
@@ -114,18 +122,18 @@ async function Descargarguia(Descripcion ,Origen, Destino, Folio, Total, Corrida
         form.getTextField('origen').setText(Origen);
         form.getTextField('destino').setText(Destino);
         form.getTextField('corrida').setText(Corrida);
-        form.getTextField('sale').setText(IdSale);
+       
         form.getTextField('idticket').setText(IdGuia);
         form.getTextField('remitente').setText(Remitente);
         form.getTextField('destinatario').setText(Destinatario);
         form.getTextField('description').setText(Descripcion);
-        form.getTextField('salida').setText(salida);
-        form.getTextField('llegada').setText(llegada);
+        form.getTextField('salida').setText(formatearfecha(salida));
+        form.getTextField('llegada').setText(formatearfecha(llegada));
      
      
 
         // Hacer los campos de solo lectura
-        ['folio', 'origen', 'destino', 'corrida', 'sale', 'idticket','remitente', 'destinatario', 'description','salida', 'llegada'].forEach(field => form.getTextField(field).enableReadOnly());
+        ['folio', 'origen', 'destino', 'corrida','idticket','remitente', 'destinatario', 'description','salida', 'llegada'].forEach(field => form.getTextField(field).enableReadOnly());
 
         // Generar el código QR con el mensaje "hola"
         const qrCodeDataURL = await generateQRCode(IdGuia);
@@ -180,6 +188,34 @@ async function Descargarguia(Descripcion ,Origen, Destino, Folio, Total, Corrida
 
 
 
+
+
+function formatearfecha(fechain) {
+
+
+
+
+    let fecha = new Date(fechain);
+
+    // Extraemos el día, mes, año, horas, minutos y segundos
+    let dia = fecha.getDate();
+    let mes = fecha.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
+    let anio = fecha.getFullYear();
+    let horas = fecha.getHours();
+    let minutos = fecha.getMinutes();
+    let segundos = fecha.getSeconds();
+
+    // Formateamos los valores a dos dígitos (añadiendo ceros si es necesario)
+    dia = dia < 10 ? '0' + dia : dia;
+    mes = mes < 10 ? '0' + mes : mes;
+    horas = horas < 10 ? '0' + horas : horas;
+    minutos = minutos < 10 ? '0' + minutos : minutos;
+    segundos = segundos < 10 ? '0' + segundos : segundos;
+    let fechaFormateada = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+
+    return fechaFormateada
+}
+
 async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
     try {
         // Descargar el formulario PDF
@@ -219,18 +255,24 @@ async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
         form.getTextField('origen').setText(Origen);
         form.getTextField('destino').setText(Destino);
         form.getTextField('corrida').setText(Corrida);
-        form.getTextField('total').setText(Total);
         form.getTextField('taquillero').setText(taquillero);
         form.getTextField('description').setText(Descripcion);
         form.getTextField('nombreemisor').setText(nombreRemitente);
         form.getTextField('telemisor').setText(phoneRemitente);
         form.getTextField('nombrereceptor').setText(nombreDestinatario);
         form.getTextField('telreceptor').setText(phoneDestinatario);
-        form.getTextField('fechasalida').setText(salida);
-        form.getTextField('fechallegada').setText(llegada);
+        form.getTextField('fechasalida').setText(formatearfecha(salida));
+        form.getTextField('fechallegada').setText(formatearfecha(llegada));
 
+        form.getTextField('fechallegada').setText(formatearfecha(llegada));
 
-        // Hacer los campos de solo lectura
+        const precioSinIVA = Total / (1 + 16 / 100);
+
+        // Calcular el IVA
+        const iva = Total - precioSinIVA;
+
+        form.getTextField('total').setText(iva.toFixed(2));
+        // Hacer los campos de solo lectur
         ['folio', 'origen', 'destino', 'corrida', 'total', 'taquillero', 'description', 'nombreemisor', 'telemisor', 'nombrereceptor', 'telreceptor', 'fechasalida', 'fechallegada' ].forEach(field => form.getTextField(field).enableReadOnly());
 
         // Generar el código QR con el mensaje "hola"

@@ -27,7 +27,7 @@ button_login.addEventListener('click', () => {
 
  //Mediante la toma de desicion establece el tipo de alertas que va a recibir el usuario en dado caso que no coincida con la contraseña correcta  
 
-            if (data === "error al cambiar el log") {
+            if (data === "invalid_password") {
                 Swal.fire({
                     title: 'Error al iniciar sesion!',
                     text: `Usuario/Contraseña incorrectos`,
@@ -54,6 +54,16 @@ button_login.addEventListener('click', () => {
                     icon: 'error',
                     confirmButtonText: 'OK'
                 })
+            }
+                else if (data === 'INVALID_CREDENTIALS') {
+
+
+                    Swal.fire({
+                        title: 'Error al iniciar sesion!',
+                        text: `Usuario/Contraseña incorrectos`,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    })
 
 
 
@@ -129,7 +139,7 @@ button_login.addEventListener('click', () => {
 
             Swal.fire({
                 title: 'Error al iniciar sesion!',
-                text: `Ocurrio un error: (mensaje de error: ${error})`,
+                text: `Ocurrio un error: (Usuario no Encontrado)`,
                 icon: 'error',
                 confirmButtonText: 'OK'
             })

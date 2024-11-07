@@ -241,9 +241,8 @@
 
     btncambiar.addEventListener('click', () => {
 
-        var terminal = document.getElementById('select_terminal_cambiar').value
-        var iduser = localStorage.getItem('id')
-        const terminalname = document.getElementById("select_terminal_crear")
+
+        const terminalname = document.getElementById("select_terminal_cambiar")
         const selectedOption = terminalname.selectedOptions[0];
         const terminal_name = selectedOption.textContent;
 
@@ -260,27 +259,14 @@
         var iduser = localStorage.getItem('id')
         var office_location_id = localStorage.getItem('office_location_id')
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/CambiarConf?id_user=${iduser}&terminal=${terminal}`)
 
-            .then(response => {
-                response.text()
+        fetch(`http://apitaquillassag.dyndns.org/Home/Asignar_terminal?user_id=${iduser}&termina_lid=${terminal}&office_id=${office_location_id}`)
 
-            })
+            .then(response => response.json())
             .then(data => {
 
-                alert("cambios realizados con exito")
-
-                const terminalname = document.getElementById("select_terminal_cambiar")
-                const selectedOption = terminalname.selectedOptions[0];
-                const terminal_name = selectedOption.textContent;
-
-                var select_office_crear = document.getElementById('select_oficina_crear')
-
-                var officeselected = select_office_crear.value
-
-                localStorage.setItem('terminal_name', terminal_name)
-                localStorage.setItem('terminal_id', terminal)
-                localforage.setItem('terminal_id', terminal).then(function () {
+                localStorage.setItem('terminal_id', data.terminal_id)
+                localforage.setItem('terminal_id', data.terminal_id).then(function () {
                     console.log('Terminal ID guardado con éxito.');
                 }).catch(function (err) {
                     console.error('Error al guardar el terminalid:', err);
@@ -290,7 +276,20 @@
                 var miElemento = document.getElementById('Terminals');
                 miElemento.textContent = mi_terminal;
 
-                fetch(`http://apitaquillassag.dyndns.org/Home/actualizarOFl?officelocationId=${officeselected}&ticketuserid=${iduser}`, {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "succes",
+                    title: "Terminal Cambiada Correctamente",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                var buttonCrear = document.getElementById('btncreate')
+                buttonCrear.disabled = true
+                var miSelect = document.getElementById('select_terminal_crear');
+                miSelect.disabled = true;
+                console.log(data)
+
+                fetch(`http://apitaquillassag.dyndns.org/Home/actualizarOFl?officelocationId=${office_location_id}&ticketuserid=${iduser}`, {
                     method: 'PATCH',
                     headers: {
                         'Accept': 'text/plain'
@@ -305,18 +304,8 @@
                     .then(text => console.log(text))
                     .catch(error => console.error('Fetch Error:', error));
 
+
             })
-            .catch(error => {
-
-                Swal.fire({
-                    title: "Error!",
-                    text: `Error inesperado: ${error}`,
-                    icon: "error",
-                    confirmButtonText: 'OK'
-                });
-            })
-
-
     })
 
 

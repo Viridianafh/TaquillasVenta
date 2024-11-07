@@ -672,6 +672,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (countnino === 0) {
             console.log('No hay más niños para restar');
+            document.getElementById('btn-siguiente1').disabled = false
 
         }
     });
@@ -757,6 +758,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (countinapam === 0) {
             console.log('No hay más pasajeros INAPAM para restar');
+            document.getElementById('btn-siguiente1').disabled = false
         }
     });
 
@@ -999,21 +1001,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         var grupos = document.querySelectorAll('div[id^="content-count-"]');
-        var alMenosUnDivConInputRellenado = false;
+        var todosLosInputsRellenados = true;  // Variable para verificar si todos los inputs están rellenados
 
         grupos.forEach(function (grupo) {
             var inputs = grupo.querySelectorAll('input');
             if (inputs.length > 0) {
                 inputs.forEach(function (input) {
-                    if (input.value.trim() !== '') {
-                        alMenosUnDivConInputRellenado = true;
+                    // Si algún input está vacío, marcar como no todos están rellenados
+                    if (input.value.trim() === '') {
+                        todosLosInputsRellenados = false;
                     }
                 });
             }
         });
 
 
-        if (alMenosUnDivConInputRellenado) {
+
+        if (todosLosInputsRellenados) {
 
             if (document.getElementById("telefonocliente").value == "") {
 
@@ -1369,234 +1373,159 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    //const btnpagar_tarjeta = document.getElementById('btnpagar-efectivo')
-
-    //btnpagar_tarjeta.addEventListener('click', () => {
-    //    var datosViajeString = localStorage.getItem("datos_viaje");
-    //    var datosViajeObj = JSON.parse(datosViajeString);
-    //    var tipo = datosViajeObj.tipo;
-    //    var id = datosViajeObj.id
-    //    var table = document.getElementById("tablaefectivoresume");
-    //    var header = [];
-    //    var rows = [];
-    //    var ticketuserid = localStorage.getItem('id')
-    //    var saleshiftid = localStorage.getItem('saleshift')
-    //    var officelocationid = localStorage.getItem('office_location_id')
-    //    var terminalid = localStorage.getItem('terminal_id')
-
-    //    // Convertir a número y redondear a 2 decimales
-    //    var monto_recibido = parseFloat(document.getElementById("txtmonto").value);
-    //    var totalapagar = parseFloat(localStorage.getItem("Total_compra"));
-
-    //    // Redondear a 2 decimales para la comparación
-    //    monto_recibido = Math.round(monto_recibido * 100) / 100;
-    //    totalapagar = Math.round(totalapagar * 100) / 100;
-
-    //    var userid = localStorage.getItem('id')
-
-    //    if (parseFloat(monto_recibido) < parseFloat(totalapagar)) {
-    //        Swal.fire({
-    //            title: "Mensaje",
-    //            text: `El monto recibido debe ser mayor o igual al total a pagar`,
-    //            icon: "info"
-    //        });
-    //    } else {
-
-    //        var shiftnumber = localStorage.getItem('shift_number')
-
-    //        var num_ventas = localStorage.getItem('num_ventas')
-
-    //        var numero = parseInt(num_ventas)
-
-    //        numero = numero + 1
-
-
-
-
-    //        localStorage.setItem('num_ventas', numero.toString())
-
-    //        for (var i = 0; i < table.rows[0].cells.length; i++) {
-    //            header.push(table.rows[0].cells[i].innerHTML);
-    //        }
-
-    //        for (var i = 1; i < table.rows.length; i++) {
-    //            var row = {};
-    //            for (var j = 0; j < table.rows[i].cells.length; j++) {
-    //                row[header[j]] = table.rows[i].cells[j].innerHTML;
-    //            }
-    //            rows.push(row);
-    //        }
-
-
-
-
-
-
-    //        //     var res = monto_recibido - totalapagar
-
-
-
-
-
-    //        const json = JSON.stringify(rows);
-
-
-    //        const jsonObj = JSON.parse(json);
-
-
-    //        const nuevoJson = jsonObj.map(item => {
-    //            let tipo = "";
-
-    //            if (item.Tipo == "Adulto") {
-    //                tipo = "ADULT";
-    //            } else if (item.Tipo == "Niño") {
-    //                tipo = "CHILD";
-    //            } else if (item.Tipo == "Adulto mayor") {
-    //                tipo = "OLDER_ADULT";
-    //                console.log("Seleccionaste la opción 3");
-    //            } else if (item.Tipo == "Estudiante") {
-    //                tipo = "STUDENT";
-    //            } else {
-    //                console.log("Opción no válida");
-    //            }
-
-    //            return {
-    //                "Name": item.nombre,
-    //                "Origin": item.Origen,
-    //                "Destination": item.Destino,
-    //                "Bus": item.Bus,
-    //                "PassengerName": item.Pasajero,
-    //                "PassengerType": tipo,
-    //                "SeatName": item.Asiento,
-    //                "SoldPrice": parseFloat(item.costo),
-    //                "PayedPrice": parseFloat(item.costo),
-    //                "OriginalPrice": parseFloat(item.costo),
-    //                "Trip_ID": id,
-    //                "UserId": userid
-    //            };
-    //        });
-
-
-    //        const nuevoJsonString = JSON.stringify(nuevoJson, null, 2);
-
-    //        var shift_number_to_is = shiftnumber + "-" + numero
-    //        alert(shift_number_to_is)
-
-
-
-
-
-    //        var lista_ventas = localStorage.getItem("array_ventas")
-
-    //        var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
-
-    //        // Añadir el nuevo valor al array
-    //        lista_ventasstr.push(shift_number_to_is);
-
-    //        // Convertir la lista actualizada a cadena y almacenarla en localStorage
-    //        localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
-
-
-
-
-    //        const InternetSale =
-    //        {
-    //            "totalAmount": parseFloat(totalapagar),
-    //            "changeAmount": tipo != "ADULT" ? (parseFloat(totalapagar) - parseFloat(precio_base)) : 0.00,
-
-    //            "PaymentType": "card",
-    //            "payedAmount": parseFloat(precio_base),
-    //            "salesTerminalId": terminalidd,
-    //            "salesmanId": ticketuserid,
-    //            "salesShiftId": localStorage.getItem('saleshift_id'),
-    //            "saleNumber": shift_number_to_is,
-    //            "short_id": generarID(),
-    //            "tripseatlist": nuevoJson,
-    //            "Email": localStorage.getItem('correocliente')
-    //        }
-
-
-    //        console.log(InternetSale)
-
-
-
-
-
-    //        fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
-    //            method: 'POST',
-    //            headers: {
-    //                "Content-Type": "application/json"
-    //            },
-    //            body: JSON.stringify(InternetSale)
-    //        })
-    //            .then(response => response.text())
-    //            .then(data => {
-
-    //                console.log(data)
-
-    //                if (data.length == 8) {
-
-    //                    var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
-    //                    localStorage.setItem('folio', data)
-
-    //                    if (elementoEnLocalStorage != "") {
-    //                        console.log('El elemento existe en local storage:', elementoEnLocalStorage);
-
-    //                        var ventatotal = parseFloat(elementoEnLocalStorage);
-
-
-
-    //                        ventatotal = ventatotal + parseFloat(totalapagar);
-
-
-
-    //                        localStorage.setItem('venta_reciente', ventatotal.toString());
-
-    //                    } else {
-    //                        console.log('El elemento no existe en local storage');
-
-    //                        localStorage.setItem('venta_reciente', totalapagar.toString());
-    //                    }
-
-
-
-    //                    var currentsale = actualizarCurrentSale();
-
-
-
-
-    //                } else {
-
-
-    //                    Swal.fire({
-    //                        title: "Ocurrio Un error !",
-    //                        text: `No se Pudo capturar Exitosamente el pago`,
-    //                        icon: "error"
-    //                    });
-
-    //                }
-
-
-
-
-    //            }).catch(error => {
-
-
-    //                Swal.fire({
-    //                    title: "Ocurrio Un error !",
-    //                    text: `No se Pudo capturar Exitosamente el pago`,
-    //                    icon: "error"
-    //                });
-
-    //            })
-
-
-    //    }
-
-
-
-
-    //})
+    const btnpagar_tarjeta = document.getElementById('btn-pagar-tarjeta')
+    
+    btnpagar_tarjeta.addEventListener('click', () => {
+        btnpagar_tarjeta.disabled = true
+
+        var datosViajeString = localStorage.getItem("datos_viaje");
+        var datosViajeObj = JSON.parse(datosViajeString);
+        var tipo = datosViajeObj.tipo;
+        var id = datosViajeObj.id;
+        var originalprice = datosViajeObj.precio;
+        var table = document.getElementById("tablacardresume");
+        var header = [];
+        var rows = [];
+        var ticketuserid = localStorage.getItem('id');
+        var saleshiftid = localStorage.getItem('saleshift');
+        var officelocationid = localStorage.getItem('office_location_id');
+        var terminalid = localStorage.getItem('terminal_id');
+
+        // Convertir a número y redondear a 2 decimales
+
+        var totalapagar = parseFloat(document.getElementById("spantotalcard").textContent);
+
+        // Redondear a 2 decimales para la comparación
+  
+        totalapagar = Math.round(totalapagar * 100) / 100;
+
+        var userid = localStorage.getItem('id');
+
+        
+            var shiftnumber = localStorage.getItem('shift_number');
+            var num_ventas = localStorage.getItem('num_ventas');
+            var numero = parseInt(num_ventas) + 1;
+
+            localStorage.setItem('num_ventas', numero.toString());
+
+            for (var i = 0; i < table.rows[0].cells.length; i++) {
+                header.push(table.rows[0].cells[i].innerHTML);
+            }
+
+            for (var i = 1; i < table.rows.length; i++) {
+                var row = {};
+                for (var j = 0; j < table.rows[i].cells.length; j++) {
+                    row[header[j]] = table.rows[i].cells[j].innerHTML;
+                }
+                rows.push(row);
+            }
+
+           
+            const json = JSON.stringify(rows);
+            const jsonObj = JSON.parse(json);
+
+
+
+            const nuevoJson = jsonObj.map(item => {
+                let tipo = "";
+
+                if (item.Tipo == "Adulto") {
+                    tipo = "ADULT";
+                } else if (item.Tipo == "Niño") {
+                    tipo = "CHILD";
+                } else if (item.Tipo == "Adulto mayor") {
+                    tipo = "OLDER_ADULT";
+                } else if (item.Tipo == "Estudiante") {
+                    tipo = "STUDENT";
+                }
+
+                return {
+                    "Name": item.nombre,
+                    "Origin": item.Origen,
+                    "Destination": item.Destino,
+                    "Bus": item.Bus,
+                    "PassengerName": item.Pasajero,
+                    "PassengerType": tipo,
+                    "SeatName": item.Asiento,
+                    "SoldPrice": parseFloat(totalapagar),
+                    "PayedPrice": 0.0,
+                    "OriginalPrice": parseFloat(originalprice),
+                    "Trip_ID": id,
+                    "UserId": userid
+                };
+            });
+
+        const nuevoJsonString = JSON.stringify(nuevoJson, null, 2);
+
+        console.log(nuevoJsonString)
+            var shift_number_to_is = shiftnumber + "-" + numero;
+            var lista_ventas = localStorage.getItem("array_ventas");
+            var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
+
+            // Añadir el nuevo valor al array
+            lista_ventasstr.push(shift_number_to_is);
+            localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
+         
+            const InternetSale = {
+                "totalAmount": parseFloat(totalapagar),
+                "changeAmount": 0,
+                "PaymentType": "card",
+                "payedAmount": parseFloat(totalapagar),
+                "salesTerminalId": terminalid,
+                "salesmanId": ticketuserid,
+                "salesShiftId": localStorage.getItem('saleshift_id'),
+                "saleNumber": shift_number_to_is,
+                "tripseatlist": nuevoJson,
+                "Email": localStorage.getItem('correocliente')
+            };
+
+
+            console.log(JSON.stringify(InternetSale))
+
+            alert("OK")
+
+            fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(InternetSale)
+            })
+                .then(response => response.text())
+                .then(data => {
+                    if (data.length == 8) {
+                        localStorage.setItem('folio', data);
+                      
+                        var currentsale = actualizarCurrentSale();
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: `Ocurrió un error`,
+                            icon: "error"
+                        });
+                    }
+                })
+                .catch(error => {
+
+                    var num_ventas = localStorage.getItem('num_ventas');
+                    var numero = parseInt(num_ventas);
+
+                    numero = numero - 1;
+                    localStorage.setItem('num_ventas', numero.toString());
+
+                    Swal.fire({
+                        title: "No se Pudo realizar el pago!",
+                        text: `mensaje de error ${error}`,
+                        icon: "error"
+                    });
+                })
+                .finally(() => {
+                    // Habilitar el botón nuevamente al finalizar la operación
+                    btnpagar_efectivo.disabled = false;
+                });
+        
+
+    })
 
 
 
@@ -1777,66 +1706,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-        //    const btn_tarjeta = document.getElementById('btn-tarjeta')
-        //    btn_tarjeta.addEventListener('click', () => {
+            const btn_tarjeta = document.getElementById('btn-tarjeta')
+            btn_tarjeta.addEventListener('click', () => {
 
 
 
-        //        document.getElementById("pago-tarjeta").style.display = 'block'
-        //        document.getElementById("section-tipo-pago").style.display = "none"
-
-        //        const datosviaje = localStorage.getItem("datos_viaje")
-        //        const datosInternetsale = localStorage.getItem("datosInternetsale")
-
-        //        var tbodyrsumeefectiivo = document.getElementById("tbl-card-resume");
-
-        //        var datais = localStorage.getItem("datosInternetsale")
-        //        datais = JSON.parse(datais)
-
-        //        var dataviaje = localStorage.getItem("datos_viaje");
-        //        var datosCombinados = JSON.parse(dataviaje);
-
-        //        for (var i = 0; i < datais.length; i++) {
+                document.getElementById("pago-tarjeta").style.display = 'block'
+                document.getElementById("section-tipo-pago").style.display = "none"
 
 
-        //            var tr = document.createElement("tr");
-        //            var tipo = datais[i].tipo
-        //            var type = datais[i].tipo
-        //            if (tipo.includes("adulto")) {
-        //                tipo = "Adulto"
-        //            } else if (tipo.includes("nino")) {
-        //                tipo = "Niño"
+                const datosviaje = localStorage.getItem("datos_viaje")
+                const datosInternetsale = localStorage.getItem("datosInternetsale")
 
-        //            } else if (tipo.includes("inapam")) {
-        //                tipo = "Adulto mayor"
+                var tbodyrsumeefectiivo = document.getElementById("tablacardresume");
 
-        //            } else if (tipo.includes("estudiante")) {
-        //                tipo = "Estudiante"
+                var datais = localStorage.getItem("datosInternetsale")
+                datais = JSON.parse(datais)
 
-        //            }
+                var dataviaje = localStorage.getItem("datos_viaje");
+                var datosCombinados = JSON.parse(dataviaje);
 
-        //            tr.innerHTML = `
-
-        //                          <td>${datosCombinados.origen}</td>
-        //                          <td>${datosCombinados.destino}</td>
-        //                          <td>${datosCombinados.departingOrigen}
-        //                          <td>${datosCombinados.bus}</td> 
-        //                          <td>${datais[i].pasajero}</td>
-        //                          <td>${tipo}</td>
-        //                          <td>${datais[i].asiento}</td>
-        //                          <td>${datais[i].precio}</td>
-                         
-        //                        `;
-
-        //            tbodyrsumeefectiivo.appendChild(tr);
+                for (var i = 0; i < datais.length; i++) {
 
 
-        //            var totalapagar = localStorage.getItem("Total_compra")
+                    var tr = document.createElement("tr");
+                    var tipo = datais[i].tipo
+                    var type = datais[i].tipo
+                    if (tipo.includes("adulto")) {
+                        tipo = "Adulto"
+                    } else if (tipo.includes("nino")) {
+                        tipo = "Niño"
 
-        //            document.getElementById("spantotalcard").innerHTML = totalapagar
-        //        }
+                    } else if (tipo.includes("inapam")) {
+                        tipo = "Adulto mayor"
 
-        //    })
+                    } else if (tipo.includes("estudiante")) {
+                        tipo = "Estudiante"
+
+                    }
+
+                    tr.innerHTML = `
+
+                                  <td>${datosCombinados.origen}</td>
+                                  <td>${datosCombinados.destino}</td>
+                                  <td>${datosCombinados.departingOrigen}
+                                  <td>${datosCombinados.bus}</td> 
+                                  <td>${datais[i].pasajero}</td>
+                                  <td>${tipo}</td>
+                                  <td>${datais[i].asiento}</td>
+                                  <td>${datais[i].precio}</td>
+                       
+                                `;
+
+                    tbodyrsumeefectiivo.appendChild(tr);
+
+
+                    var totalapagar = localStorage.getItem("Total_compra")
+
+                    document.getElementById("spantotalcard").innerHTML = totalapagar
+                }
+
+            })
 
 
 })
@@ -2601,6 +2531,7 @@ function validarEdadestudiante(input, labelspan) {
     if (!curpRegex.test(curp)) {
         labelspan.textContent = "CURP Inválido: formato incorrecto";
         labelspan.style.color = "red";
+        document.getElementById('btn-siguiente1').disabled = true
         return;
     }
 
@@ -2621,6 +2552,7 @@ function validarEdadestudiante(input, labelspan) {
     if (isNaN(fechaNacimiento.getTime()) || fechaNacimiento > new Date()) {
         labelspan.textContent = "CURP Inválido: fecha de nacimiento incorrecta";
         labelspan.style.color = "red";
+        document.getElementById('btn-siguiente1').disabled = true
         return;
     }
 
@@ -2636,9 +2568,11 @@ function validarEdadestudiante(input, labelspan) {
     if (edad >= 0 && edad <= 120) {
         labelspan.textContent = edad < 5 ? "CURP Válido (Menor de edad)" : "CURP inválido (excede la edad de 5 años)";
         labelspan.style.color = edad < 5 ? "green" : "red";
+        document.getElementById('btn-siguiente1').disabled = false
     } else {
         labelspan.textContent = "CURP Inválido: edad fuera de rango";
         labelspan.style.color = "red";
+        document.getElementById('btn-siguiente1').disabled = true
     }
 }
 
@@ -2651,6 +2585,7 @@ function validarEdadadulta(input, labelspan) {
     if (!curpRegex.test(curp)) {
         labelspan.textContent = "CURP Inválido: formato incorrecto";
         labelspan.style.color = "red";
+        document.getElementById('btn-siguiente1').disabled = true
         return;
     }
 
@@ -2671,6 +2606,7 @@ function validarEdadadulta(input, labelspan) {
     if (isNaN(fechaNacimiento.getTime()) || fechaNacimiento > new Date()) {
         labelspan.textContent = "CURP Inválido: fecha de nacimiento incorrecta";
         labelspan.style.color = "red";
+        document.getElementById('btn-siguiente1').disabled = true
         return;
     }
 
@@ -2686,6 +2622,7 @@ function validarEdadadulta(input, labelspan) {
     if (edad >= 0 && edad <= 120) {
         labelspan.textContent = edad >= 60 ? "CURP Válido (adulto mayor) " : "CURP inválido (no para inapam)";
         labelspan.style.color = edad >= 60 ? "green" : "red";
+        document.getElementById('btn-siguiente1').disabled = false
     } else {
         labelspan.textContent = "CURP Inválido: edad fuera de rango";
         labelspan.style.color = "red";

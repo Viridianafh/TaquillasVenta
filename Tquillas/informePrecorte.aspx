@@ -101,8 +101,7 @@
         <br>
 
         <div class="container">
-            <h4>Oficina: <span id="reporte-oficina"></span></h4>
-            <h4>Terminal: <span id="reporte-terminal"></span></h4>
+          
             <br />
 
             <div class="container d-flex">
@@ -130,18 +129,27 @@
         </div>
 
         <div id="informe">
-            <h5>RESUMEN PRECORTE</h5>
+            <h5>Resumen Precorte</h5>
             <br />
             <h6>Taquillero: <span id="taquillero"></span></h6>
             <h6>Turno: <span id="turno"></span></h6>
             <h6>Oficina: <span id="oficina"></span></h6>
             <h6>Terminal: <span id="terminal"></span></h6>
+            <br />
+            
             <h6>Cantidad cancelación: <span id="cant-cancel"></span></h6>
             <h6>Cantidad paquetes: <span id="cant-package"></span></h6>
             <h6>Cantidad venta: <span id="cant-sale"></span></h6>
+            <br />
+            
+            <h6>Total efectivo: <span id="total-cash"></span></h6>
+            <h6>Total tarjeta: <span id="total-card"></span></h6>
             <h6>Total cancelación: <span id="total-cancel"></span></h6>
             <h6>Total venta: <span id="total-venta"></span></h6>
+            <h6>Total paquetes: <span id="total-pack"></span></h6>
             <h6>El total es de: <span id="total-monto"></span></h6>
+        
+            <br />
             <p>Entrega: <span id="reporte-taquillero"></span><hr /></p>
             <p>Recibe: <hr /></p>
         </div>

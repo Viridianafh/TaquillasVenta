@@ -56,6 +56,7 @@
                     `;
 
                 tbodyrsumeefectiivo.appendChild(tr);
+                Descargar(e.TicketId, e.PassengerName, e.Origin, e.Destination, datosCombinados.departingOrigen, datosCombinados.bus, passengerTypeText, e.SeatName, e.SoldPrice)
             });
         });
 });
@@ -116,6 +117,42 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         const llegada = datosViajeObj.departingDestino;
         const corrida = datosViajeObj.corrida;
 
+        let fechas = new Date(departingOrigen);
+
+        // Extraemos el día, mes, año, horas, minutos y segundos
+        let dia = fechas.getDate();
+        let mes = fechas.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
+        let anio = fechas.getFullYear();
+        let horas = fechas.getHours();
+        let minutos = fechas.getMinutes();
+        let segundos = fechas.getSeconds();
+
+        // Formateamos los valores a dos dígitos (añadiendo ceros si es necesario)
+        dia = dia < 10 ? '0' + dia : dia;
+        mes = mes < 10 ? '0' + mes : mes;
+        horas = horas < 10 ? '0' + horas : horas;
+        minutos = minutos < 10 ? '0' + minutos : minutos;
+        segundos = segundos < 10 ? '0' + segundos : segundos;
+        let fechaFormateadaori = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+
+        let fechass = new Date(llegada);
+
+        // Extraemos el día, mes, año, horas, minutos y segundos
+        let dia2 = fechass.getDate();
+        let mes2 = fechass.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
+        let anio2 = fechass.getFullYear();
+        let horas2 = fechass.getHours();
+        let minutos2 = fechass.getMinutes();
+        let segundos2 = fechass.getSeconds();
+
+        // Formateamos los valores a dos dígitos (añadiendo ceros si es necesario)
+        dia2 = dia2 < 10 ? '0' + dia2 : dia2;
+        mes2 = mes2 < 10 ? '0' + mes2 : mes2;
+        horas2 = horas2 < 10 ? '0' + horas2 : horas2;
+        minutos2 = minutos2 < 10 ? '0' + minutos2 : minutos2;
+        segundos2 = segundos2 < 10 ? '0' + segundos2 : segundos2;
+        let fechaFormateadades = `${dia2}/${mes2}/${anio2} ${horas2}:${minutos2}:${segundos2}`;
+
         const fechaActual = new Date();
         const fechaFormateada = fechaActual.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
@@ -127,17 +164,26 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         form.getTextField('ticket_id').setText(folio);
         form.getTextField('seat').setText(asiento);
         form.getTextField('Destino').setText(destino);
-        form.getTextField('departure_origen').setText(departingOrigen);
-        form.getTextField('fecha').setText(fechaFormateada);
+        form.getTextField('departure_origen').setText(fechaFormateadaori);
+        form.getTextField('fecha').setText(`Fecha venta: ${fechaFormateada}`);
         form.getTextField('saleman_name').setText(taquillero);
         form.getTextField('subtotal').setText(precio_base);
-        form.getTextField('departure_destino').setText(llegada);
+        form.getTextField('departure_destino').setText(fechaFormateadades);
         form.getTextField('total').setText(String(precio));
         form.getTextField('product').setText(corrida);
         form.getTextField('passenger_type').setText(tipo);
+        const precioSinIVA = precio_base / (1 + 16 / 100);
+
+        // Calcular el IVA
+        const iva = precio_base - precioSinIVA;
+
+
+
+
+        form.getTextField('IVA').setText(String(iva.toFixed(2)));
 
         // Hacer los campos de solo lectura
-        ['passenger_name', 'origen', 'ticket_id', 'seat', 'Destino', 'departure_origen', 'fecha',
+        ['passenger_name', 'origen', 'ticket_id', 'seat', 'Destino', 'departure_origen', 'fecha', 'IVA',
             'saleman_name', 'subtotal', 'departure_destino', 'total', 'product', 'passenger_type'].forEach(field => {
                 const textField = form.getTextField(field);
                 if (textField) {

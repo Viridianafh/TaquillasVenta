@@ -20,7 +20,27 @@ localStorage.setItem("array_checkpoints", [])
 
 
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
+
+
+    const selectpago = document.getElementById('selectpago')
+    selectpago.addEventListener('change', () => {
+
+        if (selectpago.value == "CARD") {
+            pago = document.getElementById('total-price').textContent
+            document.getElementById('monto-paquete').style.display = 'none'
+            document.getElementById('monto-paquete').value = parseFloat( pago)
+            
+        } else {
+
+            document.getElementById('monto-paquete').style.display = 'block'
+        }
+
+
+    })
+
 
 
 
@@ -358,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 totalPackage: localStorage.getItem('TOTALPACKAGE'),
                 userid: localStorage.getItem('id'),
                 saleshift: shift_number_to_is,
-                PaymentType: "cash",
+                PaymentType: document.getElementById('selectpago').value == "CASH" ? 'cash' : 'card',
                 salesmanId: localStorage.getItem('id'),
                 CashCheckpoint: "",
                 salesterminal: localStorage.getItem('terminal_id'),
@@ -404,8 +424,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     
                         var restante = total;
-                        var totalventareciente = ventareciente + restante;
+                    var totalventareciente = ventareciente + restante;
+                    if (document.getElementById('selectpago').value == "CASH") {
+
                         localStorage.setItem('venta_reciente', totalventareciente);
+                    } else {
+
+                    }
 
                         console.log('venta_reciente actualizado a:', totalventareciente);
                     
@@ -1782,7 +1807,14 @@ function CerrarCajamenor() {
 
 
 
+
+
+
+
+ 
+
 }
+
 
 
 

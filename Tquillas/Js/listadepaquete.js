@@ -196,7 +196,7 @@
 
         // Configura las opciones para html2pdf
         const opciones = {
-            margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
+            margin: [0, -5, 0, 0], // Márgenes en mm (top, right, bottom, left)
             filename: 'listadeabordar.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
@@ -223,6 +223,7 @@
                 // Aquí puedes ejecutar el código que desees cuando se descarta la alerta
                 if (result.dismiss === Swal.DismissReason.backdrop) {
 
+                    document.getElementById('table-lista').style.display = 'block'
                     document.getElementById('table-lista').style.display = 'block'
                     document.getElementById('table-lista2').style.display = 'none'
                 } else if (result.dismiss === Swal.DismissReason.esc) {
@@ -276,13 +277,33 @@ function ocultarColumna6() {
 
         limpiarTabla()
         limpiarTabla2()
-    
+
+
+        let fecha = new Date(departure);
+
+        // Extraemos el día, mes, año, horas, minutos y segundos
+        let dia = fecha.getDate();
+        let mes = fecha.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
+        let anio = fecha.getFullYear();
+        let horas = fecha.getHours();
+        let minutos = fecha.getMinutes();
+        let segundos = fecha.getSeconds();
+
+        // Formateamos los valores a dos dígitos (añadiendo ceros si es necesario)
+        dia = dia < 10 ? '0' + dia : dia;
+        mes = mes < 10 ? '0' + mes : mes;
+        horas = horas < 10 ? '0' + horas : horas;
+        minutos = minutos < 10 ? '0' + minutos : minutos;
+        segundos = segundos < 10 ? '0' + segundos : segundos;
+
+        // Creamos la fecha en el nuevo formato dd/mm/yyyy h:mm:ss
+        let fechaFormateada = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
 
         fetch(`http://apitaquillassag.dyndns.org/Home/ListarPaquetes?trip_id=${tripid}`)
             .then(response => response.json())
             .then(data => {
 
-                document.getElementById("spanfecha").textContent = departure;
+                document.getElementById("spanfecha").textContent = fechaFormateada;
                 document.getElementById("spantaquillas").textContent = localStorage.getItem('office_name').toString();
                 document.getElementById("rutabname").textContent = corrida
                 document.getElementById("buss").textContent = bus

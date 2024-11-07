@@ -89,11 +89,12 @@
           
               <div class="d-flex gap-3 align-items-center justify-content-arround">
                 <img src="Assets/logoSag.png" alt="Alternate Text" style="width:120px;" />
-                 <p id="main-fecha" class="m-3">fecha salida: <span id="spanfecha"></span></p>
+                       <p id="main-taquilla" class="m-3">Taquilla: <span id="spantaquillas"></span></p>
+                 <p id="main-fecha" class="m-3">Fecha salida: <span id="spanfecha"></span></p>
             </div>
             <div class="d-flex align-items-center justify-content-center">
                
-                <p id="main-taquilla" class="m-3">Taquilla: <span id="spantaquillas"></span></p>
+           
                 <p id="main-ruta"     class="m-3">Ruta: <span id="rutabname"></span></p>
                 <p id="main-bus"       class="m-3">Bus: <span id="buss"></span></p>
                 <p id="main-abordan"   class="m-3">EquipajeTaquilla: <span id="countabordan"></span></p>

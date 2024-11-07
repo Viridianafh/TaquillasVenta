@@ -196,6 +196,13 @@
          <h4>Total: $<span id="total-price">0.00</span></h4>
     <pre id="json-output" class="bg-light p-3" style =" display:none"></pre>
 
+
+     <label>Tipo de pago:</label>
+     <select class="form-control" id="selectpago" >
+         <option value="CASH">efectivo</option>
+         <option value="CARD">tarjeta</option>
+     </select>
+
      <label>Monto:</label>
    <input type="number" id="monto-paquete" class="form-control"  />
    
