@@ -130,6 +130,7 @@
 
         <div id="informe">
             <h5>Resumen Precorte</h5>
+            <h6>Fecha: <span id="spanfecha"></span></h6>
             <br />
             <h6>Taquillero: <span id="taquillero"></span></h6>
             <h6>Turno: <span id="turno"></span></h6>

@@ -126,11 +126,17 @@ fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${sa
 
         });
 
-        fetch(`https://localhost:5001/Home/sumaventa?sale_id=${saleshift_id}`)
+        fetch(`http://apitaquillassag.dyndns.org/Home/sumaventa?sale_id=${saleshift_id}`)
             .then(res => res.json())  // Esperar la respuesta en formato JSON
             .then(data => {
                 // Procesar los datos obtenidos
                 console.log(data);
+
+                // Crear un objeto Date con la fecha y hora actual
+                const fechaHoraActual = new Date();
+
+                // Obtener la fecha y hora en formato legible
+                document.getElementById('spanfecha').textContent = fechaHoraActual.toLocaleString()
 
                 // Asignar los valores de las variables a partir de los datos obtenidos
                 let totalcard = parseFloat(data.venta_tarjeta) || 0;  // Convertir a float, si no es un número, asignar 0
