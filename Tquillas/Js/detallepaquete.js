@@ -265,15 +265,16 @@ async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
         form.getTextField('fechallegada').setText(formatearfecha(llegada));
 
         form.getTextField('fechallegada').setText(formatearfecha(llegada));
+        form.getTextField('total').setText(Total);
 
         const precioSinIVA = Total / (1 + 16 / 100);
 
         // Calcular el IVA
         const iva = Total - precioSinIVA;
 
-        form.getTextField('total').setText(iva.toFixed(2));
+        form.getTextField('IVA').setText(iva.toFixed(2));
         // Hacer los campos de solo lectur
-        ['folio', 'origen', 'destino', 'corrida', 'total', 'taquillero', 'description', 'nombreemisor', 'telemisor', 'nombrereceptor', 'telreceptor', 'fechasalida', 'fechallegada' ].forEach(field => form.getTextField(field).enableReadOnly());
+        ['folio', 'IVA', 'origen', 'destino', 'corrida', 'total', 'taquillero', 'description', 'nombreemisor', 'telemisor', 'nombrereceptor', 'telreceptor', 'fechasalida', 'fechallegada' ].forEach(field => form.getTextField(field).enableReadOnly());
 
         // Generar el código QR con el mensaje "hola"
         const qrCodeDataURL = await generateQRCode(Folio);
