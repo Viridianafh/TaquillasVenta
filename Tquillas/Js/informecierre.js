@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn_end.addEventListener('click', () => {
 
         var cajaabierta = false
-        localStorage.setItem("caja_abierta" , cajaabierta)
+        localStorage.setItem("caja_abierta", cajaabierta)
 
         localStorage.setItem("Total_compra", 0)
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return response.json();
 
-         
+
 
                 window.location.href = "dash.aspx"
             })
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem("cashcheckpoint")
 
 
-        window.location.href= "dash.aspx"
+        window.location.href = "dash.aspx"
     })
 
 })
@@ -85,11 +85,18 @@ fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${sa
         var countcancel = 0
         var countventa = 0
         var countpackage = 0
+        let totalcard = 0;
+        let totalcash = 0;
 
         data.forEach(e => {
             if (e.Tipo === "VENTA") {
                 totalVentas += e.PrecioDeVenta || 0;
-                countventa++
+                countventa++;
+                if (e.Tipo_pago == "cash") {
+                    totalcash += e.PrecioDeVenta;
+                } else {
+                    totalcard += e.PrecioDeVenta;
+                }
             } else if (e.Tipo === "CANCEL") {
                 totalCancelaciones += e.PrecioDeVenta || 0;
                 countcancel++
@@ -125,8 +132,34 @@ fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${sa
 
 
         });
+        document.getElementById('total-monto').textContent = totalFinal;
+        document.getElementById('total-cash').textContent = totalcash;
+        document.getElementById('total-card').textContent = totalcard;
+        document.getElementById('total-pack').textContent = totalPaquetes;
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/sumaventa?sale_id=${saleshift_id}`)
+
+        document.getElementById("taquillero").textContent = localStorage.getItem('name');
+        document.getElementById("turno").textContent = localStorage.getItem('shift_number')
+        document.getElementById("oficina").textContent = localStorage.getItem('office_name')
+        document.getElementById("terminal").textContent = localStorage.getItem('terminal_name')
+        document.getElementById("cant-cancel").textContent = countcancel
+        document.getElementById("cant-package").textContent = countpackage
+        document.getElementById("cant-sale").textContent = countventa
+        document.getElementById("total-cancel").textContent = totalCancelaciones
+        document.getElementById("total-venta").textContent = totalVentas
+
+        document.getElementById("reporte-taquillero").textContent = localStorage.getItem('name')
+
+        // Crear un objeto Date con la fecha y hora actual
+        const fechaHoraActual = new Date();
+
+        // Obtener la fecha y hora en formato legible
+        document.getElementById('spanfecha').textContent = fechaHoraActual.toLocaleString()
+
+        // Generar el PDF después de cargar todos los datos
+        const contenidoDiv = document.getElementById('informe');
+        html2pdf(contenidoDiv, opciones);
+        /*fetch(`http://apitaquillassag.dyndns.org/Home/sumaventa?sale_id=${saleshift_id}`)
             .then(res => res.json())  // Esperar la respuesta en formato JSON
             .then(data => {
                 // Procesar los datos obtenidos
@@ -184,7 +217,7 @@ fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${sa
             })
             .catch(error => {
                 console.error('Error al obtener los datos:', error);
-            });
+            });*/
 
     })
     .catch(error => {

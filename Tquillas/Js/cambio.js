@@ -126,14 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'CHILD':
                     precionuevo = precionuevo * descuento
-                    break;  
+                    break;
                 case 'STUDENT':
                     precionuevo = precionuevo * descuento
                     break;
                 case 'OLDER_ADULT':
                     precionuevo = precionuevo * descuento
                     break;
-                        
+
             }
 
 
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var tabla = document.getElementById(`${id}`).getElementsByTagName('tbody')[0];
         var tr = document.createElement('tr');
 
-        document.getElementById('cancelarCambio').disabled = false 
+        document.getElementById('cancelarCambio').disabled = false
 
         data.map(e => {
 
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-localStorage.setItem('numero_venta_viejo', e.salenumber);
+            localStorage.setItem('numero_venta_viejo', e.salenumber);
 
 
 
@@ -443,7 +443,7 @@ function ContarEstudiante(id) {
 
 
             if (data.valor != "enabled") {
-                
+
                 document.getElementById('option-estudiante').style.display = "none"
             }
 
@@ -458,7 +458,7 @@ function ContarEstudiante(id) {
 
                         if (cant_students == 6) {
 
-                          
+
                             document.getElementById('option-estudiante').style.display = "none"
                         }
 
@@ -664,18 +664,18 @@ function crearasientos(tipo, id) {
 
         if (statusData.length === 0) {
             seatElement.classList.add('btn-primary');
-           
-        
+
+
 
         } else {
             const seatStatus = statusData.find(status => status.asiento == seat.name);
             if (seatStatus && seatStatus.status === 'OCCUPIED') {
                 seatElement.classList.add('btn-danger');
-                
+
 
             } else {
                 seatElement.classList.add('btn-primary');
-             
+
 
             }
         }
@@ -748,7 +748,7 @@ function crearasientos(tipo, id) {
 
 
 function ProcederBoleto() {
-
+    document.getElementById('procederCambio').disabled = true
     var tipopasajero = localStorage.getItem('tipopasajero_cambio')
 
 
@@ -906,7 +906,7 @@ function ProcederBoleto() {
 
 
 
-             InternetSale =
+            InternetSale =
             {
                 "totalAmount": parseFloat(localStorage.getItem('precio_Total_cambio')),
                 "changeAmount": parseFloat(localStorage.getItem('precio_anteriorcambio')),
@@ -924,12 +924,12 @@ function ProcederBoleto() {
 
         }
 
-      
+
 
 
         console.log(JSON.stringify(InternetSale))
         // Realizar la solicitud PATCH usando fetch
-       fetch('http://apitaquillassag.dyndns.org/Home/cambiarBoleto', options)
+        fetch('http://apitaquillassag.dyndns.org/Home/cambiarBoleto', options)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Hubo un problema con la solicitud: ' + response.status);
@@ -1007,7 +1007,7 @@ function ProcederBoleto() {
     }
 
 
-  
+
 }
 
 
@@ -1084,7 +1084,7 @@ function CancelarOperacion() {
         icon: "success"
     }).then((result) => {
         if (result.isConfirmed || result.isDismissed) {
-    document.getElementById('cancelarCambio').disabled = true
+            document.getElementById('cancelarCambio').disabled = true
             location.reload();
         }
     });
@@ -1100,7 +1100,7 @@ function CancelarOperacion() {
 
 async function Descargar(ticket) {
     try {
-       
+
 
         // Obtener datos del boleto
         const response = await fetch(`http://apitaquillassag.dyndns.org/Home/ConsultarBoletos?folio=${ticket}`);
@@ -1222,7 +1222,7 @@ async function Descargar(ticket) {
         link.click();
         document.body.removeChild(link);
 
-      
+
 
         // Abrir el PDF en una nueva pestaña
         setTimeout(() => {
@@ -1231,6 +1231,45 @@ async function Descargar(ticket) {
 
     } catch (error) {
         console.error("Error al descargar el PDF:", error);
-      
+
     }
+}
+function generateQRCode(text) {
+    return new Promise((resolve, reject) => {
+        try {
+            const div = document.createElement('div');
+            new QRCode(div, {
+                text: text,
+                width: 128,
+                height: 128,
+                errorCorrectionLevel: 'H'
+            });
+
+            setTimeout(() => {
+                const canvas = div.querySelector('canvas');
+                if (canvas) {
+                    canvas.toBlob(blob => {
+                        const reader = new FileReader();
+                        reader.onloadend = function () {
+                            resolve(new Uint8Array(reader.result));
+                        }
+                        reader.readAsArrayBuffer(blob);
+                    });
+                } else {
+                    const img = div.querySelector('img');
+                    if (img) {
+                        fetch(img.src)
+                            .then(res => res.arrayBuffer())
+                            .then(buffer => resolve(new Uint8Array(buffer)))
+                            .catch(reject);
+                    } else {
+                        reject(new Error('No se pudo generar el QR'));
+                    }
+                }
+            }, 100);
+        } catch (error) {
+            console.error("Error en generateQRCode:", error);
+            reject(error);
+        }
+    });
 }

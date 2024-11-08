@@ -344,6 +344,19 @@
 
  
         </div>
+         <div id="content_piso_1" style="display:flex;justify-content:center;flex-direction:column">
+            <h4>Piso1</h4>
+            <div id="pruebas_piso1">
+
+            </div>
+        </div>
+        
+        <div id="content_piso_2" style="display:none;justify-content:center;flex-direction:column">
+            <h4>Piso2</h4>
+            <div id="pruebas_piso2">
+
+            </div>
+        </div>
 
 </section>
 

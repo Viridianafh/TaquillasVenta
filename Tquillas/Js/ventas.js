@@ -15,7 +15,16 @@ var countpasajerofinal = 1
 precio_base = 0;
 var ventasls = localStorage.getItem('venta_reciente')
 var startdate = ""
-
+let p1d1 = ``;
+let p1d2 = ``;
+let p1d3 = ``;
+let p1d4 = ``;
+let p1d5 = ``;
+let p2d1 = ``;
+let p2d2 = ``;
+let p2d3 = ``;
+let p2d4 = ``;
+let p2d5 = ``;
 localStorage.setItem("array_checkpoints", [])
 
 
@@ -169,38 +178,38 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Segundo fetch para actualizar cash checkpoint y cancelar evento
                         actualizarCashCheckpoint(cashcheckpoint, saleshift)
                             .then(result => {
-                              
-                                    // Tercer fetch para agregar cash checkpoint
-                                    agregarCashCheckpoint(cashcheckpoint, Saleshift)
-                                        .then(data => {
-                                            if (data === "Operación exitosa") {
-                                                Swal.fire({
-                                                    title: "Puedes continuar!",
-                                                    text: "Se abre de nuevo la caja",
-                                                    icon: "success"
-                                                });
-                                                location.href = "informePrecorte.aspx";
 
-                                                const ventasls = parseFloat(localStorage.getItem('venta_reciente'));
-                                                if (ventasls >= 3000) {
-                                                    localStorage.setItem('venta_reciente', sobrante.toString());
-                                                }
-                                            } else {
-                                                Swal.fire({
-                                                    title: "Error!",
-                                                    text: "Hubo un error",
-                                                    icon: "error"
-                                                });
+                                // Tercer fetch para agregar cash checkpoint
+                                agregarCashCheckpoint(cashcheckpoint, Saleshift)
+                                    .then(data => {
+                                        if (data === "Operación exitosa") {
+                                            Swal.fire({
+                                                title: "Puedes continuar!",
+                                                text: "Se abre de nuevo la caja",
+                                                icon: "success"
+                                            });
+                                            location.href = "informePrecorte.aspx";
+
+                                            const ventasls = parseFloat(localStorage.getItem('venta_reciente'));
+                                            if (ventasls >= 3000) {
+                                                localStorage.setItem('venta_reciente', sobrante.toString());
                                             }
-                                        })
-                                        .catch(error => {
+                                        } else {
                                             Swal.fire({
                                                 title: "Error!",
-                                                text: `Hubo un error: mensaje ${error}`,
+                                                text: "Hubo un error",
                                                 icon: "error"
                                             });
+                                        }
+                                    })
+                                    .catch(error => {
+                                        Swal.fire({
+                                            title: "Error!",
+                                            text: `Hubo un error: mensaje ${error}`,
+                                            icon: "error"
                                         });
-                                
+                                    });
+
                             });
                     }
                 })
@@ -324,9 +333,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log(JSON.stringify(Viaje))
 
+        p1d1 = ``;
+        p1d2 = ``;
+        p1d3 = ``;
+        p1d4 = ``;
+        p1d5 = ``;
 
+        p2d1 = ``;
+        p2d2 = ``;
+        p2d3 = ``;
+        p2d4 = ``;
+        p2d5 = ``;
+        document.getElementById("pruebas_piso1").innerHTML = ``;
+        document.getElementById("pruebas_piso2").innerHTML = ``;
+        document.getElementById("content_piso_2").style.display = "none";
         fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
-        //fetch(`https://localhost:5001/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
+            //fetch(`https://localhost:5001/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
 
         })
             .then(response => response.json())
@@ -345,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         icon: 'error',
                         confirmButtonText: 'Cool'
                     })
-                } 
+                }
 
                 var tbody = document.getElementsByTagName('tbody')[0]; // Get the first tbody element
                 var alldata = data
@@ -992,7 +1014,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_siguiente1 = document.getElementById('btn-siguiente1')
     btn_siguiente1.addEventListener('click', () => {
 
-
+        p1d1 = ``;
+        p1d2 = ``;
+        p1d3 = ``;
+        p1d4 = ``;
+        p1d5 = ``;
+        p2d1 = ``;
+        p2d2 = ``;
+        p2d3 = ``;
+        p2d4 = ``;
+        p2d5 = ``;
 
 
         var correocliente = document.getElementById('correocliente').value
@@ -1153,7 +1184,223 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     function buildSeatMap(seatData, occupiedSeats) {
+                        var datosViajeString = localStorage.getItem("datos_viaje");
+                        var datosViajeObj = JSON.parse(datosViajeString);
+                        var tipo = datosViajeObj.tipo;
+                        let service = "";
+                        let total_asientos = 0;
+                        if (tipo == "Plus") {
+                            service = "normal-id";
+                            document.getElementById('content-floor-indicator').style.display = "flex"
+                        } else {
+                            document.getElementById('content-floor-indicator').style.display = "flex"
+                            service = "premium-id";
 
+                        }
+                        let cont = 1;
+                        let filatemp = "0";
+                        //console.log("seatdata: " + JSON.stringify(seatData))
+                        //console.log("ocupados: " + JSON.stringify(occupiedSeats))
+                        seatData.forEach(asiento => {
+                            if (service == "premium-id") {
+                                if (filatemp != asiento.row) {
+                                    filatemp = asiento.row;
+                                    cont = 0;
+                                } else {
+                                    cont = 1;
+                                }
+                                switch (asiento.row) {
+                                    case "0":
+                                        if (asiento.type == "DOOR") {
+                                            p1d1 += `<button class='btn btn-secondary' style='width:80px; height:80px; margin:1px;' disabled>
+                                                        Puerta
+                                                     </button>`;
+
+                                            //p1d1 += `<input type='button' class='btn ' id="" style="padding:10px 10px 10px 10px;width:80px;height:80px;margin:1px 1px 1px 1px;"/>`;
+                                            p1d1 += cad_vac(1);
+                                        } else {
+                                            p1d1 += cad_lib_oc(occupiedSeats, asiento);
+                                            /*if (occupiedSeats.find(obj => obj.asiento.toString() === asiento.name) != undefined) {
+                                                p1d1 += `<button id="${asiento.name}" value="${asiento.name}" class='btn btn-danger' disabled style='padding:10px;width:80px;height:80px;margin:1px;background-image: url("Assets/asientor.png"); background-size: cover;'>
+                                                            ${asiento.name}
+                                                         </button>`;
+                                            } else {
+                                                p1d1 += `<button id="${asiento.name}" value="${asiento.name}" class='btn btn-primary' onclick='ReservarAsiento("${asiento.name}")' id="${asiento.name}" style="padding:10px;width:80px;height:80px;margin:1px;background-image: url('Assets/asientor.png'); background-size: cover;">
+                                                            ${asiento.name}
+                                                         </button>`;
+                                            }*/
+                                        }
+                                        if (cont == 0) {
+                                            p1d2 += cad_vac(2);
+                                        } else {
+                                            p1d2 += cad_vac(1);
+                                        }
+                                        cont = 1;
+                                        break;
+                                    case "1":
+                                        if (cont == 0) {
+                                            p1d3 += cad_vac(2);
+                                            p1d3 += cad_lib_oc(occupiedSeats, asiento);
+                                        } else {
+                                            if (asiento.type == "BATHROOM") {
+                                                p1d3 += `<button class='btn btn-danger' disabled style='padding:10px;width:80px;height:80px;margin:1px;background-image: url("Assets/toilet.png"); background-size: cover;'>
+                                                            
+                                                         </button>`;
+                                            } else {
+                                                p1d3 += cad_lib_oc(occupiedSeats, asiento);
+                                            }
+                                        }
+                                        break;
+                                    case "3":
+                                        if (cont == 0) {
+                                            p1d4 += cad_vac(2);
+                                            p1d4 += cad_lib_oc(occupiedSeats, asiento);
+                                        } else {
+                                            p1d4 += cad_lib_oc(occupiedSeats, asiento);
+                                        }
+                                        break;
+                                    case "4":
+                                        if (cont == 0) {
+                                            p1d5 += `<input type='button' class='btn btn-outline-secondary' value='' disabled style='padding:10px 10px 10px 10px;width:80px;height:80px;margin:1px 1px 1px 1px;'/>`;
+                                            p1d5 += cad_vac(1);
+                                        } else {
+                                            p1d5 += cad_lib_oc(occupiedSeats, asiento);
+                                        }
+                                        break;
+                                }
+                            } else {
+                                if (asiento.floor == "1") {
+                                    if (filatemp != asiento.row) {
+                                        filatemp = asiento.row;
+                                        cont = 0;
+                                    } else {
+                                        cont = 1;
+                                    }
+                                    switch (asiento.row) {
+                                        case "0":
+                                            if (asiento.type == "DOOR" && asiento.column == "1") {
+                                                p1d2 += cad_vac(10);
+                                                p1d1 += `<input type='button' class='btn ' id="" style="padding:10px 10px 10px 10px;width:80px;height:80px;margin:1px 1px 1px 1px;"/>`;
+                                                p1d1 += `<button class='btn btn-secondary' style='width:80px; height:80px; margin:1px;' disabled>
+                                                            Puerta
+                                                         </button>`;
+                                            } else {
+                                                if (asiento.type == "DOOR" && asiento.column == "5") {
+                                                    p1d1 += cad_vac(3);
+                                                    p1d1 += `<button class='btn btn-secondary' style='width:80px; height:80px; margin:1px;' disabled>
+                                                                Puerta
+                                                             </button>`;
+                                                    p1d1 += cad_vac(2);
+                                                } else {
+                                                    p1d1 += cad_lib_oc(occupiedSeats, asiento);
+                                                }
+                                            }
+                                            break;
+                                        case "1":
+                                            if (asiento.column == "8") {
+                                                p1d3 += cad_vac(8);
+                                                p1d3 += cad_lib_oc(occupiedSeats, asiento);
+                                            } else {
+                                                p1d3 += cad_lib_oc(occupiedSeats, asiento);
+                                            }
+                                            break;
+                                        case "3":
+                                            if (asiento.column == "8") {
+                                                p1d4 += cad_vac(8);
+                                                p1d4 += cad_lib_oc(occupiedSeats, asiento);
+                                            } else {
+                                                p1d4 += cad_lib_oc(occupiedSeats, asiento);
+                                            }
+                                            break;
+                                        case "4":
+                                            if (asiento.type == "BED") {
+                                                p1d5 += cad_vac(1);
+                                                p1d5 += `<input type='button' class='btn btn-outline-secondary' value='' disabled style='padding:10px 10px 10px 10px;width:80px;height:80px;margin:1px 1px 1px 1px;'/>`;
+                                                p1d5 += cad_vac(3);
+                                            } else {
+                                                if (asiento.type == "BATHROOM") {
+                                                    p1d5 += `<button class='btn btn-danger' disabled style='padding:10px;width:80px;height:80px;margin:1px;background-image: url("Assets/toilet.png"); background-size: cover;'>
+                                                            
+                                                         </button>`;
+                                                    if (asiento.column == "6") {
+                                                        p1d5 += cad_vac(1);
+                                                    }
+                                                } else {
+                                                    if (asiento.type != "WHEEL") {
+                                                        p1d5 += cad_lib_oc(occupiedSeats, asiento);
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                    }
+                                } else {
+                                    if (filatemp != asiento.row) {
+                                        filatemp = asiento.row;
+                                        cont = 0;
+                                    } else {
+                                        cont = 1;
+                                    }
+                                    switch (asiento.row) {
+                                        case "0":
+                                            if (asiento.column == "0") {
+                                                p2d1 += cad_vac(1);
+                                                p2d1 += cad_lib_oc(occupiedSeats, asiento);
+                                                p2d1 += cad_vac(2);
+                                            } else {
+                                                p2d1 += cad_lib_oc(occupiedSeats, asiento);
+                                            }
+                                            if (cont == 0) {
+                                                p2d2 += cad_vac(2);
+                                            } else {
+                                                p2d2 += cad_vac(1);
+                                            }
+                                            cont = 1;
+                                            break;
+                                        case "1":
+                                            if (cont == 0) {
+                                                if (asiento.column == "0") {
+                                                    p2d3 += cad_vac(1);
+                                                    p2d3 += cad_lib_oc(occupiedSeats, asiento);
+                                                    p2d3 += cad_vac(2);
+                                                } else {
+                                                    p2d3 += cad_lib_oc(occupiedSeats, asiento);
+                                                }
+                                            } else {
+                                                if (asiento.type == "BATHROOM") {
+                                                    p2d3 += `<button class='btn btn-danger' disabled style='padding:10px;width:80px;height:80px;margin:1px;background-image: url("Assets/toilet.png"); background-size: cover;'>
+                                                            
+                                                         </button>`;
+                                                } else {
+                                                    p2d3 += cad_lib_oc(occupiedSeats, asiento);
+                                                }
+                                            }
+                                            break;
+                                        case "3":
+                                            if (asiento.column == "0") {
+                                                p2d4 += cad_vac(1);
+                                            }
+                                            if (cont == 0) {
+                                                p2d4 += cad_lib_oc(occupiedSeats, asiento);
+                                            } else {
+                                                p2d4 += cad_lib_oc(occupiedSeats, asiento);
+                                            }
+                                            break;
+                                        case "4":
+                                            if (asiento.column == "0") {
+                                                p2d5 += cad_vac(1);
+                                            }
+                                            if (cont == 0) {
+                                                p2d5 += cad_lib_oc(occupiedSeats, asiento);
+                                            } else {
+                                                p2d5 += cad_lib_oc(occupiedSeats, asiento);
+                                            }
+                                            break;
+                                    }
+                                }
+                            }
+                            total_asientos += 1;
+                        });
+                        /*console.log("seatdata: " + JSON.stringify(seatData))
                         var datosViajeString = localStorage.getItem("datos_viaje");
                         var datosViajeObj = JSON.parse(datosViajeString);
                         var tipo = datosViajeObj.tipo;
@@ -1173,83 +1420,111 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         var seatcounter = 1;
 
-
+                        let row_ant = "0";
                         seatData.forEach(e => {
-
-
-
-                            var seatElement = document.createElement('div');
-                            seatElement.className = `div${e.name} container`;
-                            seatElement.id = 'content';
-
-                            var buttonElement = document.createElement('button');
-                            buttonElement.id = `Asientos`;
-                            buttonElement.value = `${e.name == "00" || e.name == "113" ? "WC" : e.name}`
-                            buttonElement.style.width = '80px';
-                            buttonElement.style.height = '80px';
-                            buttonElement.style.display = e.name === "01" || e.name === "05" || e.name === "00" || e.name === "113" ? 'none' : 'flex';
-                            buttonElement.style.alignItems = 'flex-start';
-                            buttonElement.style.justifyContent = 'center';
-                            buttonElement.style.padding = '5px';
-
-                            var h4Element = document.createElement('h6');
-                            var content = (e.floor === "1") ? e.name : `${e.name}/${e.floor}`;
-                            h4Element.textContent = (e.name === "00" || e.name === "113") ? "WC" : content;
-
-                            var imgElement = document.createElement('img');
-                            imgElement.src = `${e.name == "00" || e.name == "113" ? 'Assets/toilet.png' : 'Assets/asiento.png'}`;
-                            imgElement.style.width = '45px';
-                            imgElement.style.height = '45px';
-                            imgElement.style.objectFit = 'cover';
-                            imgElement.style.alignSelf = 'end';
-                            imgElement.style.transform = "scaleX(-1)";
-
-                            buttonElement.appendChild(h4Element);
-                            buttonElement.appendChild(imgElement);
-
-                            seatElement.appendChild(buttonElement);
-
-                            parent.appendChild(seatElement);
-
-                            // Verificar si el asiento está entre el 1 y el 8
-                            if (parseInt(e.name) >= 5 && parseInt(e.name) <= 8) {
-                                seatElement.style.marginRight = tipo == "Plus" ? '50px' : '0px'; // Agregar margen inferior para separarlos visualmente
-                            }
-
-                            if (occupiedSeats.some(seat => seat.asiento == parseInt(e.name))) {
-                                buttonElement.className = 'btn btn-danger';
+                            let row_act = e.row;
+                            let cambio = 0;
+                            if (row_ant != row_act) {
+                                cambio = 1;
                             } else {
-                                buttonElement.className = 'btn btn-primary';
-
-                                buttonElement.addEventListener('click', () => {
-                                    if (buttonElement.value == "WC") {
-                                        alert("No puedes seleccionar este elemento");
-                                    } else {
-                                        if (buttonElement.className === 'btn btn-primary') {
-                                            if (countasientos < count_pasajeros) {
-                                                buttonElement.className = 'btn btn-success';
-                                                countasientos = countasientos + 1;
-                                                //countpasajero = countpasajero - 1;
-                                                agregaratabla(buttonElement.value);
-                                            } else {
-                                                Swal.fire({
-                                                    title: "Mensaje!",
-                                                    text: `No puedes escojer mas boletos`,
-                                                    icon: "info"
-                                                });
-                                            }
-                                        } else {
-                                            buttonElement.className = 'btn btn-primary'
-                                            countasientos = countasientos - 1;
-                                            // countpasajero = countpasajero + 1;
-                                            quitartabla(buttonElement.value);
-                                        }
-                                    }
-                                });
+                                combio = 0;
                             }
 
-                            seatcounter++;
-                        });
+                            if (tipo == "Plus") {
+
+                            } else {
+                                var seatElement = document.createElement('div');
+                                seatElement.className = `div${e.name} container`;
+                                seatElement.id = 'content';
+
+                                var buttonElement = document.createElement('button');
+                                buttonElement.id = `Asientos`;
+                                buttonElement.value = `${e.name == "00" || e.name == "113" ? "WC" : e.name}`
+                                buttonElement.style.width = '80px';
+                                buttonElement.style.height = '80px';
+                                buttonElement.style.display = e.name === "01" || e.name === "05" || e.name === "00" || e.name === "113" ? 'flex' : 'flex';
+                                buttonElement.style.alignItems = 'flex-start';
+                                buttonElement.style.justifyContent = 'center';
+                                buttonElement.style.padding = '5px';
+
+                                var h4Element = document.createElement('h6');
+                                var content = (e.floor === "1") ? e.name : `${e.name}/${e.floor}`;
+                                h4Element.textContent = (e.name === "00" || e.name === "113") ? "WC" : content;
+
+                                var imgElement = document.createElement('img');
+                                imgElement.src = `${e.name == "00" || e.name == "113" ? 'Assets/toilet.png' : 'Assets/asiento.png'}`;
+                                imgElement.style.width = '45px';
+                                imgElement.style.height = '45px';
+                                imgElement.style.objectFit = 'cover';
+                                imgElement.style.alignSelf = 'end';
+                                imgElement.style.transform = "scaleX(-1)";
+
+                                buttonElement.appendChild(h4Element);
+                                buttonElement.appendChild(imgElement);
+
+                                seatElement.appendChild(buttonElement);
+
+                                parent.appendChild(seatElement);
+
+                                // Verificar si el asiento está entre el 1 y el 8
+                                if (parseInt(e.name) >= 5 && parseInt(e.name) <= 8) {
+                                    seatElement.style.marginRight = tipo == "Plus" ? '50px' : '0px'; // Agregar margen inferior para separarlos visualmente
+                                }
+
+                                if (occupiedSeats.some(seat => seat.asiento == parseInt(e.name))) {
+                                    buttonElement.className = 'btn btn-danger';
+                                } else {
+                                    buttonElement.className = 'btn btn-primary';
+
+                                    buttonElement.addEventListener('click', () => {
+                                        if (buttonElement.value == "WC") {
+                                            alert("No puedes seleccionar este elemento");
+                                        } else {
+                                            if (buttonElement.className === 'btn btn-primary') {
+                                                if (countasientos < count_pasajeros) {
+                                                    buttonElement.className = 'btn btn-success';
+                                                    countasientos = countasientos + 1;
+                                                    //countpasajero = countpasajero - 1;
+                                                    agregaratabla(buttonElement.value);
+                                                } else {
+                                                    Swal.fire({
+                                                        title: "Mensaje!",
+                                                        text: `No puedes escojer mas boletos`,
+                                                        icon: "info"
+                                                    });
+                                                }
+                                            } else {
+                                                buttonElement.className = 'btn btn-primary'
+                                                countasientos = countasientos - 1;
+                                                // countpasajero = countpasajero + 1;
+                                                quitartabla(buttonElement.value);
+                                            }
+                                        }
+                                    });
+                                }
+
+                                seatcounter++;
+                            }                            
+                        });*/
+                        p1d1 = "<div class='row'><div class='col-md-12'>" + p1d1 + "</div></div>";
+                        p1d2 = "<div class='row'><div class='col-md-12'>" + p1d2 + "</div></div>";
+                        p1d3 = "<div class='row'><div class='col-md-12'>" + p1d3 + "</div></div>";
+                        p1d4 = "<div class='row'><div class='col-md-12'>" + p1d4 + "</div></div>";
+                        p1d5 = "<div class='row'><div class='col-md-12'>" + p1d5 + "</div></div>";
+
+                        p2d1 = "<div class='row'><div class='col-md-12'>" + p2d1 + "</div></div>";
+                        p2d2 = "<div class='row'><div class='col-md-12'>" + p2d2 + "</div></div>";
+                        p2d3 = "<div class='row'><div class='col-md-12'>" + p2d3 + "</div></div>";
+                        p2d4 = "<div class='row'><div class='col-md-12'>" + p2d4 + "</div></div>";
+                        p2d5 = "<div class='row'><div class='col-md-12'>" + p2d5 + "</div></div>";
+
+                        //document.getElementById("pruebas_piso1").innerHTML = `<div style="display:flex;flex-direction:row">${p1d1}${p1d3}${p1d2}${p1d4}${p1d5}</div>`;
+                        document.getElementById("pruebas_piso1").innerHTML = `${p1d1}${p1d3}${p1d2}${p1d4}${p1d5}`;
+                        if (tipo == "Plus") {
+                            //document.getElementById("pruebas_piso2").innerHTML = `<div style="display:flex;flex-direction:row">${p2d1}${p2d3}${p2d2}${p2d4}${p2d5}</div>`;
+                            document.getElementById("pruebas_piso2").innerHTML = `${p2d1}${p2d3}${p2d2}${p2d4}${p2d5}`;
+                            document.getElementById("content_piso_2").style.display = "flex";
+                        }
                     }
                 } else {
 
@@ -1259,10 +1534,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         icon: "info"
                     });
                 }
-            } 
+            }
         }
 
-           
+
         else {
 
             Swal.fire({
@@ -1374,7 +1649,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     const btnpagar_tarjeta = document.getElementById('btn-pagar-tarjeta')
-    
+
     btnpagar_tarjeta.addEventListener('click', () => {
         btnpagar_tarjeta.disabled = true
 
@@ -1396,134 +1671,134 @@ document.addEventListener('DOMContentLoaded', () => {
         var totalapagar = parseFloat(document.getElementById("spantotalcard").textContent);
 
         // Redondear a 2 decimales para la comparación
-  
+
         totalapagar = Math.round(totalapagar * 100) / 100;
 
         var userid = localStorage.getItem('id');
 
-        
-            var shiftnumber = localStorage.getItem('shift_number');
-            var num_ventas = localStorage.getItem('num_ventas');
-            var numero = parseInt(num_ventas) + 1;
 
-            localStorage.setItem('num_ventas', numero.toString());
+        var shiftnumber = localStorage.getItem('shift_number');
+        var num_ventas = localStorage.getItem('num_ventas');
+        var numero = parseInt(num_ventas) + 1;
 
-            for (var i = 0; i < table.rows[0].cells.length; i++) {
-                header.push(table.rows[0].cells[i].innerHTML);
+        localStorage.setItem('num_ventas', numero.toString());
+
+        for (var i = 0; i < table.rows[0].cells.length; i++) {
+            header.push(table.rows[0].cells[i].innerHTML);
+        }
+
+        for (var i = 1; i < table.rows.length; i++) {
+            var row = {};
+            for (var j = 0; j < table.rows[i].cells.length; j++) {
+                row[header[j]] = table.rows[i].cells[j].innerHTML;
+            }
+            rows.push(row);
+        }
+
+
+        const json = JSON.stringify(rows);
+        const jsonObj = JSON.parse(json);
+
+
+
+        const nuevoJson = jsonObj.map(item => {
+            let tipo = "";
+
+            if (item.Tipo == "Adulto") {
+                tipo = "ADULT";
+            } else if (item.Tipo == "Niño") {
+                tipo = "CHILD";
+            } else if (item.Tipo == "Adulto mayor") {
+                tipo = "OLDER_ADULT";
+            } else if (item.Tipo == "Estudiante") {
+                tipo = "STUDENT";
             }
 
-            for (var i = 1; i < table.rows.length; i++) {
-                var row = {};
-                for (var j = 0; j < table.rows[i].cells.length; j++) {
-                    row[header[j]] = table.rows[i].cells[j].innerHTML;
-                }
-                rows.push(row);
-            }
-
-           
-            const json = JSON.stringify(rows);
-            const jsonObj = JSON.parse(json);
-
-
-
-            const nuevoJson = jsonObj.map(item => {
-                let tipo = "";
-
-                if (item.Tipo == "Adulto") {
-                    tipo = "ADULT";
-                } else if (item.Tipo == "Niño") {
-                    tipo = "CHILD";
-                } else if (item.Tipo == "Adulto mayor") {
-                    tipo = "OLDER_ADULT";
-                } else if (item.Tipo == "Estudiante") {
-                    tipo = "STUDENT";
-                }
-
-                return {
-                    "Name": item.nombre,
-                    "Origin": item.Origen,
-                    "Destination": item.Destino,
-                    "Bus": item.Bus,
-                    "PassengerName": item.Pasajero,
-                    "PassengerType": tipo,
-                    "SeatName": item.Asiento,
-                    "SoldPrice": parseFloat(totalapagar),
-                    "PayedPrice": 0.0,
-                    "OriginalPrice": parseFloat(originalprice),
-                    "Trip_ID": id,
-                    "UserId": userid
-                };
-            });
+            return {
+                "Name": item.nombre,
+                "Origin": item.Origen,
+                "Destination": item.Destino,
+                "Bus": item.Bus,
+                "PassengerName": item.Pasajero,
+                "PassengerType": tipo,
+                "SeatName": item.Asiento,
+                "SoldPrice": parseFloat(totalapagar),
+                "PayedPrice": 0.0,
+                "OriginalPrice": parseFloat(originalprice),
+                "Trip_ID": id,
+                "UserId": userid
+            };
+        });
 
         const nuevoJsonString = JSON.stringify(nuevoJson, null, 2);
 
         console.log(nuevoJsonString)
-            var shift_number_to_is = shiftnumber + "-" + numero;
-            var lista_ventas = localStorage.getItem("array_ventas");
-            var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
+        var shift_number_to_is = shiftnumber + "-" + numero;
+        var lista_ventas = localStorage.getItem("array_ventas");
+        var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
 
-            // Añadir el nuevo valor al array
-            lista_ventasstr.push(shift_number_to_is);
-            localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
-         
-            const InternetSale = {
-                "totalAmount": parseFloat(totalapagar),
-                "changeAmount": 0,
-                "PaymentType": "card",
-                "payedAmount": parseFloat(totalapagar),
-                "salesTerminalId": terminalid,
-                "salesmanId": ticketuserid,
-                "salesShiftId": localStorage.getItem('saleshift_id'),
-                "saleNumber": shift_number_to_is,
-                "tripseatlist": nuevoJson,
-                "Email": localStorage.getItem('correocliente')
-            };
+        // Añadir el nuevo valor al array
+        lista_ventasstr.push(shift_number_to_is);
+        localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
+
+        const InternetSale = {
+            "totalAmount": parseFloat(totalapagar),
+            "changeAmount": 0,
+            "PaymentType": "card",
+            "payedAmount": parseFloat(totalapagar),
+            "salesTerminalId": terminalid,
+            "salesmanId": ticketuserid,
+            "salesShiftId": localStorage.getItem('saleshift_id'),
+            "saleNumber": shift_number_to_is,
+            "tripseatlist": nuevoJson,
+            "Email": localStorage.getItem('correocliente')
+        };
 
 
-            console.log(JSON.stringify(InternetSale))
+        console.log(JSON.stringify(InternetSale))
 
-            alert("OK")
+        alert("OK")
 
-            fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(InternetSale)
-            })
-                .then(response => response.text())
-                .then(data => {
-                    if (data.length == 8) {
-                        localStorage.setItem('folio', data);
-                      
-                        var currentsale = actualizarCurrentSale();
-                    } else {
-                        Swal.fire({
-                            title: "Error!",
-                            text: `Ocurrió un error`,
-                            icon: "error"
-                        });
-                    }
-                })
-                .catch(error => {
+        fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(InternetSale)
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data.length == 8) {
+                    localStorage.setItem('folio', data);
 
-                    var num_ventas = localStorage.getItem('num_ventas');
-                    var numero = parseInt(num_ventas);
-
-                    numero = numero - 1;
-                    localStorage.setItem('num_ventas', numero.toString());
-
+                    var currentsale = actualizarCurrentSale();
+                } else {
                     Swal.fire({
-                        title: "No se Pudo realizar el pago!",
-                        text: `mensaje de error ${error}`,
+                        title: "Error!",
+                        text: `Ocurrió un error`,
                         icon: "error"
                     });
-                })
-                .finally(() => {
-                    // Habilitar el botón nuevamente al finalizar la operación
-                    btnpagar_efectivo.disabled = false;
+                }
+            })
+            .catch(error => {
+
+                var num_ventas = localStorage.getItem('num_ventas');
+                var numero = parseInt(num_ventas);
+
+                numero = numero - 1;
+                localStorage.setItem('num_ventas', numero.toString());
+
+                Swal.fire({
+                    title: "No se Pudo realizar el pago!",
+                    text: `mensaje de error ${error}`,
+                    icon: "error"
                 });
-        
+            })
+            .finally(() => {
+                // Habilitar el botón nuevamente al finalizar la operación
+                btnpagar_efectivo.disabled = false;
+            });
+
 
     })
 
@@ -1650,7 +1925,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(JSON.stringify(InternetSale))
 
             alert("OK")
-           
+
             fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
                 method: 'POST',
                 headers: {
@@ -1706,46 +1981,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-            const btn_tarjeta = document.getElementById('btn-tarjeta')
-            btn_tarjeta.addEventListener('click', () => {
+    const btn_tarjeta = document.getElementById('btn-tarjeta')
+    btn_tarjeta.addEventListener('click', () => {
 
 
 
-                document.getElementById("pago-tarjeta").style.display = 'block'
-                document.getElementById("section-tipo-pago").style.display = "none"
+        document.getElementById("pago-tarjeta").style.display = 'block'
+        document.getElementById("section-tipo-pago").style.display = "none"
 
 
-                const datosviaje = localStorage.getItem("datos_viaje")
-                const datosInternetsale = localStorage.getItem("datosInternetsale")
+        const datosviaje = localStorage.getItem("datos_viaje")
+        const datosInternetsale = localStorage.getItem("datosInternetsale")
 
-                var tbodyrsumeefectiivo = document.getElementById("tablacardresume");
+        var tbodyrsumeefectiivo = document.getElementById("tablacardresume");
 
-                var datais = localStorage.getItem("datosInternetsale")
-                datais = JSON.parse(datais)
+        var datais = localStorage.getItem("datosInternetsale")
+        datais = JSON.parse(datais)
 
-                var dataviaje = localStorage.getItem("datos_viaje");
-                var datosCombinados = JSON.parse(dataviaje);
+        var dataviaje = localStorage.getItem("datos_viaje");
+        var datosCombinados = JSON.parse(dataviaje);
 
-                for (var i = 0; i < datais.length; i++) {
+        for (var i = 0; i < datais.length; i++) {
 
 
-                    var tr = document.createElement("tr");
-                    var tipo = datais[i].tipo
-                    var type = datais[i].tipo
-                    if (tipo.includes("adulto")) {
-                        tipo = "Adulto"
-                    } else if (tipo.includes("nino")) {
-                        tipo = "Niño"
+            var tr = document.createElement("tr");
+            var tipo = datais[i].tipo
+            var type = datais[i].tipo
+            if (tipo.includes("adulto")) {
+                tipo = "Adulto"
+            } else if (tipo.includes("nino")) {
+                tipo = "Niño"
 
-                    } else if (tipo.includes("inapam")) {
-                        tipo = "Adulto mayor"
+            } else if (tipo.includes("inapam")) {
+                tipo = "Adulto mayor"
 
-                    } else if (tipo.includes("estudiante")) {
-                        tipo = "Estudiante"
+            } else if (tipo.includes("estudiante")) {
+                tipo = "Estudiante"
 
-                    }
+            }
 
-                    tr.innerHTML = `
+            tr.innerHTML = `
 
                                   <td>${datosCombinados.origen}</td>
                                   <td>${datosCombinados.destino}</td>
@@ -1758,15 +2033,15 @@ document.addEventListener('DOMContentLoaded', () => {
                        
                                 `;
 
-                    tbodyrsumeefectiivo.appendChild(tr);
+            tbodyrsumeefectiivo.appendChild(tr);
 
 
-                    var totalapagar = localStorage.getItem("Total_compra")
+            var totalapagar = localStorage.getItem("Total_compra")
 
-                    document.getElementById("spantotalcard").innerHTML = totalapagar
-                }
+            document.getElementById("spantotalcard").innerHTML = totalapagar
+        }
 
-            })
+    })
 
 
 })
@@ -2064,7 +2339,7 @@ function iniciarturno() {
                 localStorage.setItem('shift_number', data.shift)
                 localStorage.setItem('saleshift_id', data.saleShift)
 
-    // datos forage
+                // datos forage
                 const url = `http://apitaquillassag.dyndns.org/Home/descargar?url=${data.url}`;
 
 
@@ -2120,23 +2395,23 @@ function iniciarturno() {
 
     } else {
 
-}
+    }
 
 
     $(document).ready(function () {
         $('#origen').select2({
             selectOnClose: true,
-            tags: true 
+            tags: true
         });
 
         $('#destino').select2({
             selectOnClose: true,
-            tags: true 
+            tags: true
         });
 
 
         fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
-        //fetch('https://localhost:5001/Home/Origen', {
+            //fetch('https://localhost:5001/Home/Origen', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -2152,14 +2427,14 @@ function iniciarturno() {
             .then(data => {
                 var selectOrigen = $('#origen');
 
-                
+
                 selectOrigen.empty().append('<option value="">Seleccione un origen</option>');
 
                 data.forEach(option => {
                     var newOption = new Option(option.name, option.id, false, false);
                     selectOrigen.append(newOption);
                 });
-                
+
                 selectOrigen.select2();
 
                 selectOrigen.on('select2:open', function () {
@@ -2175,7 +2450,7 @@ function iniciarturno() {
                     var data = { origen: Origen };
 
                     fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
-                    //fetch('https://localhost:5001/Home/Destino', {
+                        //fetch('https://localhost:5001/Home/Destino', {
                         method: 'POST',
                         headers: {
                             "Content-Type": "application/json"
@@ -2235,7 +2510,7 @@ function iniciarturno() {
 
 
         fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
-        //fetch('https://localhost:5001/Home/Destino', {
+            //fetch('https://localhost:5001/Home/Destino', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -2285,7 +2560,7 @@ function convertirAMayusculas(input) {
 
 function validarNumero(input) {
 
-  var precio_base = document.getElementById('spantotaltotal').textContent
+    var precio_base = document.getElementById('spantotaltotal').textContent
 
     input.value = input.value.replace(/[^0-9]/g, '');
 
@@ -2296,10 +2571,10 @@ function validarNumero(input) {
 
     if (res < 0 || isNaN(res)) {
 
-    document.getElementById('cambio').textContent = `` 
+        document.getElementById('cambio').textContent = ``
     } else {
 
-    document.getElementById('cambio').textContent = `Cambio: ${res}` 
+        document.getElementById('cambio').textContent = `Cambio: ${res}`
     }
 
 
@@ -2649,5 +2924,47 @@ input2.addEventListener('input', function () {
 
 
 
+function cad_lib_oc(occupiedSeats, asiento) {
+    if (occupiedSeats.find(obj => obj.asiento.toString() === asiento.name) != undefined) {
+        return `<button id="${asiento.name}" value="${asiento.name}" class='btn btn-danger' disabled style='padding:10px;width:80px;height:80px;margin:1px;background-image: url("Assets/asientor.png"); background-size: cover;'>
+                                                            ${asiento.name}
+                                                         </button>`;
+    } else {
+        return `<button id="${asiento.name}" value="${asiento.name}" class='btn btn-primary' onclick='ReservarAsiento("${asiento.name}")' id="${asiento.name}" style="padding:10px;width:80px;height:80px;margin:1px;background-image: url('Assets/asientor.png'); background-size: cover;">
+                                                            ${asiento.name}
+                                                         </button>`;
+    }
+}
 
+function cad_vac(cant) {
+    let cad_fin = "";
+    for (let i = 0; i < cant; i++) {
+        cad_fin += `<input type='button' class='btn ' id="" style="padding:10px 10px 10px 10px;width:80px;height:80px;margin:1px 1px 1px 1px;"/>`;
+    }
+    return cad_fin;
+}
+
+
+function ReservarAsiento(id) {
+    let buttonElement = document.getElementById(id)
+    if (buttonElement.className === 'btn btn-primary') {
+        if (countasientos < count_pasajeros) {
+            buttonElement.className = 'btn btn-success';
+            countasientos = countasientos + 1;
+            //countpasajero = countpasajero - 1;
+            agregaratabla(buttonElement.value);
+        } else {
+            Swal.fire({
+                title: "Mensaje!",
+                text: `No puedes escojer mas boletos`,
+                icon: "info"
+            });
+        }
+    } else {
+        buttonElement.className = 'btn btn-primary'
+        countasientos = countasientos - 1;
+        // countpasajero = countpasajero + 1;
+        quitartabla(buttonElement.value);
+    }
+}
 
