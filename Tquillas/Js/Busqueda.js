@@ -1,6 +1,6 @@
 ﻿document.addEventListener('DOMContentLoaded', (event) => {
-    
-    
+
+
 
     const btn_buscar = document.getElementById('btn-buscar')
     btn_buscar.addEventListener('click', () => {
@@ -10,7 +10,7 @@
         limpiarTabla()
 
 
-      
+
 
         var codigo = document.getElementById('textconcepto').value
 
@@ -36,7 +36,7 @@
 
                     btn_buscar.textContent = "Buscar"
 
-                } else {    
+                } else {
 
                     // Supongamos que tienes una tabla con id "miTabla" en tu HTML
                     var tabla = document.getElementById("table").getElementsByTagName('tbody')[0];
@@ -58,9 +58,9 @@
                             tipo = "Estudiante"
                         }
 
-                        tr.innerHTML = 
-                        
-                        `
+                        tr.innerHTML =
+
+                            `
                             <td>${data[i].passenger_name}</td>
                             <td>${tipo}</td>                    
                             <td>${data[i].ticket_id}</td>          
@@ -90,7 +90,7 @@
 
                 }
 
-                
+
             })
             .catch(error => {
 
@@ -169,7 +169,7 @@ async function Descargar(ticket, tipopago, date) {
         }
         const taquilleroData = await taquilleroResponse.json();
         var nametaquillero = "";
-        taquilleroData.forEach(e => { nametaquillero = e.name.length == 0  ? "INTERNET" : e.name; });
+        taquilleroData.forEach(e => { nametaquillero = e.name.length == 0 ? "INTERNET" : e.name; });
 
 
         // Cargar el PDF base
@@ -178,8 +178,8 @@ async function Descargar(ticket, tipopago, date) {
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
         const taquillero = localStorage.getItem('name');
-       
-       
+
+
         // Rellenar el formulario
         const form = pdfDoc.getForm();
 
@@ -204,13 +204,13 @@ async function Descargar(ticket, tipopago, date) {
         // Calcular el IVA
         const iva = boleto.PayedPrice - precioSinIVA;
 
-        
+
 
 
         form.getTextField('IVA').setText(String(iva.toFixed(2)));
         form.getTextField('product').setText(boleto.product);
 
-    
+
         switch (boleto.PassengerType) {
             case "ADULT":
                 await form.getTextField('passenger_type').setText("Adulto");
@@ -229,10 +229,6 @@ async function Descargar(ticket, tipopago, date) {
                 break;
         }
 
-            
-
-
-       
 
         // Hacer los campos de solo lectura
         ['passenger_name', 'origen', 'ticket_id', 'seat', 'Destino', 'departure_origen', 'fecha', 'IVA',
@@ -355,7 +351,7 @@ function ProcederCancelacion() {
 
                     cancelarBoleto()
 
-                    
+
                 }
                 else {
                     Swal.fire({
@@ -385,7 +381,7 @@ function cancelarBoleto() {
         "oldticket": boleto,
         "cancelUserId": userid,
         "saleshift": localStorage.getItem('saleshift_id')
-                                                                                      
+
     }
 
 
@@ -423,7 +419,7 @@ function cancelarBoleto() {
             console.error('Error:', error);
         });
 
-    
+
 
 }
 
@@ -454,7 +450,7 @@ function formatearfecha(fechain) {
     return fechaFormateada
 }
 
- 
+
 function limpiarTabla() {
     var tabla = document.getElementById('table');
 

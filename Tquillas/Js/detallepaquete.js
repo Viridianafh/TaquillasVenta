@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${e.Destinatario}</td>
                 <td>${e.IdGuia}</td>
                   <td><button class="btn btn-primary" onclick="Descargarguia( '${e.Descripcion}',  '${e.Origen}', '${e.Destino}', '${e.Folio}', '${e.Total}', '${e.Corrida}', '${e.IdGuia}', '${e.IdSale}', '${e.Remitente}',  '${e.Destinatario}'  )">Descargar</button></td>
-                <td><button class="btn btn-dark" onclick="Descargar( '${e.Descripcion }', '${e.Origen}', '${e.Destino}', '${e.Folio}', '${e.Total}', '${e.Corrida}')">Descargar</button></td>
+                <td><button class="btn btn-dark" onclick="Descargar( '${e.Descripcion}', '${e.Origen}', '${e.Destino}', '${e.Folio}', '${e.Total}', '${e.Corrida}')">Descargar</button></td>
             
                 `;
                 tabla.appendChild(tr)
@@ -91,13 +91,13 @@ function generateQRCode(text) {
         }
     });
 }
-async function Descargarguia(Descripcion ,Origen, Destino, Folio, Total, Corrida, IdGuia, IdSale, Remitente, Destinatario) {
+async function Descargarguia(Descripcion, Origen, Destino, Folio, Total, Corrida, IdGuia, IdSale, Remitente, Destinatario) {
     try {
 
 
-       
+
         // Creamos la fecha en el nuevo formato dd/mm/yyyy h:mm:ss
-     
+
         // Descargar el formulario PDF
         const url = '/Assets/etiqueta.pdf';
         const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
@@ -113,7 +113,7 @@ async function Descargarguia(Descripcion ,Origen, Destino, Folio, Total, Corrida
 
 
 
-        
+
         // Obtener el formulario del PDF
         const form = pdfDoc.getForm();
 
@@ -122,18 +122,18 @@ async function Descargarguia(Descripcion ,Origen, Destino, Folio, Total, Corrida
         form.getTextField('origen').setText(Origen);
         form.getTextField('destino').setText(Destino);
         form.getTextField('corrida').setText(Corrida);
-       
+
         form.getTextField('idticket').setText(IdGuia);
         form.getTextField('remitente').setText(Remitente);
         form.getTextField('destinatario').setText(Destinatario);
         form.getTextField('description').setText(Descripcion);
         form.getTextField('salida').setText(formatearfecha(salida));
         form.getTextField('llegada').setText(formatearfecha(llegada));
-     
-     
+
+
 
         // Hacer los campos de solo lectura
-        ['folio', 'origen', 'destino', 'corrida','idticket','remitente', 'destinatario', 'description','salida', 'llegada'].forEach(field => form.getTextField(field).enableReadOnly());
+        ['folio', 'origen', 'destino', 'corrida', 'idticket', 'remitente', 'destinatario', 'description', 'salida', 'llegada'].forEach(field => form.getTextField(field).enableReadOnly());
 
         // Generar el código QR con el mensaje "hola"
         const qrCodeDataURL = await generateQRCode(IdGuia);
@@ -274,7 +274,7 @@ async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
 
         form.getTextField('IVA').setText(iva.toFixed(2));
         // Hacer los campos de solo lectur
-        ['folio', 'IVA', 'origen', 'destino', 'corrida', 'total', 'taquillero', 'description', 'nombreemisor', 'telemisor', 'nombrereceptor', 'telreceptor', 'fechasalida', 'fechallegada' ].forEach(field => form.getTextField(field).enableReadOnly());
+        ['folio', 'IVA', 'origen', 'destino', 'corrida', 'total', 'taquillero', 'description', 'nombreemisor', 'telemisor', 'nombrereceptor', 'telreceptor', 'fechasalida', 'fechallegada'].forEach(field => form.getTextField(field).enableReadOnly());
 
         // Generar el código QR con el mensaje "hola"
         const qrCodeDataURL = await generateQRCode(Folio);

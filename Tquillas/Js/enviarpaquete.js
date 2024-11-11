@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectpago.value == "CARD") {
             pago = document.getElementById('total-price').textContent
             document.getElementById('monto-paquete').style.display = 'none'
-            document.getElementById('monto-paquete').value = parseFloat( pago)
-            
+            document.getElementById('monto-paquete').value = parseFloat(pago)
+
         } else {
 
             document.getElementById('monto-paquete').style.display = 'block'
@@ -279,101 +279,129 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTotalPrice();
 
 
-        
+
     });
-    
+
 
     document.getElementById('show-json').addEventListener('click', () => {
-    var totalText = document.getElementById('total-price').textContent;
-    var total = parseFloat(totalText);
-    var paymentType = document.getElementById('selectpago').value; // Obtener el tipo de pago
+        var totalText = document.getElementById('total-price').textContent;
+        var total = parseFloat(totalText);
+        var paymentType = document.getElementById('selectpago').value; // Obtener el tipo de pago
 
-    // Asignar el total al monto ingresado si el método de pago es "CARD"
-    if (paymentType === "CARD") {
-        document.getElementById('monto-paquete').value = total; // Asignar el total al monto ingresado
-    }
-
-    var monto_ingresado = document.getElementById('monto-paquete').value; // Obtener el monto ingresado después de la asignación
-
-    // Validación para el método de pago en efectivo
-    if (paymentType === "CASH") {
-        if (monto_ingresado < total) {
-            alert("EL monto DEBE SER MAYOR a la venta");
-            return; // Detener la ejecución si la validación falla
+        // Asignar el total al monto ingresado si el método de pago es "CARD"
+        if (paymentType === "CARD") {
+            document.getElementById('monto-paquete').value = total; // Asignar el total al monto ingresado
         }
-    } 
-    // Validación para el método de pago con tarjeta
+
+        var monto_ingresado = document.getElementById('monto-paquete').value; // Obtener el monto ingresado después de la asignación
+
+        // Validación para el método de pago en efectivo
+        if (paymentType === "CASH") {
+            if (monto_ingresado < total) {
+                alert("EL monto DEBE SER MAYOR a la venta");
+                return; // Detener la ejecución si la validación falla
+            }
+        }
+        // Validación para el método de pago con tarjeta
         else if (paymentType === "CARD") {
             if (parseFloat(monto_ingresado) !== total) {
-            alert("EL monto DEBE SER IGUAL al total para pagos con tarjeta");
-            return; // Detener la ejecución si la validación falla
+                alert("EL monto DEBE SER IGUAL al total para pagos con tarjeta");
+                return; // Detener la ejecución si la validación falla
+            }
+            // Asegurarse de que el campo de monto ingresado no esté vacío
+            if (monto_ingresado === "") {
+                alert("Por favor, ingrese el monto total para el pago con tarjeta.");
+                return; // Detener la ejecución si el campo está vacío
+            }
         }
-        // Asegurarse de que el campo de monto ingresado no esté vacío
-        if (monto_ingresado === "") {
-            alert("Por favor, ingrese el monto total para el pago con tarjeta.");
-            return; // Detener la ejecución si el campo está vacío
+
+        const rows = tableBody.querySelectorAll('tr');
+        const data = Array.from(rows).map(row => ({
+            descripcion: row.querySelector('.descripcion').value.trim(),
+            alto: row.querySelector('.alto').value.trim(),
+            ancho: row.querySelector('.ancho').value.trim(),
+            largo: row.querySelector('.largo').value.trim(),
+            peso: row.querySelector('.peso').value.trim(),
+            embalaje: row.querySelector('select').value,
+            precio: row.querySelector('.precio').value.trim()
+        }));
+
+        document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
+        localStorage.setItem("PACKAGES", JSON.stringify(data));
+
+        // Crear el objeto combinado
+        const combinedData = {
+            datosViaje: JSON.parse(localStorage.getItem('datos_viaje')),
+            remides: JSON.parse(localStorage.getItem('REMIDES')),
+            packages: JSON.parse(localStorage.getItem('PACKAGES')),
+            totalPackage: localStorage.getItem('TOTALPACKAGE'),
+            userid: localStorage.getItem('id'),
+            saleshift: `${localStorage.getItem('shift_number')}-${parseInt(localStorage.getItem('num_ventas')) + 1}`,
+            PaymentType: paymentType === "CASH" ? 'cash' : 'card',
+            salesmanId: localStorage.getItem('id'),
+            CashCheckpoint: "",
+            salesterminal: localStorage.getItem('terminal_id'),
+            saleshiftid: localStorage.getItem('saleshift_id'),
+            isaleid: "",
+            shortid: "",
+            Email: "sag@sag.com"
+        };
+
+        console.log('Datos a enviar:', combinedData);
+
+
+        var numdeventas = parseInt(localStorage.getItem('num_ventas'))
+        numdeventas++
+        localStorage.setItem('num_ventas', numdeventas)
+
+        if (paymentType === "CASH") {
+            var venta = parseFloat(localStorage.getItem('venta_reciente'))
+            venta = venta + parseFloat(localStorage.getItem('TOTALPACKAGE'))
+            localStorage.setItem('venta_reciente', venta)
+        } else {
+
         }
-    }
 
-    const rows = tableBody.querySelectorAll('tr');
-    const data = Array.from(rows).map(row => ({
-        descripcion: row.querySelector('.descripcion').value.trim(),
-        alto: row.querySelector('.alto').value.trim(),
-        ancho: row.querySelector('.ancho').value.trim(),
-        largo: row.querySelector('.largo').value.trim(),
-        peso: row.querySelector('.peso').value.trim(),
-        embalaje: row.querySelector('select').value,
-        precio: row.querySelector('.precio').value.trim()
-    }));
+       
 
-    document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
-    localStorage.setItem("PACKAGES", JSON.stringify(data));
+        // Verifica los datos antes de enviar
 
-    // Crear el objeto combinado
-    const combinedData = {
-        datosViaje: JSON.parse(localStorage.getItem('datos_viaje')),
-        remides: JSON.parse(localStorage.getItem('REMIDES')),
-        packages: JSON.parse(localStorage.getItem('PACKAGES')),
-        totalPackage: localStorage.getItem('TOTALPACKAGE'),
-        userid: localStorage.getItem('id'),
-        saleshift: `${localStorage.getItem('shift_number')}-${parseInt(localStorage.getItem('num_ventas')) + 1}`,
-        PaymentType: paymentType === "CASH" ? 'cash' : 'card',
-        salesmanId: localStorage.getItem('id'),
-        CashCheckpoint: "",
-        salesterminal: localStorage.getItem('terminal_id'),
-        saleshiftid: localStorage.getItem('saleshift_id'),
-        isaleid: "",
-        shortid: "",
-        Email: "sag@sag.com"
-    };
+        fetch('http://apitaquillassag.dyndns.org/Home/insertarpackage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(combinedData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error en la respuesta: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Respuesta del servidor:', data);
+                // Manejo de la respuesta exitosa
 
-    console.log('Datos a enviar:', combinedData); // Verifica los datos antes de enviar
+             
+                var isaleid = data.isaleid;
+                window.location.href = "detallepaquete.aspx?isaleid=" + isaleid;
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+                // Manejo de errores
+                alert('Hubo un problema al realizar la solicitud: ' + error.message);
 
-    fetch('http://apitaquillassag.dyndns.org/Home/insertarpackage', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(combinedData)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error en la respuesta: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Respuesta del servidor:', data);
-        // Manejo de la respuesta exitosa
-        var isaleid = data.isaleid;
-        window.location.href = "detallepaquete.aspx?isaleid=" + isaleid;
-    })
-    .catch(error => {
-        console.error('Error en la solicitud:', error);
-        // Manejo de errores
-        alert('Hubo un problema al realizar la solicitud: ' + error.message);
+                var numdeventas = parseInt(localStorage.getItem('num_ventas'))
+                if (numdeventas == 0) {
+
+                }else{
+
+                numdeventas - 1
+                }
+                localStorage.setItem('num_ventas', numdeventas)
+            });
     });
-});
 
 
     // Obtener el elemento y agregar el evento
@@ -443,20 +471,20 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(jsonFormData);
 
             localStorage.setItem('data_clientes-paquetes', JSON.stringify(jsonFormData))
-          
+
             // Aquí puedes agregar la lógica para proceder a la siguiente página o acción
 
 
             const remides = {
 
-                 "NombreRemitente":document.getElementById('nombre-remitente').value,
-                 "DireccionRemitente":  document.getElementById('direccion-remitente').value,
-                 "PhoneRemitente": document.getElementById('phone-remitente').value,
-                 "CorreoRemitente": document.getElementById('correo-remitente').value,
-                 "NombreDestinatario": document.getElementById('nombre-destinatario').value,
-                 "DireccionDestinatario": document.getElementById('direccion-destinatario').value,
-                 "PhoneDestinatario": document.getElementById('phone-destinatario').value,
-                 "CorreoDestinatario": document.getElementById('correo-destinatario').value
+                "NombreRemitente": document.getElementById('nombre-remitente').value,
+                "DireccionRemitente": document.getElementById('direccion-remitente').value,
+                "PhoneRemitente": document.getElementById('phone-remitente').value,
+                "CorreoRemitente": document.getElementById('correo-remitente').value,
+                "NombreDestinatario": document.getElementById('nombre-destinatario').value,
+                "DireccionDestinatario": document.getElementById('direccion-destinatario').value,
+                "PhoneDestinatario": document.getElementById('phone-destinatario').value,
+                "CorreoDestinatario": document.getElementById('correo-destinatario').value
             }
 
             localStorage.setItem("REMIDES", JSON.stringify(remides))
@@ -1482,7 +1510,7 @@ function iniciarturno() {
 
 
     } else {
-       
+
         fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
             method: 'POST',
             headers: {
@@ -1704,7 +1732,7 @@ function CerrarCajamenor() {
 
 
 
- 
+
 
 }
 

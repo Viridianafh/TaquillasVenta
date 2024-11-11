@@ -1,4 +1,6 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+﻿let pdfDocs = [];
+let nombre_pdf_comb = "";
+document.addEventListener('DOMContentLoaded', async function () {
     var tbodyrsumeefectiivo = document.getElementById("table-descarga-boletos").getElementsByTagName('tbody')[0];
     var datais = localStorage.getItem("datosInternetsale");
     datais = JSON.parse(datais);
@@ -7,17 +9,17 @@
     var datosCombinados = JSON.parse(dataviaje);
     var folio = localStorage.getItem('folio');
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/ConsultaBoletos?folio=${folio}`)
+    await fetch(`http://apitaquillassag.dyndns.org/Home/ConsultaBoletos?folio=${folio}`)
         .then(response => response.json())
-        .then(data => {
+        .then(async data => {  // Cambié a async para usar await dentro de la función
             document.getElementById('loaderboletos').style.display = 'none';
             document.getElementById('section-tabla-boletos').style.display = 'block';
-
+            let tam = data.length;
+            let cont = 0;
             console.log(data);
 
-            data.forEach(e => {
-                var tr = document.createElement('tr');
-
+            for (const e of data) {  // Usamos 'for...of' para iterar
+                cont++;
                 let passengerTypeText;
 
                 switch (e.PassengerType) {
@@ -40,24 +42,30 @@
                         passengerTypeText = 'Tipo desconocido'; // Manejo de casos no esperados
                 }
 
-
+                var tr = document.createElement('tr');
                 tr.innerHTML =
                     `
-                        <td>${e.Origin}</td>
-                        <td>${e.Destination}</td>
-                        <td>${datosCombinados.departingOrigen}</td>
-                        <td>${datosCombinados.bus}</td> 
-                        <td>${e.PassengerName}</td>
-                        <td>${passengerTypeText}</td>
-                        <td>${e.TicketId}</td>
-                        <td>${e.SeatName}</td>
-                        <td>${e.SoldPrice}</td>
-                        <td><button class="btn btn-dark" id="btn-download" onclick="Descargar('${e.TicketId}', '${e.PassengerName}', '${e.Origin}', '${e.Destination}', '${datosCombinados.departingOrigen}', '${datosCombinados.bus}', '${passengerTypeText}', '${e.SeatName}', ${e.SoldPrice});"> <ion-icon name="download-outline"></ion-icon>Descargar</button></td>
-                    `;
+                    <td>${e.Origin}</td>
+                    <td>${e.Destination}</td>
+                    <td>${datosCombinados.departingOrigen}</td>
+                    <td>${datosCombinados.bus}</td> 
+                    <td>${e.PassengerName}</td>
+                    <td>${passengerTypeText}</td>
+                    <td>${e.TicketId}</td>
+                    <td>${e.SeatName}</td>
+                    <td>${e.SoldPrice}</td>
+                    <td><button class="btn btn-dark" id="btn-download" onclick="Descargar('${e.TicketId}', '${e.PassengerName}', '${e.Origin}', '${e.Destination}', '${datosCombinados.departingOrigen}', '${datosCombinados.bus}', '${passengerTypeText}', '${e.SeatName}', ${e.SoldPrice});"> <ion-icon name="download-outline"></ion-icon>Descargar</button></td>
+                `;
 
                 tbodyrsumeefectiivo.appendChild(tr);
-                Descargar(e.TicketId, e.PassengerName, e.Origin, e.Destination, datosCombinados.departingOrigen, datosCombinados.bus, passengerTypeText, e.SeatName, e.SoldPrice)
-            });
+                nombre_pdf_comb += e.TicketId;
+                if (cont != tam) {
+                    nombre_pdf_comb += ", ";
+                }
+                // Esperar a que la función Descargar termine antes de continuar
+                await Descargar(e.TicketId, e.PassengerName, e.Origin, e.Destination, datosCombinados.departingOrigen, datosCombinados.bus, passengerTypeText, e.SeatName, e.SoldPrice);
+            }
+            combinarPDFs(pdfDocs, nombre_pdf_comb);
         });
 });
 
@@ -231,9 +239,11 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         console.log("Marca de agua añadida");
 
         // Generar y descargar el PDF
+
         const pdfBytes = await pdfDoc.save();
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const urlObject = window.URL.createObjectURL(blob);
+        pdfDocs.push(pdfBytes);
 
         const link = document.createElement('a');
         link.href = urlObject;
@@ -246,11 +256,52 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
 
         // Abrir el PDF en una nueva pestaña
         setTimeout(() => {
-            window.open(urlObject, '_blank');
+            //window.open(urlObject, '_blank');
         }, 1000);
 
     } catch (error) {
         console.error("Error al descargar el PDF:", error);
         document.getElementById('btn-download').textContent = "Error al descargar";
+    }
+}
+
+async function combinarPDFs(pdfs, nombre_pdf_comb) {
+    console.log(pdfs)
+    try {
+        // Crear un nuevo documento PDF vacío
+        const combinedPdf = await PDFLib.PDFDocument.create();
+
+        // Recorrer cada uno de los PDFs que quieres combinar
+        for (let i = 0; i < pdfs.length; i++) {
+            // Cargar el PDF actual
+            const pdfDoc = await PDFLib.PDFDocument.load(pdfs[i]);
+
+            // Copiar todas las páginas del PDF actual al nuevo documento combinado
+            const copiedPages = await combinedPdf.copyPages(pdfDoc, pdfDoc.getPages().map((_, index) => index));
+            copiedPages.forEach(page => combinedPdf.addPage(page));
+        }
+
+        // Guardar el PDF combinado
+        const pdfBytes = await combinedPdf.save();
+
+        // Crear un Blob con el PDF combinado y generar el enlace de descarga
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const urlObject = URL.createObjectURL(blob);
+
+        // Crear un enlace para descargar el PDF combinado
+        const link = document.createElement('a');
+        link.href = urlObject;
+        link.download = `${nombre_pdf_comb}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Opcional: abrir el PDF combinado en una nueva pestaña
+        setTimeout(() => {
+            window.open(urlObject, '_blank');
+        }, 1000);
+
+    } catch (error) {
+        console.error('Error al combinar los PDFs:', error);
     }
 }
