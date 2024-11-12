@@ -95,7 +95,7 @@
         <script>
             const opciones = {
                 margin: [0, 0, 0, 0], // Márgenes en mm (top, right, bottom, left)
-                filename: 'listadeabordar.pdf',
+                filename: 'InformeCierre.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'mm', format: [83, 297], orientation: 'portrait' } // 83 mm de ancho y altura indefinida

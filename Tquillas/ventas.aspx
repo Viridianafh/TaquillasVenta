@@ -419,7 +419,7 @@
                         <td>Pasajero</td>
                         <td>Tipo</td>
                         <td>Asiento</td>
-                        <td>costo</td>
+                        <td>Costo</td>
 
                     </tr>
                 </thead>
@@ -499,7 +499,7 @@
                         <td>Pasajero</td>
                         <td>Tipo</td>
                         <td>Asiento</td>
-                        <td>costo</td>
+                        <td>Costo</td>
 
                     </tr>
                 </thead>

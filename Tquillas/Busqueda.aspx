@@ -51,8 +51,8 @@
                    <th scope="col">Tipo de pago</th>
                    <th scope="col">Fecha</th>
                    <th scope="col">Asiento</th>
-                   <th scope="col">Status</th>
-                   <th scope="col">Actions</th>
+                   <th scope="col">Estatus</th>
+                   <th scope="col">Acciones</th>
                  </tr>
             </thead>
             <tbody>

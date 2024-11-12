@@ -1626,7 +1626,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                           <td>${datosCombinados.origen}</td>
                           <td>${datosCombinados.destino}</td>
-                          <td>${datosCombinados.departingOrigen}
+                          <td>${formatearfecha(datosCombinados.departingOrigen)}
                           <td>${datosCombinados.bus}</td> 
                           <td>${datais[i].pasajero}</td>
                           <td>${tipo}</td>
@@ -1722,7 +1722,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "PassengerName": item.Pasajero,
                 "PassengerType": tipo,
                 "SeatName": item.Asiento,
-                "SoldPrice": parseFloat(totalapagar),
+                "SoldPrice": parseFloat(item.Costo),
                 "PayedPrice": 0.0,
                 "OriginalPrice": parseFloat(originalprice),
                 "Trip_ID": id,
@@ -1891,7 +1891,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     "PassengerName": item.Pasajero,
                     "PassengerType": tipo,
                     "SeatName": item.Asiento,
-                    "SoldPrice": parseFloat(item.costo),
+                    "SoldPrice": parseFloat(item.Costo),
                     "PayedPrice": 0.0,
                     "OriginalPrice": parseFloat(originalprice),
                     "Trip_ID": id,
@@ -2024,7 +2024,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                   <td>${datosCombinados.origen}</td>
                                   <td>${datosCombinados.destino}</td>
-                                  <td>${datosCombinados.departingOrigen}
+                                  <td>${formatearfecha(datosCombinados.departingOrigen)}
                                   <td>${datosCombinados.bus}</td> 
                                   <td>${datais[i].pasajero}</td>
                                   <td>${tipo}</td>
@@ -2905,7 +2905,7 @@ function validarEdadadulta(input, labelspan) {
 }
 
 // Crear un nuevo textarea dinámicamente
-var countnino = 1; // Ajusta según sea necesario
+var countnino = 0; // Ajusta según sea necesario
 var contentinputs = document.getElementById('contentinputs');
 var input2 = document.createElement('textarea');
 input2.classList.add("form-control");
@@ -2968,3 +2968,30 @@ function ReservarAsiento(id) {
     }
 }
 
+
+
+function formatearfecha(fechain) {
+
+
+
+
+    let fecha = new Date(fechain);
+
+    // Extraemos el día, mes, año, horas, minutos y segundos
+    let dia = fecha.getDate();
+    let mes = fecha.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
+    let anio = fecha.getFullYear();
+    let horas = fecha.getHours();
+    let minutos = fecha.getMinutes();
+    let segundos = fecha.getSeconds();
+
+    // Formateamos los valores a dos dígitos (añadiendo ceros si es necesario)
+    dia = dia < 10 ? '0' + dia : dia;
+    mes = mes < 10 ? '0' + mes : mes;
+    horas = horas < 10 ? '0' + horas : horas;
+    minutos = minutos < 10 ? '0' + minutos : minutos;
+    segundos = segundos < 10 ? '0' + segundos : segundos;
+    let fechaFormateada = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+
+    return fechaFormateada
+}

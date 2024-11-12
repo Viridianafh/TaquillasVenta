@@ -90,7 +90,7 @@
                     <div class="card-body">
                         <div><ion-icon name="swap-horizontal-outline" style="font-size: 80px;"></ion-icon></div>
                         <h5 class="card-title">Enviar Paquetes</h5>
-                        <p class="card-text">click aqui para enviar paquetes </p>
+                        <p class="card-text">Click aquí para enviar paquetes </p>
                     </div>
                     <div class="card-footer"><a href="enviarpaquete.aspx">Ver</a></div>
                 </div>
@@ -98,7 +98,7 @@
                 <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
                     <div><ion-icon name="search-circle-outline" style="font-size: 80px;"></ion-icon></div>
                     <div class="card-body">
-                        <h5 class="card-title">Buscar paqueteria</h5>
+                        <h5 class="card-title">Buscar paquetería</h5>
                         <p class="card-text">Busca un paquete usando su ticket</p>
                     </div>
                     <div class="card-footer"><a href="buscarpaquete.aspx">Ver</a></div>
