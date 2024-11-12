@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             celdaOrigen.innerHTML = origencambio; // Cambia esto según sea necesario
             celdaDestino.innerHTML = destinocambio; // Cambia esto según sea necesario
             celdaAsiento.innerHTML = `<p id="seatrow"></p>`; // Cambia esto según sea necesario
-            celdaPrecio.innerHTML = precionuevo; // Asigna el valor del precio
+            celdaPrecio.innerHTML = precionuevo.toFixed(2); // Asigna el valor del precio
             celdaTicket.innerHTML = `<p id="ticketrow"></p>`; // 
 
             crearasientos(tipo, dataid)
@@ -715,7 +715,7 @@ function crearasientos(tipo, id) {
         var res = precionuevo - precio_anterior
 
         document.getElementById('spanTexto2').style.display = 'block'
-        document.getElementById('spanTexto2').textContent = `la diferencia de precio es de: ${res} Pesos `
+        document.getElementById('spanTexto2').textContent = `la diferencia de precio es de: ${res.toFixed(2)} Pesos `
 
         localStorage.setItem('diferencia_cambio', res)
 
@@ -1139,7 +1139,17 @@ async function Descargar(ticket) {
         form.getTextField('departure_destino').setText(boleto.llegada);
         form.getTextField('total').setText(String(boleto.SoldPrice));
         form.getTextField('product').setText(boleto.product);
+        form.getTextField('product').setText(boleto.product);
 
+        const precioSinIVA = boleto.PayedPrice / (1 + 16 / 100);
+
+        // Calcular el IVA
+        const iva = boleto.PayedPrice - precioSinIVA;
+
+
+
+
+        form.getTextField('IVA').setText(String(iva.toFixed(2)));
 
         switch (boleto.PassengerType) {
             case "ADULT":
@@ -1162,7 +1172,7 @@ async function Descargar(ticket) {
 
 
         // Hacer los campos de solo lectura
-        ['passenger_name', 'origen', 'ticket_id', 'seat', 'Destino', 'departure_origen', 'fecha',
+        ['passenger_name', 'IVA','origen', 'ticket_id', 'seat', 'Destino', 'departure_origen', 'fecha',
             'saleman_name', 'subtotal', 'departure_destino', 'total', 'product', 'passenger_type'].forEach(field => {
                 const textField = form.getTextField(field);
                 if (textField) {

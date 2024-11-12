@@ -2994,4 +2994,7 @@ function formatearfecha(fechain) {
     let fechaFormateada = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
 
     return fechaFormateada
+
+
+
 }

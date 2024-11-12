@@ -35,7 +35,7 @@ fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${sa
                 totalVentas += e.PrecioDeVenta || 0;
                 countventa++;
                 if (e.Tipo_pago == "cash") {
-                    totalcard += e.PrecioDeVenta;
+                    totalcash += e.PrecioDeVenta;
                 } else {
                     totalcard += e.PrecioDeVenta;
                 }
