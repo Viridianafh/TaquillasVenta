@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <td>${e.TicketId}</td>
                     <td>${e.SeatName}</td>
                     <td>${e.SoldPrice}</td>
-                    <td><button class="btn btn-dark" id="btn-download" onclick="Descargar('${e.TicketId}', '${e.PassengerName}', '${e.Origin}', '${e.Destination}', '${datosCombinados.departingOrigen}', '${datosCombinados.bus}', '${passengerTypeText}', '${e.SeatName}', ${e.SoldPrice});"> <ion-icon name="download-outline"></ion-icon>Descargar</button></td>
+                    <td><button class="btn btn-dark" id="btn-download" onclick="Descargar('${e.TicketId}', '${e.PassengerName}', '${e.Origin}', '${e.Destination}', '${datosCombinados.departingOrigen}', '${datosCombinados.bus}', '${passengerTypeText}', '${e.SeatName}', ${e.SoldPrice},true);"> <ion-icon name="download-outline"></ion-icon>Descargar</button></td>
                 `;
 
                 tbodyrsumeefectiivo.appendChild(tr);
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     nombre_pdf_comb += ", ";
                 }
                 // Esperar a que la función Descargar termine antes de continuar
-                await Descargar(e.TicketId, e.PassengerName, e.Origin, e.Destination, datosCombinados.departingOrigen, datosCombinados.bus, passengerTypeText, e.SeatName, e.SoldPrice);
+                await Descargar(e.TicketId, e.PassengerName, e.Origin, e.Destination, datosCombinados.departingOrigen, datosCombinados.bus, passengerTypeText, e.SeatName, e.SoldPrice, false);
             }
             combinarPDFs(pdfDocs, nombre_pdf_comb);
         });
@@ -110,7 +110,7 @@ function generateQRCode(text) {
     });
 }
 
-async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus, tipo, asiento, precio) {
+async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus, tipo, asiento, precio, imprimir) {
     try {
         document.getElementById('btn-download').textContent = "Descargando...";
 
@@ -249,7 +249,9 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         link.href = urlObject;
         link.download = `${folio}.pdf`;
         document.body.appendChild(link);
-        link.click();
+        if (imprimir) {
+            link.click();
+        }
         document.body.removeChild(link);
 
         document.getElementById('btn-download').textContent = "Volver a Descargar";
