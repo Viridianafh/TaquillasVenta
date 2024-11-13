@@ -62,29 +62,33 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Llama a la función para buscar el boleto
             const data1 = await BuscarBoletoUno(ticket);
-            document.getElementById('procederCambio').disabled = false
-            document.getElementById('bus-container').style.display = 'none'
-            var contentcards = document.getElementById("content-cards")
-            var floor1 = document.getElementById('floor-1')
-            var floor2 = document.getElementById('floor-2')
+            if (data1.length > 0) {
+                document.getElementById('procederCambio').disabled = false
+                document.getElementById('bus-container').style.display = 'none'
+                var contentcards = document.getElementById("content-cards")
+                var floor1 = document.getElementById('floor-1')
+                var floor2 = document.getElementById('floor-2')
 
-            seatcount = 1
-            seatcounter = 0
+                seatcount = 1
+                seatcounter = 0
 
-            floor1.innerHTML = ''
-            floor2.innerHTML = ''
-            contentcards.innerHTML = ''
+                floor1.innerHTML = ''
+                floor2.innerHTML = ''
+                contentcards.innerHTML = ''
 
 
 
-            limpiarTabla()
-            limpiarTabla2()
-            // Crea las tablas y realiza los cambios necesarios en la interfaz
-            CrearTablas(data1, 'tableticket');
-            iniciarCambio();
+                limpiarTabla()
+                limpiarTabla2()
+                // Crea las tablas y realiza los cambios necesarios en la interfaz
+                CrearTablas(data1, 'tableticket');
+                iniciarCambio();
 
-            // Muestra la sección del viaje
-            document.getElementById("section-viaje").style.display = "block";
+                // Muestra la sección del viaje
+                document.getElementById("section-viaje").style.display = "block";
+            } else {
+                window.alert("Boleto no encontrado.");
+            }           
         } catch (error) {
             console.error("Error al buscar el boleto:", error);
             alert("Hubo un error al buscar el boleto. Por favor, intenta nuevamente.");
@@ -748,7 +752,8 @@ function crearasientos(tipo, id) {
 
 
 function ProcederBoleto() {
-    document.getElementById('procederCambio').disabled = true
+    document.getElementById('procederCambio').disabled = true;
+    document.getElementById("cancelarCambio").disabled = true;
     var tipopasajero = localStorage.getItem('tipopasajero_cambio')
 
 
@@ -1051,7 +1056,7 @@ function limpiarTabla2() {
 
 
 function CancelarOperacion() {
-
+    document.getElementById("procederCambio").disabled = true;
     let salesData = localStorage.getItem('salesNumbersolds');
 
     // Verificar si hay datos y analizarlos

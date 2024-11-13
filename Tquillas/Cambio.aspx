@@ -75,7 +75,7 @@
                             <th>Destino</th>
                             <th>Asiento</th>
                             <th>Precio</th>
-                            <th>Folio</th>
+                            <th>Folio de compra</th>
                         </tr>
                     </thead>
                     <tbody>
