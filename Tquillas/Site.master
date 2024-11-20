@@ -338,21 +338,33 @@
             }
         }
 
-      
 
         // Función para obtener datos de localStorage
+        // Función para obtener datos de localStorage
         function getLocalStorageData() {
-            // Suponiendo que almacenes los datos en un objeto clave-valor en localStorage
             let data = {};
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 const value = localStorage.getItem(key);
-                data[key] = JSON.parse(value);
+
+                // Verifica si el valor es nulo o vacío
+                if (value === null || value === "") {
+                    data[key] = ""; // Asigna una cadena vacía si el valor es nulo o vacío
+                } else {
+                    try {
+                        // Intenta parsear el valor
+                        const parsedValue = JSON.parse(value);
+                        data[key] = parsedValue; // Asigna el valor parseado
+                    } catch (e) {
+                        // Si hay un error en el parseo, asigna el valor original
+                        data[key] = value; // Asigna el valor original si no es un JSON válido
+                    }
+                }
             }
             return data;
         }
 
-
+        
 
         setInterval(async () => {
             const localStorageData = getLocalStorageData();
