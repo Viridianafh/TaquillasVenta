@@ -149,14 +149,15 @@
         </div>
 
 
-
      <footer>
                 <p>&copy; <%: DateTime.Now.Year %> - Sag Autobuses</p>
             </footer>
-   
 
     <script>
 
+
+
+        // El ID del usuario (esto puede variar según tu implementación)
         // Obtener el valor de 'caja_abierta' desde localStorage
         var estaabierta = localStorage.getItem('caja_abierta');
 
@@ -174,6 +175,203 @@
             console.log('Turno iniciado, puede usar el sistema.');
         }
 
+
+
+        
+
+        function getLocalStorageData() {
+            let localStorageData = {};
+            // Verificamos si hay datos en localStorage
+            if (localStorage.length === 0) {
+                return ""; // Si no hay datos, retornamos una cadena vacía
+            }
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i); // Obtiene la clave en la posición i
+                const value = localStorage.getItem(key); // Obtiene el valor de esa clave
+                localStorageData[key] = value; // Almacena el par clave-valor en el objeto
+            }
+            return localStorageData; // Devuelve el objeto con todos los datos
+        }
+
+        async function pedirUsuario() {
+            const username = prompt("Por favor, ingresa tu nombre de usuario:");
+
+            // Verificar si el usuario ingresó algo
+            if (username) {
+                // Paso 2: Realizar una solicitud fetch usando el nombre de usuario
+                const url = `http://apitaquillassag.dyndns.org/Home/BuscarTaquilleroPorUsername?username=${username}`;
+
+                try {
+                    const response = await fetch(url);
+
+                    if (!response.ok) {
+                        throw new Error('Error en la solicitud');
+                    }
+
+                    const data = await response.json();  // Convertir la respuesta en formato JSON
+                    console.log(data);  // Aquí puedes procesar la respuesta, por ejemplo mostrarla en la página
+                    alert(`Datos del usuario: ${JSON.stringify(data)}`);
+
+                    const userId = data.id;
+                    console.log('ID del usuario:', userId);
+
+                    // Retornar el ID del usuario
+                    return userId;
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert("Hubo un problema con la solicitud.");
+                }
+            } else {
+                alert("No se ingresó ningún nombre de usuario.");
+                return null;  // Retornar null si no se ingresó un nombre de usuario
+            }
+        }
+
+   
+
+
+        async function saveUserDataToBackend(userId) {
+            try {
+                // 1. Obtener los datos de localStorage
+                const localStorageData = getLocalStorageData();
+
+                
+
+                // 3. Preparar los datos que se enviarán al servidor
+                const userData = {
+                    localStorageData,
+                   
+                };
+
+                // 4. Crear el objeto que se enviará al backend
+                const dataToSend = {
+                    userId: userId,  // El ID del usuario
+                    userData: userData
+                };
+
+                // 5. Enviar los datos al servidor (POST request)
+                const response = await fetch('http://apitaquillassag.dyndns.org/Home/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dataToSend)
+                });
+
+                const result = await response.json();
+                console.log(result.message);  // Mostrar respuesta del backend
+            } catch (error) {
+                console.error('Error al guardar los datos:', error);
+            }
+        }
+
+
+        async function recuperardata(id) {
+            if (!id) return;  // Si no hay ID, no hacemos nada
+
+            const apiUrl = `http://apitaquillassag.dyndns.org/Home/get/${id}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Error al obtener los datos');
+                }
+
+                const data = await response.json();
+                console.log(data);
+
+                // Almacenar los datos en localStorage
+                for (let key in data.localStorageData) {
+                    if (data.localStorageData.hasOwnProperty(key)) {
+                        let value = data.localStorageData[key];
+
+                        // Si el campo es 'id', lo guardamos tal cual
+                        if (key === 'id') {
+                            localStorage.setItem(key, value);
+                        } else {
+                            // Detectar y convertir valores que deberían ser números
+                            if (typeof value === 'string') {
+                                // Intentamos convertir la cadena en un número si es posible
+                                const numValue = parseFloat(value);
+                                if (!isNaN(numValue)) {
+                                    // Si la conversión es válida, usamos el número
+                                    value = numValue;
+                                }
+                            }
+
+                            // Verificar si el valor es una cadena JSON y parsearlo
+                            if (value && typeof value === 'string') {
+                                try {
+                                    // Si el valor parece una cadena JSON, intentar convertirlo a un objeto
+                                    const parsedValue = JSON.parse(value);
+                                    localStorage.setItem(key, JSON.stringify(parsedValue));
+                                } catch (error) {
+                                    // Si no es una cadena JSON válida, guardarlo tal cual como string
+                                    localStorage.setItem(key, value);
+                                }
+                            } else {
+                                // Si el valor no es una cadena, solo guardarlo como está
+                                localStorage.setItem(key, JSON.stringify(value));
+                            }
+                        }
+                    }
+                }
+
+                console.log('Datos guardados en localStorage:');
+                for (let key in data.localStorageData) {
+                    if (data.localStorageData.hasOwnProperty(key)) {
+                        let storedValue = localStorage.getItem(key);
+
+                        // Intentar parsear el valor almacenado, si es un JSON
+                        try {
+                            storedValue = JSON.parse(storedValue);
+                        } catch (error) {
+                            // Si no es un JSON válido, dejarlo como cadena
+                        }
+
+                        console.log(`${key}:`, storedValue);
+                    }
+                }
+            } catch (error) {
+                console.error('Hubo un error al obtener los datos:', error);
+            }
+        }
+
+      
+
+        // Función para obtener datos de localStorage
+        function getLocalStorageData() {
+            // Suponiendo que almacenes los datos en un objeto clave-valor en localStorage
+            let data = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                data[key] = JSON.parse(value);
+            }
+            return data;
+        }
+
+
+
+        setInterval(async () => {
+            const localStorageData = getLocalStorageData();
+
+            if (Object.keys(localStorageData).length === 0) {  // Si localStorage está vacío
+                const usuarioid = await pedirUsuario();  // Esperar a que pedirUsuario devuelva el ID
+
+                if (usuarioid) {
+                    await recuperardata(usuarioid);  // Solo llamar a recuperardata si se obtuvo un ID
+                }
+            } else {
+                const userid = document.getElementById('iduss') ? document.getElementById('iduss').textContent : null;
+                if (userid) {
+                    saveUserDataToBackend(userid);  // Enviar datos al backend si el ID está disponible
+                }
+            }
+        }, 60000);
+
+        
 
     </script>
 </body>

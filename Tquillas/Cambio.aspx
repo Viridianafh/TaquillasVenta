@@ -32,7 +32,7 @@
   
     <div class="col">
        
-     <h5 class="card-title m-2 text-danger">datos del viejo Boleto</h5>
+     <h5 class="card-title m-2 text-danger">Datos del boleto anterior</h5>
 
               <div class="card-body">
 
@@ -45,6 +45,7 @@
                             <th>Destino</th>
                             <th>Asiento</th>
                             <th>Precio</th>
+                            <th>Fecha</th>
                             <th>Ticket</th>
                         </tr>
                     </thead>
@@ -75,6 +76,7 @@
                             <th>Destino</th>
                             <th>Asiento</th>
                             <th>Precio</th>
+                            <th>Fecha</th>
                             <th>Folio de compra</th>
                         </tr>
                     </thead>

@@ -284,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     document.getElementById('show-json').addEventListener('click', () => {
+        document.getElementById('show-json').disabled = true
         var totalText = document.getElementById('total-price').textContent;
         var total = parseFloat(totalText);
         var paymentType = document.getElementById('selectpago').value; // Obtener el tipo de pago
@@ -385,13 +386,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
              
                 var isaleid = data.isaleid;
+                document.getElementById('show-json').disabled = false
                 window.location.href = "detallepaquete.aspx?isaleid=" + isaleid;
             })
             .catch(error => {
                 console.error('Error en la solicitud:', error);
                 // Manejo de errores
                 alert('Hubo un problema al realizar la solicitud: ' + error.message);
-
+                document.getElementById('show-json').disabled = false
                 var numdeventas = parseInt(localStorage.getItem('num_ventas'))
                 if (numdeventas == 0) {
 
@@ -593,7 +595,13 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(arrayventas)
 
 
-        } else {
+        }
+        else if (monto_retirar > monto) {
+            alert("no puedes  retirar esta cantidad")
+        }
+
+
+        else {
 
 
             var venta = localStorage.getItem('venta_reciente')

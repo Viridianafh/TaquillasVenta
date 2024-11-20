@@ -99,7 +99,6 @@ function generateQRCode(text) {
                             .then(buffer => resolve(new Uint8Array(buffer)))
                             .catch(reject);
                     } else {
-                        reject(new Error('No se pudo generar el QR'));
                     }
                 }
             }, 100);

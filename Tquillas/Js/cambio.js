@@ -154,13 +154,15 @@ document.addEventListener('DOMContentLoaded', () => {
             let celdaDestino = nuevaFila.insertCell(2);
             let celdaAsiento = nuevaFila.insertCell(3);
             let celdaPrecio = nuevaFila.insertCell(4); // Columna de Precio
-            let celdaTicket = nuevaFila.insertCell(5);
+            let celdafecha = nuevaFila.insertCell(5); 
+            let celdaTicket = nuevaFila.insertCell(6);
 
             celdaNombre.innerHTML = Nombre; // Cambia esto según sea necesario
             celdaOrigen.innerHTML = origencambio; // Cambia esto según sea necesario
             celdaDestino.innerHTML = destinocambio; // Cambia esto según sea necesario
             celdaAsiento.innerHTML = `<p id="seatrow"></p>`; // Cambia esto según sea necesario
             celdaPrecio.innerHTML = precionuevo.toFixed(2); // Asigna el valor del precio
+            celdafecha.innerHTML = formatearfecha( localStorage.getItem('salida_nuevo')); 
             celdaTicket.innerHTML = `<p id="ticketrow"></p>`; // 
 
             crearasientos(tipo, dataid)
@@ -224,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${e.destino}</td>
                     <td>${e.asiento}</td>
                     <td>${e.precio}</td>
+                    <td>${formatearfecha(e.date_created)}</td >
                     <td>${e.ticket}</td>
     
                     `;
@@ -388,6 +391,7 @@ async function enviardata(id, corrida, tipo, origen, destino, bus, departingOrig
     localStorage.setItem('origen_cambio', origen)
     localStorage.setItem('destino_cambio', destino)
     localStorage.setItem('runid_cambio', RunId)
+    localStorage.setItem('salida_nuevo', departingOrigen)
 
     localStorage.setItem('tripid_cambio', id)
     await contarInapam(id)
@@ -527,6 +531,32 @@ async function BuscarBoletoUno(ticket) {
 }
 
 
+
+function formatearfecha(fechain) {
+
+
+
+
+    let fecha = new Date(fechain);
+
+    // Extraemos el día, mes, año, horas, minutos y segundos
+    let dia = fecha.getDate();
+    let mes = fecha.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
+    let anio = fecha.getFullYear();
+    let horas = fecha.getHours();
+    let minutos = fecha.getMinutes();
+    let segundos = fecha.getSeconds();
+
+    // Formateamos los valores a dos dígitos (añadiendo ceros si es necesario)
+    dia = dia < 10 ? '0' + dia : dia;
+    mes = mes < 10 ? '0' + mes : mes;
+    horas = horas < 10 ? '0' + horas : horas;
+    minutos = minutos < 10 ? '0' + minutos : minutos;
+    segundos = segundos < 10 ? '0' + segundos : segundos;
+    let fechaFormateada = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+
+    return fechaFormateada
+}
 
 function iniciarCambio() {
     $(document).ready(function () {
@@ -719,7 +749,7 @@ function crearasientos(tipo, id) {
         var res = precionuevo - precio_anterior
 
         document.getElementById('spanTexto2').style.display = 'block'
-        document.getElementById('spanTexto2').textContent = `la diferencia de precio es de: ${res.toFixed(2)} Pesos `
+        document.getElementById('spanTexto2').textContent = `La diferencia de precio es de: ${res.toFixed(2)} Pesos `
 
         localStorage.setItem('diferencia_cambio', res)
 
@@ -982,7 +1012,7 @@ function ProcederBoleto() {
                         localStorage.setItem('venta_reciente', suma)
 
                         document.getElementById('spanTexto').style.display = 'block'
-                        document.getElementById('spanTexto').textContent = `el nuevo folio es: ${data} puedes descargar el boleto en el menu "Buscar Boleto"`
+                        document.getElementById('spanTexto').textContent = `El nuevo folio es: ${data} puedes descargar el boleto en el menu "Buscar Boleto"`
 
 
                         Descargar(data)
@@ -1085,7 +1115,7 @@ function CancelarOperacion() {
 
     Swal.fire({
         title: "Cambios Realizados",
-        text: 'Boleto Cancelado',
+        text: 'Operacion Cancelada',
         icon: "success"
     }).then((result) => {
         if (result.isConfirmed || result.isDismissed) {

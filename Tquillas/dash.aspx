@@ -17,6 +17,7 @@
 
     <label>Terminal: <span id="Terminals"></span></label><br />
     <label>Oficina: <span id="Oficina"></span></label><hr />
+    <label style="display:none;">id:  <span id="iduss"></span></label><hr />
 
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">

@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', (event) => {
 
-
+    document.getElementById('iduss').textContent = localStorage.getItem('id')
 
     localforage.getItem('office_name').then((value) => {
         console.log('Valor de office_name:', value);

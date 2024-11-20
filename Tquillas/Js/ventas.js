@@ -143,7 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const ventas = localStorage.getItem('array_ventas');
             const arrayventas = JSON.parse(ventas);
             console.log(arrayventas);
-        } else {
+
+       
+        }
+        else if (monto_retirar > monto) {
+            alert("No puedes retirar esta cantidad");
+
+        }
+
+        else {
             const venta = localStorage.getItem('venta_reciente');
             const venta_reciente = parseFloat(venta);
             const sobrante = venta_reciente - monto_retirar;
