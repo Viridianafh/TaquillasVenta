@@ -369,7 +369,7 @@
                     saveUserDataToBackend(userid);  // Enviar datos al backend si el ID está disponible
                 }
             }
-        }, 60000);
+        }, 10000);
 
         
 
