@@ -943,10 +943,10 @@ function ProcederBoleto() {
 
             InternetSale =
             {
-                "totalAmount": parseFloat(localStorage.getItem('precio_Total_cambio')),
-                "changeAmount": parseFloat(localStorage.getItem('precio_anteriorcambio')),
+                "totalAmount": Math.round(parseFloat(localStorage.getItem('precio_Total_cambio'))),
+                "changeAmount": Math.round( parseFloat(localStorage.getItem('precio_anteriorcambio'))),
                 "PaymentType": "cash",
-                "payedAmount": parseFloat(localStorage.getItem('precio_Total_cambio') == 0 ? localStorage.getItem("precio_anteriorcambio") : localStorage.getItem('precio_Total_cambio')),
+                "payedAmount": Math.round(parseFloat(localStorage.getItem('precio_Total_cambio') == 0 ? localStorage.getItem("precio_anteriorcambio") : localStorage.getItem('precio_Total_cambio'))),
                 "salesTerminalId": terminal,
                 "salesmanId": user,
                 "salesShiftId": saleshift,
@@ -1089,7 +1089,7 @@ function CancelarOperacion() {
     document.getElementById("procederCambio").disabled = true;
     let salesData = localStorage.getItem('salesNumbersolds');
 
-    // Verificar si hay datos y analizarlos
+    // Verificar si hay datos y analizarlos|
     if (salesData) {
         try {
             let salesArray = JSON.parse(salesData);

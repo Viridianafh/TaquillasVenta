@@ -1750,10 +1750,10 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
 
         const InternetSale = {
-            "totalAmount": parseFloat(totalapagar),
+            "totalAmount": Math.round( parseFloat(totalapagar)),
             "changeAmount": 0,
             "PaymentType": "card",
-            "payedAmount": parseFloat(totalapagar),
+            "payedAmount": Math.round( parseFloat(totalapagar)),
             "salesTerminalId": terminalid,
             "salesmanId": ticketuserid,
             "salesShiftId": localStorage.getItem('saleshift_id'),
@@ -1915,12 +1915,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Añadir el nuevo valor al array
             lista_ventasstr.push(shift_number_to_is);
             localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
-            var changeamount = parseFloat(monto_recibido) - parseFloat(totalapagar)
+            var changeamount = Math.round( parseFloat(monto_recibido) - parseFloat(totalapagar))
             const InternetSale = {
-                "totalAmount": parseFloat(totalapagar),
+                "totalAmount": Math.round( parseFloat(totalapagar)),
                 "changeAmount": changeamount,
                 "PaymentType": "cash",
-                "payedAmount": parseFloat(monto_recibido),
+                "payedAmount": Math.round( parseFloat(monto_recibido)),
                 "salesTerminalId": terminalid,
                 "salesmanId": ticketuserid,
                 "salesShiftId": localStorage.getItem('saleshift_id'),
