@@ -866,20 +866,14 @@ function ProcederBoleto() {
 
         localStorage.setItem('num_ventas', numero.toString())
 
-        var shift_number_to_is = shiftnumber + "-" + numero
-        alert(shift_number_to_is)
 
-
-        var lista_ventas = localStorage.getItem("array_ventas")
-
+        var shift_number_to_is = shiftnumber + "-" + numero;
+        var lista_ventas = localStorage.getItem("array_ventas");
         var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
 
         // Añadir el nuevo valor al array
         lista_ventasstr.push(shift_number_to_is);
-
-        // Convertir la lista actualizada a cadena y almacenarla en localStorage
         localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
-
 
         var precio_anteriorcambo = localStorage.getItem('precio_anteriorcambio')
         var nuevo = localStorage.getItem('precionuevo')
@@ -932,8 +926,8 @@ function ProcederBoleto() {
                 "PassengerName": nombre,
                 "PassengerType": tipopasajero,
                 "SeatName": asiento_cambio,
-                "SoldPrice": parseFloat(localStorage.getItem('precio_anteriorcambio')),
-                "PayedPrice": parseFloat(localStorage.getItem("precio_Total_cambio")),
+                "SoldPrice": Math.round(parseFloat(localStorage.getItem('precionuevo'))),
+                "PayedPrice": 0.00,
                 "OriginalPrice": parseFloat(localStorage.getItem("nuevo_precio_cambio")),
                 "Trip_ID": dataid,
                 "UserId": user
