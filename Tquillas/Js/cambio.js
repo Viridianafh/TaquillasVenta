@@ -1132,7 +1132,7 @@ async function Descargar(ticket) {
 
 
         // Obtener datos del boleto
-        const response = await fetch(`http://apitaquillassag.dyndns.org/Home/ConsultarBoletos?folio=${ticket}`);
+        const response = await fetch(`http://apitaquillassag.dyndns.org/Home/ConsultarBoletosCambio?folio=${ticket}`);
         const data = await response.json();
         console.log("Datos del boleto:", data);
 

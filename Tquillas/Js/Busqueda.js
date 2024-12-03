@@ -153,6 +153,7 @@ async function Descargar(ticket, tipopago, date) {
     try {
         document.getElementById('btn-download').textContent = "Descargando...";
 
+
         // Obtener datos del boleto
         const response = await fetch(`http://apitaquillassag.dyndns.org/Home/ConsultarBoletos?folio=${ticket}`);
         const data = await response.json();
@@ -351,7 +352,6 @@ function ProcederCancelacion() {
 
                     cancelarBoleto()
 
-
                 }
                 else {
                     Swal.fire({
@@ -367,9 +367,6 @@ function ProcederCancelacion() {
 
 
 function cancelarBoleto() {
-
-
-
 
     var boleto = document.getElementById('textconcepto').value
     var userid = localStorage.getItem('id')
@@ -413,33 +410,25 @@ function cancelarBoleto() {
                 }
             });
 
-
         })
         .catch(error => {
             console.error('Error:', error);
         });
-
-
 
 }
 
 
 function formatearfecha(fechain) {
 
-
-
-
     let fecha = new Date(fechain);
 
-    // Extraemos el día, mes, año, horas, minutos y segundos
     let dia = fecha.getDate();
-    let mes = fecha.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
+    let mes = fecha.getMonth() + 1;
     let anio = fecha.getFullYear();
     let horas = fecha.getHours();
     let minutos = fecha.getMinutes();
     let segundos = fecha.getSeconds();
 
-    // Formateamos los valores a dos dígitos (añadiendo ceros si es necesario)
     dia = dia < 10 ? '0' + dia : dia;
     mes = mes < 10 ? '0' + mes : mes;
     horas = horas < 10 ? '0' + horas : horas;
@@ -454,7 +443,6 @@ function formatearfecha(fechain) {
 function limpiarTabla() {
     var tabla = document.getElementById('table');
 
-    // Eliminar todas las filas excepto la primera (encabezados)
     while (tabla.rows.length > 1) {
         tabla.deleteRow(1);
     }
