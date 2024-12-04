@@ -779,20 +779,17 @@ function crearasientos(tipo, id) {
 }
 
 
-
-
 function ProcederBoleto() {
     document.getElementById('procederCambio').disabled = true;
     document.getElementById("cancelarCambio").disabled = true;
     var tipopasajero = localStorage.getItem('tipopasajero_cambio')
 
 
-
     var texto = document.getElementById('seatrow').textContent
+
     if (texto === "") {
         alert("debes seleccionar un asiento para proceder")
     } else {
-
 
         var nombre = localStorage.getItem("nombrepasajero_cambio")
         var tipo = ""
@@ -998,7 +995,7 @@ function ProcederBoleto() {
                         document.getElementById('ticketrow').textContent = data
                         document.getElementById('ticketrow').style.backgroundColor = 'green'
 
-                        var precionuevo = localStorage.getItem('precio_Total_cambio')
+                        var precionuevo = Math.round(parseFloat(localStorage.getItem('precionuevo')))
                         var parseprecionuevo = parseFloat(precionuevo)
                         var ventareciente = localStorage.getItem('venta_reciente')
                         var parseventa = parseFloat(ventareciente)
@@ -1032,11 +1029,7 @@ function ProcederBoleto() {
                     localStorage.setItem('cancelaciones', cancelaciones);
                 }
             });
-
     }
-
-
-
 }
 
 
@@ -1261,8 +1254,6 @@ async function Descargar(ticket) {
         link.click();
         document.body.removeChild(link);
 
-
-
         // Abrir el PDF en una nueva pestaña
         setTimeout(() => {
             window.open(urlObject, '_blank');
@@ -1273,6 +1264,7 @@ async function Descargar(ticket) {
 
     }
 }
+
 function generateQRCode(text) {
     return new Promise((resolve, reject) => {
         try {
