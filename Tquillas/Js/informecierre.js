@@ -69,6 +69,7 @@ let lastCancelVenta// Variable para almacenar el precio del último CANCEL
 
 
 fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${saleshift_id}`)
+//fetch(`https://localhost:5001/Home/detalleventapentaho?saleshift=${saleshift_id}`)
     .then(response => response.json())
     .then(data => {
 
@@ -103,6 +104,11 @@ fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${sa
             } else if (e.Tipo === "PAQUETE") {
                 totalPaquetes += e.PrecioDeVenta || 0;
                 countpackage++
+                if (e.Tipo_pago == "cash") {
+                    totalcash += e.PrecioDeVenta;
+                } else {
+                    totalcard += e.PrecioDeVenta;
+                }
             }
         });
 
@@ -145,7 +151,7 @@ fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${sa
         document.getElementById("cant-cancel").textContent = countcancel
         document.getElementById("cant-package").textContent = countpackage
         document.getElementById("cant-sale").textContent = countventa
-        document.getElementById("total-cancel").textContent = totalCancelaciones
+        document.getElementById("total-cancel").textContent = -1 * totalCancelaciones
         document.getElementById("total-venta").textContent = totalVentas
 
         document.getElementById("reporte-taquillero").textContent = localStorage.getItem('name')
