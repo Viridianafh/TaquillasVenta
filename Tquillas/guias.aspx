@@ -35,13 +35,13 @@
 
     </a>
       
-      <h2>Guias de viaje <span id="usuario"></span></h2><br>
+      <h2>Guías de viaje <span id="usuario"></span></h2><br>
 
     
 
     <section id="section-busqueda-guide" class="">
 
-         <h5>Buscar Origen</h5>
+         <h5>Buscar origen</h5>
         <div class="d-flex gap-2 flex-direction-column">
 
            
@@ -65,7 +65,7 @@
                         <th>operadores</th>
                         <th>bus</th>
                         <th>salida</th>
-                        <th>generar guia</th>
+                        <th>generar guía</th>
                     </tr>
                 </thead>
                 <tbody>

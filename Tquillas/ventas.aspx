@@ -53,15 +53,15 @@
 
 <section id="section-iniciar">
     <div class="container mt-5" id="content-button">
-        <button class="btn btn-primary" id="button_iniciar">Iniciar Turno</button>
+        <button class="btn btn-primary" id="button_iniciar">Iniciar turno</button>
     </div>
 
     <div class="container" id="content-buscador" style="display: none;">
-        <h1>Venta de Boletos</h1>
+        <h1>Venta de boletos</h1>
 
         <div class="container mt-5 mb-2 gap-2" id="content-buttons" style="display: none">
-            <button class="btn btn-success d-none" id="button_precorte">Precorte de Caja</button>
-            <button class="btn btn-danger" id="button_cerrar_caja">Cerrar Caja</button>
+            <button class="btn btn-success d-none" id="button_precorte">Precorte de caja</button>
+            <button class="btn btn-danger" id="button_cerrar_caja">Cerrar caja</button>
         </div>
 
         <hr />
@@ -71,13 +71,13 @@
                 <div class="container m-3">
                     <label for="origen">Origen: </label>
                     <select id="origen" class="select2" style="width: 320px;">
-                        <option value="default">Seleccionar Opción</option>
+                        <option value="default">Seleccionar opción</option>
                     </select>
                 </div>
                 <div class="container m-3">
                     <label for="destino">Destino: </label>
                     <select id="destino" class="select2" style="width: 320px;">
-                        <option value="default">Seleccionar Opción</option>
+                        <option value="default">Seleccionar opción</option>
                     </select>
                 </div>
                 <div class="container m-3">
@@ -143,7 +143,7 @@
 
             <div class="container d-flex justify-content-between mb-5">
                 
-                <button class="btn btn-danger" id="btn-atras1"><ion-icon name="arrow-back-outline"></ion-icon>atras</button>
+                <button class="btn btn-danger" id="btn-atras1"><ion-icon name="arrow-back-outline"></ion-icon>atrás</button>
                  <button class="btn btn-success" id="btn-siguiente1">siguiente<ion-icon name="arrow-forward-outline"></ion-icon></button>
                   
 
@@ -162,10 +162,10 @@
                       <thead class="thead-dark">
 
                           <tr>
-                              <th>Total Boletos de Estudiante Vendidos</th>
-                              <th>Maximo de Boletos de estudiantes</th>
-                              <th>Total Boletos de Inapam Vendidos</th>
-                              <th>Maximo de Boletos de Inapam</th>
+                              <th>Total boletos de estudiante vendidos</th>
+                              <th>Máximo de boletos de estudiantes</th>
+                              <th>Total boletos de inapam vendidos</th>
+                              <th>Máximo de boletos de inapam</th>
 
                           </tr>
                       </thead>
@@ -189,7 +189,7 @@
                 <textarea id="telefonocliente" class="form-control" maxlength="10" name="textarea" rows="1" cols="50" style="150px;"></textarea>
 
 
-                <label>Correo electronico</label>
+                <label>Correo electrónico</label>
                 <textarea id="correocliente" class="form-control" maxlength="50" name="textarea" rows="1" cols="50" style="150px;"></textarea>
 
 
@@ -276,7 +276,7 @@
 
             <div class="container d-flex justify-content-between">
                 
-                <button class="btn btn-danger" id="btn-atras2"><ion-icon name="arrow-back-outline"></ion-icon>atras</button>
+                <button class="btn btn-danger" id="btn-atras2"><ion-icon name="arrow-back-outline"></ion-icon>atrás</button>
                  <button class="btn btn-success" id="btn-siguiente2">siguiente<ion-icon name="arrow-forward-outline"></ion-icon></button>
                   
 
@@ -311,7 +311,7 @@
         <div class="container d-flex gap-2 m-5">
            
             <ion-icon name="square-outline" style="color: #28a745; background-color: #28a745;"></ion-icon>
-            Seleccion
+            Selección
             <ion-icon name="square-outline" style="color: #0d6efd; background-color: #0d6efd;"></ion-icon>
             Disponible
             <ion-icon name="square-outline" style="color: #dc3545; background-color: #dc3545;"></ion-icon>
@@ -365,7 +365,7 @@
 
     <section id="section-tipo-pago" style="display: none;">
 
-      <button class="btn btn-danger" id="btn-atras3"><ion-icon name="arrow-back-outline"></ion-icon>atras</button>
+      <button class="btn btn-danger" id="btn-atras3"><ion-icon name="arrow-back-outline"></ion-icon>atrás</button>
 
 
 
@@ -402,7 +402,7 @@
 
 
 
-              <button class="btn btn-danger" id="btn-atras4"><ion-icon name="arrow-back-outline"></ion-icon>atras</button>
+              <button class="btn btn-danger" id="btn-atras4"><ion-icon name="arrow-back-outline"></ion-icon>atrás</button>
 
         <h1>Resumen:</h1>
         <h5>(resumen de la compra)</h5>
@@ -461,7 +461,7 @@
                 <h4>Promoción: <span id="namepromo"></span></h4>
                 <p id="resanuncio" style="display:none"></p>
                 <input placeholder="ingresa el código promocional" type="text" id="codpromo" class="form-control m-2" style="width:250px;" />
-                <button class="btn btn-dark" id="btnaplicarpromo">Aplicar Promoción</button>
+                <button class="btn btn-dark" id="btnaplicarpromo">Aplicar promoción</button>
             </div>
         </div>
     </div>
@@ -475,7 +475,7 @@
 
 
     <section id="pago-tarjeta" style="display: none;">
-              <button class="btn btn-danger" id="btn-atras5"><ion-icon name="arrow-back-outline"></ion-icon>atras</button>
+              <button class="btn btn-danger" id="btn-atras5"><ion-icon name="arrow-back-outline"></ion-icon>atrás</button>
 
 
 

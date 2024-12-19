@@ -24,13 +24,13 @@
 
     <div class="container" >
 
-        <h2>Informe Cierre Caja <span id="usuario"></span></h2>
+        <h2>Informe cierre caja <span id="usuario"></span></h2>
         <p><strong> <span id="dates"></span></strong> </p>
         <p><span id="shift_number"></span></p>
         <br>
 
         <div class="container" id="content">
-        <h2>Informe Precorte de Caja <span id="usuario"></span></h2>
+        <h2>Informe precorte de caja <span id="usuario"></span></h2>
         <p><strong> <span id="dates"></span></strong> </p>
         <br>
 
@@ -43,14 +43,14 @@
                         <thead>
                             <tr>
                                 <th>Tipo</th>
-                                <th>Fecha De Venta</th>
-                                <th>Número De Venta</th>
-                                <th>Id Del Boleto</th>
-                                <th>Nombre De Pasajero</th>
-                                <th>Tipo De Pasajero</th>
+                                <th>Fecha de venta</th>
+                                <th>Número de venta</th>
+                                <th>Id del boleto</th>
+                                <th>Nombre de pasajero</th>
+                                <th>Tipo de pasajero</th>
                                 <th>Origen</th>
                                 <th>Destino</th>
-                                <th>Precio De Venta</th>
+                                <th>Precio de venta</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,7 +62,7 @@
         </div>
 
         <div id="informe">
-            <h5>Resumen Cierre</h5>
+            <h5>Resumen cierre</h5>
             <h6>Fecha: <span id="spanfecha"></span></h6>
             <br />
             <h6>Taquillero: <span id="taquillero"></span></h6>

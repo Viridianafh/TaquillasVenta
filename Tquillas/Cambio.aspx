@@ -65,7 +65,7 @@
              <div class="col">
 
             <div class="card-body" style="display:none;" id="newcardbody">
-                      <h5 class="card-title m-2 text-success">Nuevo Boleto</h5>
+                      <h5 class="card-title m-2 text-success">Nuevo boleto</h5>
 
                 <table class="table table-bordered" id="table-ticket-nuevo" >
                    
@@ -101,7 +101,7 @@
 
             
 
-                 <h5>Paso 1. buscar viaje...</h5>
+                 <h5>Paso 1. Buscar viaje...</h5>
             <div>
                 <label>Origen</label>
                 <select class="form-control select2" id="origen" style="width: 220px;">
@@ -185,8 +185,8 @@
     </section>
 
     <div class="d-flex gap-5">
-        <button class="btn btn-success mt-5" id="procederCambio" onclick="ProcederBoleto()" >Proceder Cambio</button>
-            <button class="btn btn-danger mt-5" id="cancelarCambio" onclick="CancelarOperacion()"  disabled="true">Cancelar Operacion</button>
+        <button class="btn btn-success mt-5" id="procederCambio" onclick="ProcederBoleto()" >Proceder cambio</button>
+            <button class="btn btn-danger mt-5" id="cancelarCambio" onclick="CancelarOperacion()"  disabled="true">Cancelar operación</button>
     </div>
 
           

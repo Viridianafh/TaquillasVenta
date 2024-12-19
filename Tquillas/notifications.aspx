@@ -29,14 +29,14 @@
               <thead>
                   <tr>
                   <th>Mensaje</th>
-                  <th>fecha de mensaje</th>
-                  <th>acciones</th>
+                  <th>Fecha de mensaje</th>
+                  <th>Acciones</th>
               </tr>
               </thead>
               
               <tbody>
                     <tr>
-                  <td>Aquí podras ver todas las novedades, viajes nuevos, modificaciones, etc</td>
+                  <td>Aquí podrás ver todas las novedades, viajes nuevos, modificaciones, etc</td>
                   <td>2024-04-22</td>
                   <td><button class="btn btn-danger disabled">borrar</button></td>
               </tr>

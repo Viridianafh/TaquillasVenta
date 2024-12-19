@@ -10,7 +10,7 @@
   <a href="dash.aspx" style="text-decoration: none;">
 
             <button class="btn btn-danger">
-             <ion-icon name="arrow-back-outline"> atras</ion-icon>
+             <ion-icon name="arrow-back-outline"> atrás</ion-icon>
             </button>
 
         </a>
@@ -34,7 +34,7 @@
 
               <div class="card h-5 p-5 gap-2">
 
-                      <h3>Selecciona la Oficina </h3>
+                      <h3>Selecciona la oficina </h3>
                       <select class="form-select" id ="select_oficina_crear">
                           <option value="-">Selecciona tu terminal</option>
                       </select>    
@@ -61,7 +61,7 @@
               </div>
 
                <div class="col border rounded p-2">
-                  <h3>Cambiar Configuración</h3>
+                  <h3>Cambiar configuración</h3>
 
                      <div class="card h-5 p-5 gap-2">
 

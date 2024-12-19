@@ -24,7 +24,7 @@
 
         <div class="container m-3">
 
-            <label>Ingresa el código de Compra o el id del paquete</label>
+            <label>Ingresa el código de compra o el id del paquete</label>
 
             <input type="text" id="codcompra" class="form-control"  />
 
@@ -38,14 +38,14 @@
                 
                 <thead>
                     <tr>
-                        <td>Codigo</td>
+                        <td>Código</td>
                         <td>Descripción</td>
                         <td>Remitente</td>
-                        <td>Numero remitente</td>
+                        <td>Número remitente</td>
                         <td>Correo remitente</td>
                         <td>Destinatario</td>
-                        <td>Numero Destinatario</td>
-                        <td>Status</td>
+                        <td>Número destinatario</td>
+                        <td>Estatus</td>
                     </tr>
                 </thead>
 

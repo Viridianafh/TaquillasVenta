@@ -23,7 +23,7 @@
 
         </a>
 
-            <h2>Buscar Boletos</h2>
+            <h2>Buscar boletos</h2>
 
             <div class="container m-5">
 
@@ -47,7 +47,7 @@
                    <th scope="col">Tipo</th>
                    <th scope="col">Ticket</th>
                    <th scope="col">Precio</th>
-                   <th scope="col">Código Compra</th>
+                   <th scope="col">Código compra</th>
                    <th scope="col">Tipo de pago</th>
                    <th scope="col">Fecha</th>
                    <th scope="col">Asiento</th>
@@ -65,11 +65,11 @@
 
     <section class="container" id="section-code" style="display:none;"">
 
-        <label>Ingresa el código que se envio al jefe de taquilla: </label>
+        <label>Ingresa el código que se envió al jefe de taquilla: </label>
 
         <input type="type" class="form-control" id="code" />
 
-        <button class="btn btn-dark" onclick="ProcederCancelacion()" >Confirmar Cancelación</butto>
+        <button class="btn btn-dark" onclick="ProcederCancelacion()" >Confirmar cancelación</button>
 
     </section>
 

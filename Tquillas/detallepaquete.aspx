@@ -36,7 +36,7 @@
 
 
               <div class="loader" id="loader"> </div> 
-              <p>Generando Boletos....</p>
+              <p>Generando boletos....</p>
     
         </div>
         
@@ -67,8 +67,8 @@
                     <th scope="col"> Destino </th>
                     <th scope="col"> Remitente </th>
                     <th scope="col"> Destinatario </th>
-                    <th scope="col"> Numero de guia </th>
-                    <th scope="col"> Descargar guia del paquete </th>
+                    <th scope="col"> Número de guía </th>
+                    <th scope="col"> Descargar guía del paquete </th>
                     <th scope="col"> Descargar ticket de cliente </th>
                 </tr>
            

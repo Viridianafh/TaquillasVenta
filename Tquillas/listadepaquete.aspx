@@ -59,7 +59,7 @@
                     <thead >
                         <tr class="table table-striped table-dark" >
                             <td><h4>Ruta</h4></td>
-                            <td><h4>Autobus</h4></td>
+                            <td><h4>Autobús</h4></td>
                             <td><h4>Origen</h4></td>
                             <td><h4>Destino</h4></td>
                             <td><h4>Salida</h4></td>
@@ -79,7 +79,7 @@
     <section id="section-lista" style="display: none; ">
 
         <div class="container d-flex m-2 gap-2">
-              <button class="btn btn-danger" id="btn-atras-lista">Atras</button>
+              <button class="btn btn-danger" id="btn-atras-lista">Atrás</button>
             <button class="btn btn-primary" id="btn-guardar-lista">Descargar</button>
         </div>
 
@@ -97,8 +97,8 @@
            
                 <p id="main-ruta"     class="m-3">Ruta: <span id="rutabname"></span></p>
                 <p id="main-bus"       class="m-3">Bus: <span id="buss"></span></p>
-                <p id="main-abordan"   class="m-3">EquipajeTaquilla: <span id="countabordan"></span></p>
-                <p id="main-total"  class="m-3">Totalequipaje: <span id="countotal"></span></p>
+                <p id="main-abordan"   class="m-3">Equipaje taquilla: <span id="countabordan"></span></p>
+                <p id="main-total"  class="m-3">Total equipaje: <span id="countotal"></span></p>
             </div>
 
             <table id="table-lista" class="table table-hover">
@@ -106,7 +106,7 @@
 
                 <thead class="bg-dark" >
                     <tr>
-                        <td><h5>Descripcion</h5></td>
+                        <td><h5>Descripción</h5></td>
                         <td><h5>Origen</h5></td>
                         <td><h5>Destino</h5></td>
                         <td><h5>Envia</h5></td>
@@ -127,7 +127,7 @@
 
                 <thead class="bg-dark" style="font-size: 10px;">
                     <tr>
-                        <td><p>Descripcion</p></td>
+                        <td><p>Descripción</p></td>
                         <td><p>Origen</p></td>
                         <td><p>Destino</p></td>
                         <td><p>Envia</p></td>

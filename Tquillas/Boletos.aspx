@@ -36,7 +36,7 @@
 
 
               <div class="loader" id="loader"> </div> 
-              <p>Generando Boletos....</p>
+              <p>Generando boletos....</p>
     
         </div>
         

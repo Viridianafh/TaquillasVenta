@@ -45,7 +45,7 @@
                 <img src="Assets/logoSag.png" style="width: 150px;" />
             </div>
 
-            <h1>Guia De Viaje</h1>
+            <h1>Guía de viaje</h1>
 
             <div>
                 <h4>

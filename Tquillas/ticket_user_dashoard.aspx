@@ -42,7 +42,7 @@
      
 
             <div class="container" style="width:100%; display:flex; align-items: center; justify-content:center; flex-direction: column; gap: 30px;">
-                   <h2>Inicio De Sesion</h2>
+                   <h2>Inicio de sesión</h2>
                 <div class="container w-100" style="display: flex; align-items: center; justify-content: center; flex-direction:column; ">
                     <label>Usuario</label>
                     <input id="text_user" type="text" class="form-control m-3" style="width:80%"/>

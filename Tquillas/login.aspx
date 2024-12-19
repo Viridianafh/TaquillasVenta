@@ -44,7 +44,7 @@
      
 
             <div class="container" style="width:100%; display:flex; align-items: center; justify-content:center; flex-direction: column; gap: 30px;">
-                   <h2>Inicio De Sesion</h2>
+                   <h2>Inicio de sesión</h2>
 
                 <div class="container w-100" style="display: flex; align-items: center; justify-content: center; flex-direction:column; ">
 

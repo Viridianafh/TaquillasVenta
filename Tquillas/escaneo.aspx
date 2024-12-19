@@ -16,7 +16,7 @@
 
         </a>
       
-      <h2>Escaneo de Boletos <span id="usuario"></span></h2><br>
+      <h2>Escaneo de boletos <span id="usuario"></span></h2><br>
 
       
 
@@ -25,7 +25,7 @@
        
         <div class="container">
 
-            <h4>Ingresa el Ticket </h4>
+            <h4>Ingresa el ticket </h4>
 
 
             <input type="text" class="form-control" id="input-ticket" />

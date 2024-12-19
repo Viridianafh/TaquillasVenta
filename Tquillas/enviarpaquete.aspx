@@ -42,15 +42,15 @@
 
 <section id="section-iniciar">
     <div class="container mt-5" id="content-button">
-        <button class="btn btn-primary" id="button_iniciar">Iniciar Turno</button>
+        <button class="btn btn-primary" id="button_iniciar">Iniciar turno</button>
     </div>
 
     <div class="container" id="content-buscador" style="display: none;">
         <h1>Envio de paquetes</h1>
 
         <div class="container mt-5 mb-2 gap-2" id="content-buttons" style="display: none">
-            <button class="btn btn-success d-none" id="button_precorte">Precorte de Caja</button>
-            <button class="btn btn-danger" id="button_cerrar_caja">Cerrar Caja</button>
+            <button class="btn btn-success d-none" id="button_precorte">Precorte de caja</button>
+            <button class="btn btn-danger" id="button_cerrar_caja">Cerrar caja</button>
         </div>
 
         <hr />
@@ -60,13 +60,13 @@
                 <div class="container m-3">
                     <label for="origen">Origen: </label>
                     <select id="origen" class="select2" style="width: 320px;">
-                        <option value="default">Seleccionar Opción</option>
+                        <option value="default">Seleccionar opción</option>
                     </select>
                 </div>
                 <div class="container m-3">
                     <label for="destino">Destino: </label>
                     <select id="destino" class="select2" style="width: 320px;">
-                        <option value="default">Seleccionar Opción</option>
+                        <option value="default">Seleccionar opción</option>
                     </select>
                 </div>
                 <div class="container m-3">
@@ -192,7 +192,7 @@
         </tbody>
     </table>
 
-    <button id="add-row" class="btn btn-primary mb-3">Agregar Fila</button>
+    <button id="add-row" class="btn btn-primary mb-3">Agregar fila</button>
          <h4>Total: $<span id="total-price">0.00</span></h4>
     <pre id="json-output" class="bg-light p-3" style =" display:none"></pre>
 

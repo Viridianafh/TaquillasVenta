@@ -37,7 +37,7 @@
                 <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
                     <div class="card-body">
                         <div><ion-icon name="ticket-outline" style="font-size: 80px;"></ion-icon></div>
-                        <h5 class="card-title">Venta de Boletos</h5>
+                        <h5 class="card-title">Venta de boletos</h5>
                         <p class="card-text">Realiza la venta de boletos de autobús aquí</p>
                     </div>
                     <div class="card-footer"><a href="ventas.aspx">Ver</a></div>
@@ -46,7 +46,7 @@
                 <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
                     <div class="card-body">
                         <div><ion-icon name="bus-outline" style="font-size: 80px;"></ion-icon></div>
-                        <h5 class="card-title">Lista de Abordar</h5>
+                        <h5 class="card-title">Lista de abordar</h5>
                         <p class="card-text">Consulta la lista de las personas que van a abordar</p>
                     </div>
                     <div class="card-footer"><a href="listadeabordar.aspx">Ver</a></div>
@@ -55,7 +55,7 @@
                 <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
                     <div><ion-icon name="search-circle-outline" style="font-size: 80px;"></ion-icon></div>
                     <div class="card-body">
-                        <h5 class="card-title">Buscar un Boleto</h5>
+                        <h5 class="card-title">Buscar un boleto</h5>
                         <p class="card-text">Busca un boleto consultando nombre, correo, o código de compra</p>
                     </div>
                     <div class="card-footer"><a href="Busqueda.aspx">Ver</a></div>
@@ -64,7 +64,7 @@
                 <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
                     <div><ion-icon name="scan-circle-outline" style="font-size: 80px;"></ion-icon></div>
                     <div class="card-body">
-                        <h5 class="card-title">Escaneo de Boletos</h5>
+                        <h5 class="card-title">Escaneo de boletos</h5>
                         <p class="card-text">Escanea el boleto ingresando el código del ticket</p>
                     </div>
                     <div class="card-footer"><a href="escaneo.aspx">Ver</a></div>
@@ -90,7 +90,7 @@
                 <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
                     <div class="card-body">
                         <div><ion-icon name="swap-horizontal-outline" style="font-size: 80px;"></ion-icon></div>
-                        <h5 class="card-title">Enviar Paquetes</h5>
+                        <h5 class="card-title">Enviar paquetes</h5>
                         <p class="card-text">Click aquí para enviar paquetes </p>
                     </div>
                     <div class="card-footer"><a href="enviarpaquete.aspx">Ver</a></div>
