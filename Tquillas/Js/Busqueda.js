@@ -309,7 +309,8 @@ function SolicitarCodigo(ticket) {
 
     var officename = localStorage.getItem('office_name')
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/GenerarTokenCancelacion?oflname=${officename}`)
+    fetch(`http://apitaquillassag.dyndns.org/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
+    //fetch(`https://localhost:5001/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
         .then(res => res.json())
         .then(data => {
 

@@ -97,7 +97,7 @@
 
            
 
-            <h5>Buen viaje, Conduce con cuidado tu familia te espera!</h5>
+            <h5>Buen viaje, conduce con cuidado tu familia te espera!</h5>
 
             <div>
                 <h6>

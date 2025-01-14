@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("pruebas_piso2").innerHTML = ``;
         document.getElementById("content_piso_2").style.display = "none";
         fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
-            //fetch(`https://localhost:5001/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
+        //fetch(`https://localhost:5001/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
 
         })
             .then(response => response.json())
