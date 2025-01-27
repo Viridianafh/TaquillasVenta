@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("pruebas_piso2").innerHTML = ``;
         document.getElementById("content_piso_2").style.display = "none";
         fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
-        //fetch(`https://localhost:5001/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
+        //fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
 
         })
             .then(response => response.json())
@@ -2421,7 +2421,7 @@ function iniciarturno() {
 
 
         fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
-            //fetch('https://localhost:5001/Home/Origen', {
+            //fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -2460,7 +2460,7 @@ function iniciarturno() {
                     var data = { origen: Origen };
 
                     fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
-                        //fetch('https://localhost:5001/Home/Destino', {
+                        //fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
                         method: 'POST',
                         headers: {
                             "Content-Type": "application/json"
@@ -2520,7 +2520,7 @@ function iniciarturno() {
 
 
         fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
-            //fetch('https://localhost:5001/Home/Destino', {
+            //fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"

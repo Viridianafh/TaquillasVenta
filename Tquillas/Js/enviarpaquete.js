@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saleshiftid: localStorage.getItem('saleshift_id'),
             isaleid: "",
             shortid: "",
-            Email: "sag@sag.com"
+            Email: "sag@sag.com",
             Phonenumber: "55555555"
         };
 

@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let celdafecha = nuevaFila.insertCell(5); 
             let celdaTicket = nuevaFila.insertCell(6);
 
-            celdaNombre.innerHTML = Nombre; // Cambia esto según sea necesario
+            celdaNombre.innerHTML = `<p id="seatname">${Nombre}</p>`; // Cambia esto según sea necesario
             celdaOrigen.innerHTML = origencambio; // Cambia esto según sea necesario
             celdaDestino.innerHTML = destinocambio; // Cambia esto según sea necesario
             celdaAsiento.innerHTML = `<p id="seatrow"></p>`; // Cambia esto según sea necesario
@@ -780,12 +780,19 @@ function crearasientos(tipo, id) {
 
 
 function ProcederBoleto() {
+
+
     document.getElementById('procederCambio').disabled = true;
     document.getElementById("cancelarCambio").disabled = true;
     var tipopasajero = localStorage.getItem('tipopasajero_cambio')
 
 
     var texto = document.getElementById('seatrow').textContent
+    var textname = document.getElementById('seatname'.textContent)
+    if (textname === "") {
+        alert("debes agregar el nombre del pasajero")
+        return 
+    }
 
     if (texto === "") {
         alert("debes seleccionar un asiento para proceder")

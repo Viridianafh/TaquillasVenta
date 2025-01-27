@@ -69,7 +69,7 @@ let lastCancelVenta// Variable para almacenar el precio del último CANCEL
 
 
 fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${saleshift_id}`)
-//fetch(`https://localhost:5001/Home/detalleventapentaho?saleshift=${saleshift_id}`)
+//fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${saleshift_id}`)
     .then(response => response.json())
     .then(data => {
 
