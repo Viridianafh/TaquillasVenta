@@ -1759,7 +1759,8 @@ document.addEventListener('DOMContentLoaded', () => {
             "salesShiftId": localStorage.getItem('saleshift_id'),
             "saleNumber": shift_number_to_is,
             "tripseatlist": nuevoJson,
-            "Email": localStorage.getItem('correocliente')
+            "Email": localStorage.getItem('correocliente'),
+            "Phonenumber": localStorage.getItem('numerocliente')
         };
 
 
@@ -1926,7 +1927,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "salesShiftId": localStorage.getItem('saleshift_id'),
                 "saleNumber": shift_number_to_is,
                 "tripseatlist": nuevoJson,
-                "Email": localStorage.getItem('correocliente')
+                "Email": localStorage.getItem('correocliente'),
+                "Phonenumber": localStorage.getItem('numerocliente')
             };
 
 
@@ -2849,8 +2851,8 @@ function validarEdadestudiante(input, labelspan) {
 
     // Validar CURP
     if (edad >= 0 && edad <= 120) {
-        labelspan.textContent = edad < 5 ? "CURP Válido (Menor de edad)" : "CURP inválido (excede la edad de 5 años)";
-        labelspan.style.color = edad < 5 ? "green" : "red";
+        labelspan.textContent = edad < 12 ? "CURP Válido (Menor de edad)" : "CURP inválido (excede la edad de 12 años)";
+        labelspan.style.color = edad < 12 ? "green" : "red";
         document.getElementById('btn-siguiente1').disabled = false
     } else {
         labelspan.textContent = "CURP Inválido: edad fuera de rango";
