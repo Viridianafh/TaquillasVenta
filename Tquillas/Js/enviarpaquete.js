@@ -299,18 +299,22 @@ document.addEventListener('DOMContentLoaded', () => {
         // Validación para el método de pago en efectivo
         if (paymentType === "CASH") {
             if (monto_ingresado < total) {
+
                 alert("EL monto DEBE SER MAYOR a la venta");
+                document.getElementById('show-json').disabled = false
                 return; // Detener la ejecución si la validación falla
             }
         }
         // Validación para el método de pago con tarjeta
         else if (paymentType === "CARD") {
             if (parseFloat(monto_ingresado) !== total) {
+                document.getElementById('show-json').disabled = false
                 alert("EL monto DEBE SER IGUAL al total para pagos con tarjeta");
                 return; // Detener la ejecución si la validación falla
             }
             // Asegurarse de que el campo de monto ingresado no esté vacío
             if (monto_ingresado === "") {
+                document.getElementById('show-json').disabled = false
                 alert("Por favor, ingrese el monto total para el pago con tarjeta.");
                 return; // Detener la ejecución si el campo está vacío
             }
@@ -867,6 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         icon: 'error',
                         confirmButtonText: 'Cool'
                     })
+                    btn_trip.disabled = false;
                 }
 
                 var tbody = document.getElementsByTagName('tbody')[0]; // Get the first tbody element
@@ -988,6 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             })
             .catch(error => {
+                btn_trip.disabled = false
                 Swal.fire({
                     title: "Error!",
                     text: `${error}`,

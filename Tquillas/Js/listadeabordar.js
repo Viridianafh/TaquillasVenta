@@ -311,7 +311,7 @@ function ocultarColumna6() {
         // Creamos la fecha en el nuevo formato dd/mm/yyyy h:mm:ss
         let fechaFormateada = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/MostrarListaAbordar?trip_id=${tripid}`)
+        fetch(`https://apitaquillassag.dyndns.org/Home/MostrarListaAbordar?trip_id=${tripid}`)
             .then(response => response.json())
             .then(data => {
 
@@ -400,7 +400,7 @@ function ocultarColumna6() {
                 document.getElementById('buss').textContent = bus
                 document.getElementById('rutabname').textContent = corrida
                 document.getElementById('spantaquillas').textContent = officename
-                document.getElementById('spanfecha').textContent = fechaFormateada
+                document.getElementById('spanfecha').textContent = departure
 
                 document.getElementById('spanOri').textContent = orige
                 document.getElementById('spanDes').textContent = destino

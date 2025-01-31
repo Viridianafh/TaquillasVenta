@@ -14,13 +14,13 @@
 
         var codigo = document.getElementById('textconcepto').value
 
-        fetch(`https://api.sagautobuses.com/Home/busqueda_boleto?concepto=${codigo}`, {
+        fetch(`http://api.sagautobuses.com/Home/busqueda_boleto?concepto=${codigo}`, {
             method: 'POST',
             headers: {
                 'Accept': 'text/plain',
                 'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
             },
-            body: JSON.stringify({})  // Si es necesario enviar datos en el cuerpo, reemplaza {} con tus datos
+              // Si es necesario enviar datos en el cuerpo, reemplaza {} con tus datos
         })
             .then(response => response.json())
             .then(data => {

@@ -369,6 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn_trip.disabled = false;
                     btn_trip.textContent = "Buscar viaje"
 
+                
                     Swal.fire({
                         title: 'Error!',
                         text: 'No existen viajes. Prueba para otra fecha lu otro destino',
@@ -499,6 +500,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             })
             .catch(error => {
+
+                btn_trip.disabled = false
                 Swal.fire({
                     title: "Error!",
                     text: `${error}`,
