@@ -14,7 +14,7 @@
 
         var codigo = document.getElementById('textconcepto').value
 
-        fetch(`http://api.sagautobuses.com/Home/busqueda_boleto?concepto=${codigo}`, {
+        fetch(`https://api.sagautobuses.com/Home/busqueda_boleto?concepto=${codigo}`, {
             method: 'POST',
             headers: {
                 'Accept': 'text/plain',
