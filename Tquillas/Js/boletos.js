@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     var datosCombinados = JSON.parse(dataviaje);
     var folio = localStorage.getItem('folio');
 
-    await fetch(`http://apitaquillassag.dyndns.org/Home/ConsultaBoletos?folio=${folio}`)
+    await fetch(`https://api-taquillas.sagautobuses.com/Home/ConsultaBoletos?folio=${folio}`)
         .then(response => response.json())
         .then(async data => {  // Cambié a async para usar await dentro de la función
             document.getElementById('loaderboletos').style.display = 'none';
@@ -184,9 +184,6 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         // Calcular el IVA
         const iva = precio_base - precioSinIVA;
 
-
-
-
         form.getTextField('IVA').setText(String(iva.toFixed(2)));
 
         // Hacer los campos de solo lectura
@@ -237,8 +234,7 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         });
         console.log("Marca de agua añadida");
 
-        // Generar y descargar el PDF
-
+        form.flatten();
         const pdfBytes = await pdfDoc.save();
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const urlObject = window.URL.createObjectURL(blob);

@@ -19,7 +19,7 @@
                 "password": pass
             }
 
-            fetch('http://apitaquillassag.dyndns.org/Home/LogOut', {
+            fetch('https://api-taquillas.sagautobuses.com/Home/LogOut', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

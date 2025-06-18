@@ -200,7 +200,7 @@
             // Verificar si el usuario ingresó algo
             if (username) {
                 // Paso 2: Realizar una solicitud fetch usando el nombre de usuario
-                const url = `http://apitaquillassag.dyndns.org/Home/BuscarTaquilleroPorUsername?username=${username}`;
+                const url = `https://api-taquillas.sagautobuses.com/Home/BuscarTaquilleroPorUsername?username=${username}`;
 
                 try {
                     const response = await fetch(url);
@@ -251,7 +251,7 @@
                 };
 
                 // 5. Enviar los datos al servidor (POST request)
-                const response = await fetch('http://apitaquillassag.dyndns.org/Home/save', {
+                const response = await fetch('https://api-taquillas.sagautobuses.com/Home/save', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -270,7 +270,7 @@
         async function recuperardata(id) {
             if (!id) return;  // Si no hay ID, no hacemos nada
 
-            const apiUrl = `http://apitaquillassag.dyndns.org/Home/get/${id}`;
+            const apiUrl = `https://api-taquillas.sagautobuses.com/Home/get/${id}`;
 
             try {
                 const response = await fetch(apiUrl);

@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${origen}&destino=${destino}&fecha=${fechaSalida}`, {
+        fetch(`https://api-taquillas.sagautobuses.com/Home/BuscarCorridas?origen=${origen}&destino=${destino}&fecha=${fechaSalida}`, {
 
         })
             .then(response => response.json())
@@ -412,7 +412,7 @@ async function enviardata(id, corrida, tipo, origen, destino, bus, departingOrig
 
 function contarInapam(id) {
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/ContarInapam?TripId=${id}`)
+    fetch(`https://api-taquillas.sagautobuses.com/Home/ContarInapam?TripId=${id}`)
 
         .then(response => response.json())
         .then(data => {
@@ -457,7 +457,7 @@ function ContarEstudiante(id) {
 
             else {
 
-                fetch(`http://apitaquillassag.dyndns.org/Home/Contarstudent?TripId=${id}`)
+                fetch(`https://api-taquillas.sagautobuses.com/Home/Contarstudent?TripId=${id}`)
                     .then(response => response.json())
                     .then(data => {
                         console.log(data)
@@ -493,7 +493,7 @@ function ContarEstudiante(id) {
 
 async function gettripid(RunId, type, Departure, Arrival, totaltime) {
     try {
-        const response = await fetch(`http://apitaquillassag.dyndns.org/Home/AgregarTrip?runid=${RunId}&service=${type}&departure=${Departure}&arriveDate=${Arrival}&totalTime=${totaltime}`, {
+        const response = await fetch(`https://api-taquillas.sagautobuses.com/Home/AgregarTrip?runid=${RunId}&service=${type}&departure=${Departure}&arriveDate=${Arrival}&totalTime=${totaltime}`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -517,7 +517,7 @@ async function gettripid(RunId, type, Departure, Arrival, totaltime) {
 
 async function BuscarBoletoUno(ticket) {
     try {
-        const response = await fetch(`http://apitaquillassag.dyndns.org/Home/GetDataTicket?ticket=${ticket}`);
+        const response = await fetch(`https://api-taquillas.sagautobuses.com/Home/GetDataTicket?ticket=${ticket}`);
 
         if (!response.ok) {
             throw new Error('Error al obtener los datos');
@@ -571,7 +571,7 @@ function iniciarCambio() {
         });
 
         // Cargar datos en el select de origen
-        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+        fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -612,7 +612,7 @@ function iniciarCambio() {
 
                     var data = { origen: Origen };
 
-                    fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                    fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
                         method: 'POST',
                         headers: {
                             "Content-Type": "application/json"
@@ -673,8 +673,8 @@ function crearasientos(tipo, id) {
 
 
     Promise.all([
-        fetch(`http://apitaquillassag.dyndns.org/Home/Asientos?Servicelvl=${tipo}`).then(response => response.json()),
-        fetch(`http://apitaquillassag.dyndns.org/Home/listarAsientosOcupados?TripId=${id}`).then(response => response.json())
+        fetch(`https://api-taquillas.sagautobuses.com/Home/Asientos?Servicelvl=${tipo}`).then(response => response.json()),
+        fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}`).then(response => response.json())
     ])
         .then(([seatData, statusData]) => {
             if (!Array.isArray(seatData)) {
@@ -962,7 +962,7 @@ function ProcederBoleto() {
 
         console.log(JSON.stringify(InternetSale))
         // Realizar la solicitud PATCH usando fetch
-        fetch('http://apitaquillassag.dyndns.org/Home/cambiarBoleto', options)
+        fetch('https://api-taquillas.sagautobuses.com/Home/cambiarBoleto', options)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Hubo un problema con la solicitud: ' + response.status);
@@ -972,7 +972,7 @@ function ProcederBoleto() {
             .then(data => {
                 console.log('Solicitud PATCH exitosa:', data);
 
-                fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
+                fetch('https://api-taquillas.sagautobuses.com/Home/VerIS', {
                     method: 'POST',
                     headers: {
                         "Content-Type": "application/json"
@@ -1132,7 +1132,7 @@ async function Descargar(ticket) {
 
 
         // Obtener datos del boleto
-        const response = await fetch(`http://apitaquillassag.dyndns.org/Home/ConsultarBoletosCambio?folio=${ticket}`);
+        const response = await fetch(`https://api-taquillas.sagautobuses.com/Home/ConsultarBoletosCambio?folio=${ticket}`);
         const data = await response.json();
         console.log("Datos del boleto:", data);
 

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var ticket = document.getElementById('input-ticket').value
         var userid = localStorage.getItem("id")
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/EscanearBoleto?ticket=${ticket}&userid=${userid}`)
+        fetch(`https://api-taquillas.sagautobuses.com/Home/EscanearBoleto?ticket=${ticket}&userid=${userid}`)
             .then(response => response.json())
             .then(data => {
 

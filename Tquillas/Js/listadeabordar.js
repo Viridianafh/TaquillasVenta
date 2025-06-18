@@ -104,7 +104,7 @@
             }
         }
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/ListaDeViajes?fechainicio=${Fecha_entrada}&fechafinal=${Fecha_salida}`, {})
+        fetch(`https://api-taquillas.sagautobuses.com/Home/ListaDeViajes?fechainicio=${Fecha_entrada}&fechafinal=${Fecha_salida}`, {})
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -311,7 +311,7 @@ function ocultarColumna6() {
         // Creamos la fecha en el nuevo formato dd/mm/yyyy h:mm:ss
         let fechaFormateada = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/MostrarListaAbordar?trip_id=${tripid}`)
+        fetch(`https://api-taquillas.sagautobuses.com/Home/MostrarListaAbordar?trip_id=${tripid}`)
             .then(response => response.json())
             .then(data => {
 

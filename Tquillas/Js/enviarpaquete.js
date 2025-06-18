@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Cargar datos en el select de origen
-        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+        fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     var data = { origen: Origen };
 
-                    fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                    fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
                         method: 'POST',
                         headers: {
                             "Content-Type": "application/json"
@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Verifica los datos antes de enviar
 
-        fetch('http://apitaquillassag.dyndns.org/Home/insertarpackage', {
+        fetch('https://api-taquillas.sagautobuses.com/Home/insertarpackage', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -624,7 +624,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
 
-            fetch('http://apitaquillassag.dyndns.org/Home/Precorte', {
+            fetch('https://api-taquillas.sagautobuses.com/Home/Precorte', {
 
                 method: 'POST',
                 headers: {
@@ -671,7 +671,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-                        fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
+                        fetch(`https://api-taquillas.sagautobuses.com/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
 
                             method: 'PATCH',
                             headers: {
@@ -852,7 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(JSON.stringify(Viaje))
 
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
+        fetch(`https://api-taquillas.sagautobuses.com/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
 
         })
             .then(response => response.json())
@@ -1098,7 +1098,7 @@ function limpiarTablaViaje() {
 
 async function gettripid(RunId, type, Departure, Arrival, totaltime) {
     try {
-        const response = await fetch(`http://apitaquillassag.dyndns.org/Home/AgregarTrip?runid=${RunId}&service=${type}&departure=${Departure}&arriveDate=${Arrival}&totalTime=${totaltime}`, {
+        const response = await fetch(`https://api-taquillas.sagautobuses.com/Home/AgregarTrip?runid=${RunId}&service=${type}&departure=${Departure}&arriveDate=${Arrival}&totalTime=${totaltime}`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -1313,7 +1313,7 @@ function iniciarturno() {
 
 
 
-                fetch(`http://apitaquillassag.dyndns.org/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
+                fetch(`https://api-taquillas.sagautobuses.com/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
                     .then(response => response.json())
                     .then(data => {
 
@@ -1324,7 +1324,7 @@ function iniciarturno() {
 
 
 
-                        const url = `http://apitaquillassag.dyndns.org/Home/descargar?url=${data.url}`;
+                        const url = `https://api-taquillas.sagautobuses.com/Home/descargar?url=${data.url}`;
 
 
                         fetch(url)
@@ -1394,7 +1394,7 @@ function iniciarturno() {
                 var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
 
 
-                fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
                     method: 'POST',
                     headers: {
                         "Content-Type": "application/json"
@@ -1471,7 +1471,7 @@ function iniciarturno() {
             var userid = localStorage.getItem('id')
 
 
-            fetch(`http://apitaquillassag.dyndns.org/Home/ActualizarSaleShift?userid=${userid}&shiftNumber=${shiftnumber}&currentSale=${ventareciente}`, {
+            fetch(`https://api-taquillas.sagautobuses.com/Home/ActualizarSaleShift?userid=${userid}&shiftNumber=${shiftnumber}&currentSale=${ventareciente}`, {
 
                 method: 'PATCH',
                 headers: {
@@ -1526,7 +1526,7 @@ function iniciarturno() {
 
     } else {
 
-        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+        fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -1566,7 +1566,7 @@ function iniciarturno() {
             var data = { origen: Origen };
 
 
-            fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+            fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -1612,7 +1612,7 @@ function iniciarturno() {
             var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
 
 
-            fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+            fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -1670,7 +1670,7 @@ function CerrarCajamenor() {
     }
 
 
-    fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
+    fetch('https://api-taquillas.sagautobuses.com/Home/CerrarTurno', {
 
         method: 'POST',
         headers: {
@@ -1696,7 +1696,7 @@ function CerrarCajamenor() {
                     };
                 });
 
-                fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
+                fetch(`https://api-taquillas.sagautobuses.com/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
 
                     method: 'PATCH',
                     headers: {
@@ -1772,7 +1772,7 @@ function CerrarCajavacia() {
 
 
 
-    fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
+    fetch('https://api-taquillas.sagautobuses.com/Home/CerrarTurno', {
 
         method: 'POST',
         headers: {

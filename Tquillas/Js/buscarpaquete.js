@@ -5,7 +5,7 @@
 function Buscar() {
     var data = document.getElementById('codcompra').value;
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/BuscarPaquete?ticket=${data}`)
+    fetch(`https://api-taquillas.sagautobuses.com/Home/BuscarPaquete?ticket=${data}`)
         .then(res => res.json())
         .then(data => {
             var tabla = document.getElementById('tabledatos').getElementsByTagName('tbody')[0];
@@ -36,7 +36,7 @@ function actualizar() {
     var status = document.getElementById('select-status-packagee').value
     var data = document.getElementById('codcompra').value;
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/actualziarstatus?status=${status}&ticket=${data}`, {
+    fetch(`https://api-taquillas.sagautobuses.com/Home/actualziarstatus?status=${status}&ticket=${data}`, {
         method: 'PATCH'
     })
         .then(response => {

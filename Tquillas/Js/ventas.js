@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para realizar el primer fetch (Precorte)
     function precorteFetch(CashCheckpoint) {
-        return fetch('http://apitaquillassag.dyndns.org/Home/Precorte', {
+        return fetch('https://api-taquillas.sagautobuses.com/Home/Precorte', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para actualizar el cash checkpoint y cancelar evento
     function actualizarCashCheckpoint(cashcheckpoint, saleshift) {
-        return fetch(`http://apitaquillassag.dyndns.org/Home/actualizar_caschekpoint_cancelevent?cashCheckpoint=${cashcheckpoint}&Saleshift=${saleshift}`, {
+        return fetch(`https://api-taquillas.sagautobuses.com/Home/actualizar_caschekpoint_cancelevent?cashCheckpoint=${cashcheckpoint}&Saleshift=${saleshift}`, {
             method: 'PATCH',
             headers: {
                 'Accept': 'text/plain',
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para agregar cash checkpoint
     function agregarCashCheckpoint(cashcheckpoint, Saleshift) {
-        return fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
+        return fetch(`https://api-taquillas.sagautobuses.com/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
             method: 'PATCH',
             headers: {
                 'Accept': 'text/plain',
@@ -355,8 +355,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("pruebas_piso1").innerHTML = ``;
         document.getElementById("pruebas_piso2").innerHTML = ``;
         document.getElementById("content_piso_2").style.display = "none";
-        fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
-        //fetch(`http://apitaquillassag.dyndns.org/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
+        fetch(`https://api-taquillas.sagautobuses.com/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
+        //fetch(`https://api-taquillas.sagautobuses.com/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
 
         })
             .then(response => response.json())
@@ -1100,13 +1100,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     var tipo = datosViajeObj.tipo;
                     var id = datosViajeObj.id
 
-                    fetch(`http://apitaquillassag.dyndns.org/Home/Asientos?Servicelvl=${tipo}`)
+                    fetch(`https://api-taquillas.sagautobuses.com/Home/Asientos?Servicelvl=${tipo}`)
                         .then((response) => response.json())
                         .then((seatData) => {
 
                             // Hacer otra solicitud fetch para obtener datos de ocupación
 
-                            fetch(`http://apitaquillassag.dyndns.org/Home/listarAsientosOcupados?TripId=${id}`)
+                            fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}`)
                                 .then((response) => response.json())
                                 .then((occupiedSeats) => {
                                     // Llamar a la función para construir el mapa de asientos
@@ -1748,9 +1748,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var lista_ventas = localStorage.getItem("array_ventas");
         var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
 
-        // Añadir el nuevo valor al array
-        lista_ventasstr.push(shift_number_to_is);
-        localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
+        // No incrementamos ni guardamos aquí, solo después de éxito
 
         const InternetSale = {
             "totalAmount": Math.round( parseFloat(totalapagar)),
@@ -1771,7 +1769,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         alert("OK")
 
-        fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
+        fetch('https://api-taquillas.sagautobuses.com/Home/VerIS', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -1781,6 +1779,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.text())
             .then(data => {
                 if (data.length == 8) {
+                    // Solo aquí incrementamos y guardamos la venta
+                    localStorage.setItem('num_ventas', numero.toString());
+                    lista_ventasstr.push(shift_number_to_is);
+                    localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
                     localStorage.setItem('folio', data);
 
                     var currentsale = actualizarCurrentSale();
@@ -1793,13 +1795,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(error => {
-
-                var num_ventas = localStorage.getItem('num_ventas');
-                var numero = parseInt(num_ventas);
-
-                numero = numero - 1;
-                localStorage.setItem('num_ventas', numero.toString());
-
                 Swal.fire({
                     title: "No se Pudo realizar el pago!",
                     text: `mensaje de error ${error}`,
@@ -1810,11 +1805,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Habilitar el botón nuevamente al finalizar la operación
                 btnpagar_efectivo.disabled = false;
             });
-
-
     })
-
-
 
 
 
@@ -1863,8 +1854,6 @@ document.addEventListener('DOMContentLoaded', () => {
             var shiftnumber = localStorage.getItem('shift_number');
             var num_ventas = localStorage.getItem('num_ventas');
             var numero = parseInt(num_ventas) + 1;
-
-            localStorage.setItem('num_ventas', numero.toString());
 
             for (var i = 0; i < table.rows[0].cells.length; i++) {
                 header.push(table.rows[0].cells[i].innerHTML);
@@ -1915,10 +1904,6 @@ document.addEventListener('DOMContentLoaded', () => {
             var shift_number_to_is = shiftnumber + "-" + numero;
             var lista_ventas = localStorage.getItem("array_ventas");
             var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
-
-            // Añadir el nuevo valor al array
-            lista_ventasstr.push(shift_number_to_is);
-            localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
             var changeamount = Math.round( parseFloat(monto_recibido) - parseFloat(totalapagar))
             const InternetSale = {
                 "totalAmount": Math.round( parseFloat(totalapagar)),
@@ -1934,12 +1919,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Phonenumber": localStorage.getItem('numerocliente')
             };
 
-
             console.log(JSON.stringify(InternetSale))
 
             alert("OK")
 
-            fetch('http://apitaquillassag.dyndns.org/Home/VerIS', {
+            fetch('https://api-taquillas.sagautobuses.com/Home/VerIS', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -1949,6 +1933,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(response => response.text())
                 .then(data => {
                     if (data.length == 8) {
+                        // Solo aquí incrementamos y guardamos la venta
+                        localStorage.setItem('num_ventas', numero.toString());
+                        lista_ventasstr.push(shift_number_to_is);
+                        localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
                         localStorage.setItem('folio', data);
                         var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
 
@@ -1970,13 +1958,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 })
                 .catch(error => {
-
-                    var num_ventas = localStorage.getItem('num_ventas');
-                    var numero = parseInt(num_ventas);
-
-                    numero = numero - 1;
-                    localStorage.setItem('num_ventas', numero.toString());
-
                     Swal.fire({
                         title: "No se Pudo realizar el pago!",
                         text: `mensaje de error ${error}`,
@@ -2111,7 +2092,7 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
 
 
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/ContarInapam?TripId=${id}`)
+    fetch(`https://api-taquillas.sagautobuses.com/Home/ContarInapam?TripId=${id}`)
 
         .then(response => response.json())
         .then(data => {
@@ -2155,7 +2136,7 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
 
             else {
 
-                fetch(`http://apitaquillassag.dyndns.org/Home/Contarstudent?TripId=${id}`)
+                fetch(`https://api-taquillas.sagautobuses.com/Home/Contarstudent?TripId=${id}`)
                     .then(response => response.json())
                     .then(data => {
                         console.log(data)
@@ -2199,7 +2180,7 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
 
 async function gettripid(RunId, type, Departure, Arrival, totaltime) {
     try {
-        const response = await fetch(`http://apitaquillassag.dyndns.org/Home/AgregarTrip?runid=${RunId}&service=${type}&departure=${Departure}&arriveDate=${Arrival}&totalTime=${totaltime}`, {
+        const response = await fetch(`https://api-taquillas.sagautobuses.com/Home/AgregarTrip?runid=${RunId}&service=${type}&departure=${Departure}&arriveDate=${Arrival}&totalTime=${totaltime}`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -2344,7 +2325,7 @@ function iniciarturno() {
 
     if (localStorage.getItem(clave) == null) {
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
+        fetch(`https://api-taquillas.sagautobuses.com/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
             .then(response => response.json())
             .then(data => {
 
@@ -2353,7 +2334,7 @@ function iniciarturno() {
                 localStorage.setItem('saleshift_id', data.saleShift)
 
                 // datos forage
-                const url = `http://apitaquillassag.dyndns.org/Home/descargar?url=${data.url}`;
+                const url = `https://api-taquillas.sagautobuses.com/Home/descargar?url=${data.url}`;
 
 
                 fetch(url)
@@ -2423,8 +2404,8 @@ function iniciarturno() {
         });
 
 
-        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
-            //fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+        fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
+            //fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -2462,8 +2443,8 @@ function iniciarturno() {
 
                     var data = { origen: Origen };
 
-                    fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
-                        //fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+                    fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                        //fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
                         method: 'POST',
                         headers: {
                             "Content-Type": "application/json"
@@ -2522,8 +2503,8 @@ function iniciarturno() {
         var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
 
 
-        fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
-            //fetch('http://apitaquillassag.dyndns.org/Home/Destino', {
+        fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+            //fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -2615,7 +2596,7 @@ function actualizarCurrentSale() {
     var userid = localStorage.getItem('id')
 
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/ActualizarSaleShift?userid=${userid}&shiftNumber=${shiftnumber}&currentSale=${ventareciente}`, {
+    fetch(`https://api-taquillas.sagautobuses.com/Home/ActualizarSaleShift?userid=${userid}&shiftNumber=${shiftnumber}&currentSale=${ventareciente}`, {
 
         method: 'PATCH',
         headers: {
@@ -2672,7 +2653,7 @@ function CerrarCajamenor() {
     }
 
 
-    fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
+    fetch('https://api-taquillas.sagautobuses.com/Home/CerrarTurno', {
 
         method: 'POST',
         headers: {
@@ -2698,7 +2679,7 @@ function CerrarCajamenor() {
                     };
                 });
 
-                fetch(`http://apitaquillassag.dyndns.org/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
+                fetch(`https://api-taquillas.sagautobuses.com/Home/agregarCashCheckpoint?cashcheck=${cashcheckpoint}`, {
 
                     method: 'PATCH',
                     headers: {
@@ -2767,7 +2748,7 @@ function CerrarCajavacia() {
 
 
 
-    fetch('http://apitaquillassag.dyndns.org/Home/CerrarTurno', {
+    fetch('https://api-taquillas.sagautobuses.com/Home/CerrarTurno', {
 
         method: 'POST',
         headers: {

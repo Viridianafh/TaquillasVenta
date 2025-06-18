@@ -4,7 +4,7 @@ window.addEventListener('load', () => {
     var ticket_user_id = localStorage.getItem('id')
 
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/comrpobarTerminal?ticket_user_id=${ticket_user_id}`)
+    fetch(`https://api-taquillas.sagautobuses.com/Home/comrpobarTerminal?ticket_user_id=${ticket_user_id}`)
 
         .then(response => response.json())
         .then(data => {

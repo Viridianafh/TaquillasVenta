@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         const shiftId = localStorage.getItem('saleshift_id')
-        const url = `http://apitaquillassag.dyndns.org/Home/TerminarTurnoCaja?shift=${shiftId}`;
+        const url = `https://api-taquillas.sagautobuses.com/Home/TerminarTurnoCaja?shift=${shiftId}`;
 
         fetch(url, {
             method: 'PATCH',
@@ -68,8 +68,8 @@ let lastCancelPrice = null;
 let lastCancelVenta// Variable para almacenar el precio del último CANCEL
 
 
-fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${saleshift_id}`)
-//fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${saleshift_id}`)
+fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift=${saleshift_id}`)
+//fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift=${saleshift_id}`)
     .then(response => response.json())
     .then(data => {
 
@@ -165,7 +165,7 @@ fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${sa
         // Generar el PDF después de cargar todos los datos
         const contenidoDiv = document.getElementById('informe');
         html2pdf(contenidoDiv, opciones);
-        /*fetch(`http://apitaquillassag.dyndns.org/Home/sumaventa?sale_id=${saleshift_id}`)
+        /*fetch(`https://api-taquillas.sagautobuses.com/Home/sumaventa?sale_id=${saleshift_id}`)
             .then(res => res.json())  // Esperar la respuesta en formato JSON
             .then(data => {
                 // Procesar los datos obtenidos

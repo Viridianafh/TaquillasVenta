@@ -7,7 +7,7 @@ let lastCancelPrice = null;
 let lastCancelVenta// Variable para almacenar el precio del último CANCEL
 
 
-fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${saleshift}`)
+fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift=${saleshift}`)
     .then(response => response.json())
     .then(data => {
 
@@ -100,7 +100,7 @@ fetch(`http://apitaquillassag.dyndns.org/Home/detalleventapentaho?saleshift=${sa
         // Generar el PDF después de cargar todos los datos
         const contenidoDiv = document.getElementById('informe');
         html2pdf(contenidoDiv, opciones);
-        /*fetch(`http://apitaquillassag.dyndns.org/Home/sumaventa?sale_id=${saleshift}`)
+        /*fetch(`https://api-taquillas.sagautobuses.com/Home/sumaventa?sale_id=${saleshift}`)
             .then(res => res.json())  // Esperar la respuesta en formato JSON
             .then(data => {
                 // Procesar los datos obtenidos

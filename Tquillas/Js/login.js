@@ -14,7 +14,7 @@ button_login.addEventListener('click', () => {
     }
 
 
-    fetch('http://apitaquillassag.dyndns.org/Home/Login', {
+    fetch('https://api-taquillas.sagautobuses.com/Home/Login', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

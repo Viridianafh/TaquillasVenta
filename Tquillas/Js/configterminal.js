@@ -77,7 +77,7 @@
    
 
 
-    fetch('http://apitaquillassag.dyndns.org/Home/getofice')
+    fetch('https://api-taquillas.sagautobuses.com/Home/getofice')
         .then(res => res.json())
         .then(data => {
 
@@ -118,7 +118,7 @@
 
 
                 var office_location_id = localStorage.getItem('office_location_id')
-                fetch(`http://apitaquillassag.dyndns.org/Home/BuscarTerminal?location=${officeselected}`)
+                fetch(`https://api-taquillas.sagautobuses.com/Home/BuscarTerminal?location=${officeselected}`)
                     .then(response => response.json())
                     .then(data => {
                         var select_terminal_crear = document.getElementById('select_terminal_crear')
@@ -185,7 +185,7 @@
         var office_location_id = localStorage.getItem('office_location_id')
 
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/Asignar_terminal?user_id=${iduser}&termina_lid=${terminal}&office_id=${office_location_id}`)
+        fetch(`https://api-taquillas.sagautobuses.com/Home/Asignar_terminal?user_id=${iduser}&termina_lid=${terminal}&office_id=${office_location_id}`)
 
             .then(response => response.json())
             .then(data => {
@@ -214,7 +214,7 @@
                 miSelect.disabled = true;
                 console.log(data)
 
-                fetch(`http://apitaquillassag.dyndns.org/Home/actualizarOFl?officelocationId=${office_location_id}&ticketuserid=${iduser}`, {
+                fetch(`https://api-taquillas.sagautobuses.com/Home/actualizarOFl?officelocationId=${office_location_id}&ticketuserid=${iduser}`, {
                     method: 'PATCH',
                     headers: {
                         'Accept': 'text/plain'
@@ -260,7 +260,7 @@
         var office_location_id = localStorage.getItem('office_location_id')
 
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/Asignar_terminal?user_id=${iduser}&termina_lid=${terminal}&office_id=${office_location_id}`)
+        fetch(`https://api-taquillas.sagautobuses.com/Home/Asignar_terminal?user_id=${iduser}&termina_lid=${terminal}&office_id=${office_location_id}`)
 
             .then(response => response.json())
             .then(data => {
@@ -289,7 +289,7 @@
                 miSelect.disabled = true;
                 console.log(data)
 
-                fetch(`http://apitaquillassag.dyndns.org/Home/actualizarOFl?officelocationId=${office_location_id}&ticketuserid=${iduser}`, {
+                fetch(`https://api-taquillas.sagautobuses.com/Home/actualizarOFl?officelocationId=${office_location_id}&ticketuserid=${iduser}`, {
                     method: 'PATCH',
                     headers: {
                         'Accept': 'text/plain'

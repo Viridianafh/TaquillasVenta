@@ -155,7 +155,7 @@ async function Descargar(ticket, tipopago, date) {
 
 
         // Obtener datos del boleto
-        const response = await fetch(`http://apitaquillassag.dyndns.org/Home/ConsultarBoletos?folio=${ticket}`);
+        const response = await fetch(`https://api-taquillas.sagautobuses.com/Home/ConsultarBoletos?folio=${ticket}`);
         const data = await response.json();
         console.log("Datos del boleto:", data);
 
@@ -164,7 +164,7 @@ async function Descargar(ticket, tipopago, date) {
         }
         const boleto = data[0]; // Usamos el primer elemento del array
 
-        const taquilleroResponse = await fetch(`http://apitaquillassag.dyndns.org/Home/buscartaquilleroporticket?id=${boleto.TicketId}`);
+        const taquilleroResponse = await fetch(`https://api-taquillas.sagautobuses.com/Home/buscartaquilleroporticket?id=${boleto.TicketId}`);
         if (!taquilleroResponse.ok) {
             throw new Error('Error en la solicitud para obtener el nombre del taquillero');
         }
@@ -309,8 +309,8 @@ function SolicitarCodigo(ticket) {
 
     var officename = localStorage.getItem('office_name')
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
-    //fetch(`http://apitaquillassag.dyndns.org/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
+    fetch(`https://api-taquillas.sagautobuses.com/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
+    //fetch(`https://api-taquillas.sagautobuses.com/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
         .then(res => res.json())
         .then(data => {
 
@@ -346,7 +346,7 @@ function ProcederCancelacion() {
         var code = document.getElementById('code').value
         var key = localStorage.getItem('tokenCancelacionBoleto')
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/ValidarTokenCancelacion?code=${code}&key=${key} `)
+        fetch(`https://api-taquillas.sagautobuses.com/Home/ValidarTokenCancelacion?code=${code}&key=${key} `)
             .then(res => res.text())
             .then(data => {
                 if (data == "Ok") {
@@ -383,7 +383,7 @@ function cancelarBoleto() {
     }
 
 
-    fetch('http://apitaquillassag.dyndns.org/Home/CancelarBoleto', {
+    fetch('https://api-taquillas.sagautobuses.com/Home/CancelarBoleto', {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

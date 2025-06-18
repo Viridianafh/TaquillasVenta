@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
     }
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/gettripstops?tripid=${trip}`)
+    fetch(`https://api-taquillas.sagautobuses.com/Home/gettripstops?tripid=${trip}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

@@ -4,7 +4,7 @@
         $('.select2').select2();
 
         // Cargar datos en el select de origen
-        fetch('http://apitaquillassag.dyndns.org/Home/Origen', {
+        fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -66,7 +66,7 @@
 
 
 
-        fetch(`http://apitaquillassag.dyndns.org/Home/ObtenerIniciosGuias?origen=${data}&fecha=${formattedDate}`)
+        fetch(`https://api-taquillas.sagautobuses.com/Home/ObtenerIniciosGuias?origen=${data}&fecha=${formattedDate}`)
             .then(response => response.json())
             .then(data => {
 
@@ -191,7 +191,7 @@ function generarguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, ant
 
 
 function llamarlistaabordar(trip_id) {
-    fetch(`http://apitaquillassag.dyndns.org/Home/MostrarListaAbordar?trip_id=${trip_id}`)
+    fetch(`https://api-taquillas.sagautobuses.com/Home/MostrarListaAbordar?trip_id=${trip_id}`)
         .then(res => {
             if (!res.ok) {
                 throw new Error('Network response was not ok ' + res.statusText);
@@ -221,7 +221,7 @@ function llamarlistaabordar(trip_id) {
 
 
 function llamarparadas(route_id) {
-    fetch(`http://apitaquillassag.dyndns.org/Home/GetStopsByRouteId?id=${route_id}`)
+    fetch(`https://api-taquillas.sagautobuses.com/Home/GetStopsByRouteId?id=${route_id}`)
         .then(res => {
             if (!res.ok) {
                 throw new Error('Network response was not ok ' + res.statusText);
@@ -351,7 +351,7 @@ function agregaranticipo() {
 
         } else {
 
-            fetch('http://apitaquillassag.dyndns.org/Home/agregar_anticipo', {
+            fetch('https://api-taquillas.sagautobuses.com/Home/agregar_anticipo', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -385,7 +385,7 @@ function actualizaranticipo() {
 
 
     var idguia = localStorage.getItem("trip_id-guia");
-    fetch(`http://apitaquillassag.dyndns.org/Home/ActualizarGuia?tripId=${idguia}`, {
+    fetch(`https://api-taquillas.sagautobuses.com/Home/ActualizarGuia?tripId=${idguia}`, {
         method: 'PATCH', 
         headers: {
             'Authorization': 'Bearer your-token-here' 
@@ -412,7 +412,7 @@ function InsertarTripStopControl(){
 
 
 
-    fetch(`http://apitaquillassag.dyndns.org/Home/InsertarTripStopControl?tripid=${tripid}&salida=${salida_guia}`, {
+    fetch(`https://api-taquillas.sagautobuses.com/Home/InsertarTripStopControl?tripid=${tripid}&salida=${salida_guia}`, {
          
             method: 'POST',
             headers: {

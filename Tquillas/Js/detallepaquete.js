@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const shortid = queryParams['shortid'];
 
     // Definir la URL de la API con el parámetro isaleid
-    const apiUrl = `http://apitaquillassag.dyndns.org/Home/detalleventa?isaleid=${isaleid}`;
+    const apiUrl = `https://api-taquillas.sagautobuses.com/Home/detalleventa?isaleid=${isaleid}`;
 
     // Realizar la solicitud fetch
     fetch(apiUrl)
