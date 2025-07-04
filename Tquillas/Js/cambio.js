@@ -81,11 +81,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 limpiarTabla()
                 limpiarTabla2()
                 // Crea las tablas y realiza los cambios necesarios en la interfaz
-                CrearTablas(data1, 'tableticket');
-                iniciarCambio();
 
-                // Muestra la sección del viaje
-                document.getElementById("section-viaje").style.display = "block";
+                if (data1[0].status == 'USED') {
+                    Swal.fire({
+                        title: 'Aviso!',
+                        text: 'No Puedes Cambiar un Boleto Usado',
+                        icon: 'warning', // en minúsculas
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload(); // Recarga la página
+                        }
+                    });
+
+                } else {
+                    CrearTablas(data1, 'tableticket');
+                    iniciarCambio();
+
+                    // Muestra la sección del viaje
+                    document.getElementById("section-viaje").style.display = "block";
+
+                }
+           
             } else {
                 window.alert("Boleto no encontrado.");
             }           

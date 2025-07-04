@@ -24,7 +24,7 @@
 
         <div class="container m-3">
 
-            <label>Ingresa el código de compra o el id del paquete</label>
+            <label>Escribe el <strong>Código</strong> del paquete</label>
 
             <input type="text" id="codcompra" class="form-control"  />
 

@@ -67,7 +67,7 @@
                             <td>${data[i].sold_price}</td>
                             <td>${data[i].short_id}</td>
                             <td>${data[i].payment_provider}</td>
-                            <td>${data[i].date_created}</td>
+                            <td>${formatearfecha(restarSeisHoras(data[i].date_created))}</td>
                             <td>${data[i].seat_name}</td>
                             <td>${data[i].status}</td>
                             <td>
@@ -447,6 +447,13 @@ function limpiarTabla() {
     while (tabla.rows.length > 1) {
         tabla.deleteRow(1);
     }
+}
+
+// Agrego la función para restar 6 horas a una fecha
+function restarSeisHoras(fechaStr) {
+    const fecha = new Date(fechaStr);
+    fecha.setHours(fecha.getHours() - 6);
+    return fecha;
 }
 
 

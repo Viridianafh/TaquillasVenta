@@ -201,17 +201,19 @@
 
 
 
-       
+        const rect = tabla.getBoundingClientRect();
+        let altoEnMm = rect.height * 0.264583; // px a mm
 
-        // Configura las opciones para html2pdf
+        // Limitar a 300mm máximo (o el máximo de tu impresora)
+        if (altoEnMm > 300) altoEnMm = 300;
+
         const opciones = {
-            margin: [0, -7, 0, 0], // Márgenes en mm (top, right, bottom, left)
+            margin: [0, -7, 0, 0],
             filename: 'listadeabordar.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: [100, 270], orientation: 'portrait' } // Dimensiones en mm
+            jsPDF: { unit: 'mm', format: [100, altoEnMm], orientation: 'portrait' }
         };
-        // Utiliza html2pdf para generar el PDF y descargarlo
         html2pdf(tabla, opciones).from(tabla).save();
 
 
@@ -337,10 +339,6 @@ function ocultarColumna6() {
                     }
 
 
-
-
-
-
                     var tr = document.createElement('tr')
                     var tr2 = document.createElement('tr')
 
@@ -381,8 +379,6 @@ function ocultarColumna6() {
                     <td>${e.Ticket}</td>
                     <td>${tipo}</td>
                     <td>${e.IsScanned == "USED" ? "SI" : "NO"} </td>
-                  
-                        
                     
                     `
                     tbody.appendChild(tr)
