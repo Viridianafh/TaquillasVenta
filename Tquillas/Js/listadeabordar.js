@@ -365,6 +365,7 @@ function ocultarColumna6() {
                     <td>${e.Destination}</td>
                     <td>${e.Ticket}</td>
                     <td>${tipo}</td>
+                    <td>${e.Phone}</td>
                     <td>${e.IsScanned == "USED" ? "SI" : "NO"} </td>
                     <td>${e.ScannedBy } </td>
                         

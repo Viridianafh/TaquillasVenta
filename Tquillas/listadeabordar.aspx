@@ -115,6 +115,7 @@
                         <td><h5>Destino</h5></td>
                         <td><h5>Boleto</h5></td>
                         <td><h5>Tipo</h5></td>
+                        <td><h5>Teléfono</h5></td>
                         <td><h5>Escaneado</h5></td>
                         <td id="h4escaneado"><h5>Escaneado por: </h5></td>
 

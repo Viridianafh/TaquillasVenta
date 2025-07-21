@@ -1061,7 +1061,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (todosLosInputsRellenados) {
 
-            if (document.getElementById("telefonocliente").value == "") {
+            if (document.getElementById("telefonocliente").value == "" || document.getElementById("telefonocliente").value.length < 10 || !/^\d+$/.test(document.getElementById("telefonocliente").value)) {
+
 
                 Swal.fire({
                     title: "mensaje!",
