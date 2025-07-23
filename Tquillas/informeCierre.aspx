@@ -70,17 +70,25 @@
             <h6>Oficina: <span id="oficina"></span></h6>
             <h6>Terminal: <span id="terminal"></span></h6>
             <br />
-            <h6>Cantidad cancelación: <span id="cant-cancel"></span></h6>
-            <h6>Cantidad paquetes: <span id="cant-package"></span></h6>
-            <h6>Cantidad venta: <span id="cant-sale"></span></h6>
+
+            <h6>Boletos vendidos: <span id="cant-sale"></span></h6>
+            <h6>Paquetes vendidos: <span id="cant-package"></span></h6>
+            <h6>Boletos cancelados: <span id="cant-cancel"></span></h6>
             <br />
            
+            <br />
+            <h6>Venta en efectivo: <span id="total-cash"></span></h6>
+            <h6>Venta en tarjeta: <span id="total-card"></span></h6>
+            <br />
             
-            <h6>Total efectivo: <span id="total-cash"></span></h6>
-            <h6>Total tarjeta: <span id="total-card"></span></h6>
-            <h6>Total cancelación: <span id="total-cancel"></span></h6>
+            <h6>Paquetes en efectivo: <span id="total-pack-cash"></span></h6>
+<h6>Paquetes con tarjeta: <span id="total-pack-card"></span></h6>
+        
+
+            <br />
+
             <h6>Total venta: <span id="total-venta"></span></h6>
-            <h6>Total paquetes: <span id="total-pack"></span></h6>
+            <h6>Total cancelación: <span id="total-cancel"></span></h6>
              <h6>El total es de: <span id="total-monto"></span></h6>
         
             <br />

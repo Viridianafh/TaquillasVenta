@@ -83,31 +83,40 @@ fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift
         let totalVentas = 0;
         let totalCancelaciones = 0;
         let totalPaquetes = 0;
-        var countcancel = 0
-        var countventa = 0
-        var countpackage = 0
+
+        let countcancel = 0;
+        let countventa = 0;
+        let countpackage = 0;
+
         let totalcard = 0;
         let totalcash = 0;
 
+        let paquetesCashMonto = 0;
+        let paquetesCardMonto = 0;
+
         data.forEach(e => {
+            let precio = Number(e.PrecioDeVenta) || 0;
+
             if (e.Tipo === "VENTA") {
-                totalVentas += e.PrecioDeVenta || 0;
+                totalVentas += precio;
                 countventa++;
-                if (e.Tipo_pago == "cash") {
-                    totalcash += e.PrecioDeVenta;
+                if (e.Tipo_pago === "cash") {
+                    totalcash += precio;
                 } else {
-                    totalcard += e.PrecioDeVenta;
+                    totalcard += precio;
                 }
             } else if (e.Tipo === "CANCEL") {
-                totalCancelaciones += e.PrecioDeVenta || 0;
-                countcancel++
+                totalCancelaciones += precio;
+                countcancel++;
             } else if (e.Tipo === "PAQUETE") {
-                totalPaquetes += e.PrecioDeVenta || 0;
-                countpackage++
-                if (e.Tipo_pago == "cash") {
-                    totalcash += e.PrecioDeVenta;
+                totalPaquetes += precio;
+                countpackage++;
+                if (e.Tipo_pago === "cash") {
+                    totalcash += precio;
+                    paquetesCashMonto += precio;
                 } else {
-                    totalcard += e.PrecioDeVenta;
+                    totalcard += precio;
+                    paquetesCardMonto += precio;
                 }
             }
         });
@@ -141,8 +150,7 @@ fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift
         document.getElementById('total-monto').textContent = totalFinal;
         document.getElementById('total-cash').textContent = totalcash;
         document.getElementById('total-card').textContent = totalcard;
-        document.getElementById('total-pack').textContent = totalPaquetes;
-
+        
 
         document.getElementById("taquillero").textContent = localStorage.getItem('name');
         document.getElementById("turno").textContent = localStorage.getItem('shift_number')
@@ -153,6 +161,10 @@ fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift
         document.getElementById("cant-sale").textContent = countventa
         document.getElementById("total-cancel").textContent = -1 * totalCancelaciones
         document.getElementById("total-venta").textContent = totalVentas
+
+        document.getElementById("total-pack-cash").textContent = paquetesCashMonto;
+        document.getElementById("total-pack-card").textContent = paquetesCardMonto;
+
 
         document.getElementById("reporte-taquillero").textContent = localStorage.getItem('name')
 
