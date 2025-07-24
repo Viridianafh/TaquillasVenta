@@ -192,7 +192,7 @@ async function Descargar(ticket, tipopago, date) {
         form.getTextField('Destino').setText(boleto.Destination);
         form.getTextField('departure_origen').setText(formatearfecha(boleto.Salida));
         form.getTextField('fecha').setText(`Fecha venta: ${date}`);
-        form.getTextField('saleman_name').setText(tipopago == 'BOOTH' ? `Vendido por: ${nametaquillero}` : `Mediante: ${tipopago}`);
+        form.getTextField('saleman_name').setText(tipopago == 'BOOTH' ? `Vendido por: ${nametaquillero}` : `Vía: ${tipopago}`);
 
         form.getTextField('subtotal').setText(String(boleto.PayedPrice));
         form.getTextField('departure_destino').setText(formatearfecha(boleto.llegada));
