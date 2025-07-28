@@ -69,7 +69,7 @@ let lastCancelVenta// Variable para almacenar el precio del último CANCEL
 
 
 fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift=${saleshift_id}`)
-//fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift=${saleshift_id}`)
+    //fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift=${saleshift_id}`)
     .then(response => response.json())
     .then(data => {
 
@@ -150,7 +150,7 @@ fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift
         document.getElementById('total-monto').textContent = totalFinal;
         document.getElementById('total-cash').textContent = totalcash;
         document.getElementById('total-card').textContent = totalcard;
-        
+
 
         document.getElementById("taquillero").textContent = localStorage.getItem('name');
         document.getElementById("turno").textContent = localStorage.getItem('shift_number')

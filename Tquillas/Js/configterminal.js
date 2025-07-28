@@ -6,6 +6,19 @@
 
 
     var role = JSON.parse(localStorage.getItem('rol'));
+    var roles = JSON.parse(localStorage.getItem('roles'));
+
+    if (!roles.includes("admin-role")) {
+
+        Swal.fire({
+            title: "Mensaje!",
+            text: "No tienes los permisos suficientes para acceder a esta sección, serás redirigido a la página principal",
+            icon: "error",
+            confirmButtonText: 'OK'
+        }).then(function () {
+            window.location.href = "/dash.aspx";
+        });
+    }
 
     localforage.getItem('office_name').then(function (value) {
         if (value !== null) {

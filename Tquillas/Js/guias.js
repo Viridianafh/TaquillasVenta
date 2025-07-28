@@ -3,6 +3,25 @@
         // Inicializar Select2
         $('.select2').select2();
 
+
+
+        var role = JSON.parse(localStorage.getItem('rol'));
+        var roles = JSON.parse(localStorage.getItem('roles'));
+
+        if (!roles.includes("admin-role")) {
+
+            Swal.fire({
+                title: "Mensaje!",
+                text: "No tienes los permisos suficientes para acceder a esta sección, serás redirigido a la página principal",
+                icon: "error",
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location.href = "/dash.aspx";
+            });
+        }
+
+
+
         // Cargar datos en el select de origen
         fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
             method: 'POST',
