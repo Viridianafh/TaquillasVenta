@@ -1,6 +1,5 @@
 ﻿
 
-
 document.addEventListener('DOMContentLoaded', (event) => {
 
     document.getElementById('iduss').textContent = localStorage.getItem('id')
@@ -8,10 +7,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     localforage.getItem('office_name').then((value) => {
         console.log('Valor de office_name:', value);
         if (value !== null) {
+            // Mostrar en el DOM
             const oficina = document.getElementById('Oficina');
             if (oficina) {
                 oficina.textContent = value;
                 console.log('Oficina actualizada con:', value);
+
+                // 🔹 Guardar también en localStorage
+                localStorage.setItem('office_name', value);
+                console.log("office_name sincronizado en localStorage:", value);
+
             } else {
                 console.error('Elemento con ID "Oficina" no encontrado');
             }
@@ -31,6 +36,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             icon: "error"
         });
     });
+
 
     localforage.getItem("terminal_name").then(function (value) {
         console.log('Valor de terminal_name:', value);

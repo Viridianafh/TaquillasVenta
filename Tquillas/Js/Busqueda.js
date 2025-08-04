@@ -313,6 +313,8 @@ function SolicitarCodigo(ticket) {
     //fetch(`https://api-taquillas.sagautobuses.com/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
         .then(res => res.json())
         .then(data => {
+            console.log("Respuesta del servidor:", data); 
+
 
             localStorage.setItem("tokenCancelacionBoleto", data.token)
         })
