@@ -365,33 +365,70 @@
 
     <section id="section-tipo-pago" style="display: none;">
 
-      <button class="btn btn-danger" id="btn-atras3"><ion-icon name="arrow-back-outline"></ion-icon>atrás</button>
+  
+    <div class="container d-flex justify-content-between">
+
+        <button class="btn btn-danger" id="btn-atras3"><ion-icon name="arrow-back-outline"></ion-icon>atrás</button>
+        <button class="btn btn-success" id="btn-siguiente3">siguiente<ion-icon name="arrow-forward-outline"></ion-icon></button>      
+
+    </div>
 
 
+     <h1>Medio de pago</h1>
+    <h5>(selecciona tu tipo de pago)</h5>
 
-         <h1>Medio de pago</h1>
-        <h5>(selecciona tu tipo de pago)</h5>
-
-        <div class="container d-flex align-items-center justify-content-center gap-5">
-            
-                         
-                
-                <button id="btn-efectivo" class="btn btn-success" style="width: 200px; height:200px;">
-                     <ion-icon name="cash-outline" style ="width: 120px; height: 120px;"></ion-icon>
-                      <p><strong>efectivo</strong></p>
-                </button>
-              
-       
-               <button id="btn-tarjeta" class="btn btn-primary" style="width: 200px; height:200px;">
+    <!--<div class="container d-flex align-items-center justify-content-center gap-5" style="display:none">
+        
                      
-                     <ion-icon name="card-outline" style ="width: 120px; height: 120px;"></ion-icon>
-                      <p><strong>tarjeta</strong></p>
-                </button>
-             
-              
+            
+            <button id="btn-efectivo" class="btn btn-success" style="width: 200px; height:200px;">
+                 <ion-icon name="cash-outline" style ="width: 120px; height: 120px;"></ion-icon>
+                  <p><strong>efectivo</strong></p>
+            </button>
+          
+   
+           <button id="btn-tarjeta" class="btn btn-primary" style="width: 200px; height:200px;">
+                 
+                 <ion-icon name="card-outline" style ="width: 120px; height: 120px;"></ion-icon>
+                  <p><strong>tarjeta</strong></p>
+            </button>
+         
+          
+        </div>-->
+    <div style="margin:5px">
+        <div style="margin:5px;display:flex;flex-direction:column">
+            <label>Total compra: <span id="total_compra_m"></span> </label>                
+        </div>
+        <div style="margin:5px">
+            <div style="margin:5px">
+                <label>Agregar metodo de pago:</label>
+                <select id = "metodo_pago">
+                    <option value="cash">Efectivo</option>                        
+                    <option value="card">Tarjeta</option>                        
+                </select>
             </div>
+            <div style="margin:5px">
+                <label>Monto:</label>
+                <input type="number" name="name" value="" id="monto_pago"/>
+            </div>
+            <button class="btn w-100 btn-primary" onclick="agregarFila()" type="button">Agregar</button>
+        </div>
+        <div>
+           <table class="table table-responsive" id="tabla-montos-pago">
+                <thead>
+                    <tr>
+                        <td>Metodo de pago</td>
+                        <td>Monto</td>
+                        <td></td>                            
+                    </tr>
+                </thead>
+               <tbody id="table_body_metodos_pago">       
+               </tbody>
+            </table>
+        </div>
+    </div>
 
-    </section>
+</section>
 
 
 
@@ -449,8 +486,9 @@
             </div>
 
             <div class="container m-4">
-                <button class="btn btn-success" id="btnpagar-efectivo" style="width: 320px;">Pagar</button>
-            </div>
+                 <button class="btn btn-success" id="btnpagar-efectivo" style="width: 320px;display:none">Pagar</button>
+                 <button class="btn btn-success" id="btnpagar-hibrido" style="width: 320px;display:none">Pagar</button>
+             </div>   
 
             <h4 id="cambio"></h4>
         </div>

@@ -25,6 +25,11 @@ let p2d2 = ``;
 let p2d3 = ``;
 let p2d4 = ``;
 let p2d5 = ``;
+var parte_efectivo = 0;
+var parte_tarjeta = 0;
+var efectivo_agregado = false;
+var tarjeta_agregado = false;
+var data_viaje;
 localStorage.setItem("array_checkpoints", [])
 
 
@@ -338,6 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         }
 
+        data_viaje = Viaje;
 
         console.log(JSON.stringify(Viaje))
 
@@ -999,6 +1005,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('section-tipo-pago').style.display = 'none';
         document.getElementById('section-asientos').style.display = 'block';
 
+        parte_efectivo = 0;
+        parte_tarjeta = 0;
+
+        document.getElementById("table_body_metodos_pago").innerHTML = "";
+
+        efectivo_agregado = false;
+        tarjeta_agregado = false;
+
     })
 
 
@@ -1100,6 +1114,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     var datosViajeObj = JSON.parse(datosViajeString);
                     var tipo = datosViajeObj.tipo;
                     var id = datosViajeObj.id
+                    var ori = data_viaje.origen;
+                    var des = data_viaje.destino;
 
                     fetch(`https://api-taquillas.sagautobuses.com/Home/Asientos?Servicelvl=${tipo}`)
                         .then((response) => response.json())
@@ -1107,7 +1123,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             // Hacer otra solicitud fetch para obtener datos de ocupación
 
-                            fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}`)
+                            fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}&origen=${ori}&destino=${des}`)
+                            //fetch(`https://localhost:5001/Home/listarAsientosOcupados?TripId=${id}&origen=${ori}&destino=${des}`)
                                 .then((response) => response.json())
                                 .then((occupiedSeats) => {
                                     // Llamar a la función para construir el mapa de asientos
@@ -1151,6 +1168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             var destino = datosViajeObj.destino
                             var departingOrigen = datosViajeObj.departingOrigen
                             precio_descuento = precio_base * 0.70;
+                            precio_descuento = Math.ceil(precio_descuento);
                             // Iterar sobre las claves y valores del objeto
                             var totalPrecio = 0;
                             var salida = formatDateTime(departingOrigen)
@@ -1568,7 +1586,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         if (countasientos == count_pasajeros) {
-
+            document.getElementById("total_compra_m").textContent = localStorage.getItem("Total_compra");
+            restante = localStorage.getItem("Total_compra");
             procesardatosViaje()
         } else {
 
@@ -1583,7 +1602,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
 
-    const btn_efectivo = document.getElementById("btn-efectivo")
+    /*const btn_efectivo = document.getElementById("btn-efectivo")
     btn_efectivo.addEventListener('click', () => {
 
         document.getElementById("pago-efectivo").style.display = 'block'
@@ -1656,7 +1675,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
 
-    })
+    })*/
 
 
 
@@ -1762,7 +1781,9 @@ document.addEventListener('DOMContentLoaded', () => {
             "saleNumber": shift_number_to_is,
             "tripseatlist": nuevoJson,
             "Email": localStorage.getItem('correocliente'),
-            "Phonenumber": localStorage.getItem('numerocliente')
+            "Phonenumber": localStorage.getItem('numerocliente'),
+            "CashAmount": 0,
+            "CardAmount": 0
         };
 
 
@@ -1787,6 +1808,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('folio', data);
 
                     var currentsale = actualizarCurrentSale();
+                    parte_efectivo = 0;
+                    parte_tarjeta = 0;
+                    efectivo_agregado = false;
+                    tarjeta_agregado = false;
                 } else {
                     Swal.fire({
                         title: "Error!",
@@ -1804,14 +1829,171 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .finally(() => {
                 // Habilitar el botón nuevamente al finalizar la operación
-                btnpagar_efectivo.disabled = false;
+                btnpagar_efectivo.disabled = false;                
             });
     })
 
 
+    function muestraTarjeta() {
+        document.getElementById("pago-tarjeta").style.display = 'block'
+        document.getElementById("section-tipo-pago").style.display = "none"
+
+
+        const datosviaje = localStorage.getItem("datos_viaje")
+        const datosInternetsale = localStorage.getItem("datosInternetsale")
+
+        var tbodyrsumeefectiivo = document.getElementById("tablacardresume");
+
+        var datais = localStorage.getItem("datosInternetsale")
+        datais = JSON.parse(datais)
+
+        var dataviaje = localStorage.getItem("datos_viaje");
+        var datosCombinados = JSON.parse(dataviaje);
+
+        for (var i = 0; i < datais.length; i++) {
+
+
+            var tr = document.createElement("tr");
+            var tipo = datais[i].tipo
+            var type = datais[i].tipo
+            if (tipo.includes("adulto")) {
+                tipo = "Adulto"
+            } else if (tipo.includes("nino")) {
+                tipo = "Niño"
+
+            } else if (tipo.includes("inapam")) {
+                tipo = "Adulto mayor"
+
+            } else if (tipo.includes("estudiante")) {
+                tipo = "Estudiante"
+
+            }
+
+            tr.innerHTML = `
+
+                                  <td>${datosCombinados.origen}</td>
+                                  <td>${datosCombinados.destino}</td>
+                                  <td>${formatearfecha(datosCombinados.departingOrigen)}
+                                  <td>${datosCombinados.bus}</td> 
+                                  <td>${datais[i].pasajero}</td>
+                                  <td>${tipo}</td>
+                                  <td>${datais[i].asiento}</td>
+                                  <td>${datais[i].precio}</td>
+                       
+                                `;
+
+            tbodyrsumeefectiivo.appendChild(tr);
+
+
+            var totalapagar = localStorage.getItem("Total_compra")
+
+            document.getElementById("spantotalcard").innerHTML = totalapagar
+        }
+    }
+
+    async function btn_efectivop() {
+
+        document.getElementById("pago-efectivo").style.display = 'block'
+        document.getElementById("section-tipo-pago").style.display = "none"
+
+        var datosViajeString = localStorage.getItem("datos_viaje");
+        var datosViajeObj = JSON.parse(datosViajeString);
+        var origen = datosViajeObj.origen;
+        var destino = datosViajeObj.destino;
+
+
+        if ((origen == "Mexico Central" && destino == "Veracruz Central") || (origen == "Veracruz Central" && destino == "Mexico Central")) {
+
+
+            document.getElementById('contentpromo').style.display = "none"
+        } else {
+            document.getElementById('contentpromo').style.display = "none"
+        }
 
 
 
+        const datosviaje = localStorage.getItem("datos_viaje")
+        const datosInternetsale = localStorage.getItem("datosInternetsale")
+
+        var tbodyrsumeefectiivo = document.getElementById("tbl-resume");
+
+        var datais = localStorage.getItem("datosInternetsale")
+        datais = JSON.parse(datais)
+
+        var dataviaje = localStorage.getItem("datos_viaje");
+        var datosCombinados = JSON.parse(dataviaje);
+
+        for (var i = 0; i < datais.length; i++) {
+
+
+            var tr = document.createElement("tr");
+            var tipo = datais[i].tipo
+            if (tipo.includes("adulto")) {
+                tipo = "Adulto"
+            } else if (tipo.includes("nino")) {
+                tipo = "Niño"
+
+            } else if (tipo.includes("inapam")) {
+                tipo = "Adulto mayor"
+
+            } else if (tipo.includes("estudiante")) {
+                tipo = "Estudiante"
+
+            }
+
+            tr.innerHTML = `
+
+                          <td>${datosCombinados.origen}</td>
+                          <td>${datosCombinados.destino}</td>
+                          <td>${formatearfecha(datosCombinados.departingOrigen)}
+                          <td>${datosCombinados.bus}</td> 
+                          <td>${datais[i].pasajero}</td>
+                          <td>${tipo}</td>
+                          <td>${datais[i].asiento}</td>
+                          <td>${datais[i].precio}</td>
+                         
+                        `;
+
+            tbodyrsumeefectiivo.appendChild(tr);
+
+
+            var totalapagar = localStorage.getItem("Total_compra")
+
+            document.getElementById("spantotaltotal").innerHTML = totalapagar
+        }
+    }
+
+    const btn_siguiente3 = document.getElementById("btn-siguiente3");
+    btn_siguiente3.addEventListener('click', async () => {
+        if (localStorage.getItem("Total_compra") > parte_efectivo + parte_tarjeta) {
+            window.alert("La suma de los montos no cubre el total de la compra.");
+        } else {
+            if (parte_efectivo == 0) {
+
+                muestraTarjeta();
+                //btn_tarjetap();
+            }
+            if (parte_tarjeta == 0) {
+                document.getElementById("btnpagar-efectivo").style.display = "block";
+                document.getElementById("btnpagar-hibrido").style.display = "none";
+                const input = document.getElementById("txtmonto");
+                input.value = parte_efectivo;
+                //input.dispatchEvent(new Event("input", { bubbles: true }));
+                input.disabled = true;
+                await validarNumero2(parte_efectivo);
+                btn_efectivop();
+            }
+            if (parte_efectivo != 0 && parte_tarjeta != 0) {
+                document.getElementById("btnpagar-efectivo").style.display = "none";
+                document.getElementById("btnpagar-hibrido").style.display = "block";
+                const input = document.getElementById("txtmonto");
+                input.value = parte_efectivo + parte_tarjeta;
+                input.disabled = true;
+                await validarNumero2(parte_efectivo + parte_tarjeta);
+                btn_efectivop();
+            }
+        }
+    });
     //pagos en efectivo
 
     const btnpagar_efectivo = document.getElementById('btnpagar-efectivo');
@@ -1917,7 +2099,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 "saleNumber": shift_number_to_is,
                 "tripseatlist": nuevoJson,
                 "Email": localStorage.getItem('correocliente'),
-                "Phonenumber": localStorage.getItem('numerocliente')
+                "Phonenumber": localStorage.getItem('numerocliente'),
+                "CashAmount": 0,
+                "CardAmount": 0
             };
 
             console.log(JSON.stringify(InternetSale))
@@ -1950,6 +2134,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
 
                         var currentsale = actualizarCurrentSale();
+                        parte_efectivo = 0;
+                        parte_tarjeta = 0;
+                        efectivo_agregado = false;
+                        tarjeta_agregado = false;
                     } else {
                         Swal.fire({
                             title: "Error!",
@@ -1967,16 +2155,177 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .finally(() => {
                     // Habilitar el botón nuevamente al finalizar la operación
-                    btnpagar_efectivo.disabled = false;
+                    btnpagar_efectivo.disabled = false;                    
                 });
         }
     });
 
 
+    const btn_hibrido = document.getElementById("btnpagar-hibrido");
+    btn_hibrido.addEventListener('click', () => {
+        btn_hibrido.disabled = true;
+        var datosViajeString = localStorage.getItem("datos_viaje");
+        var datosViajeObj = JSON.parse(datosViajeString);
+        var tipo = datosViajeObj.tipo;
+        var id = datosViajeObj.id;
+        var originalprice = datosViajeObj.precio;
+        var table = document.getElementById("tablaefectivoresume");
+        var header = [];
+        var rows = [];
+        var ticketuserid = localStorage.getItem('id');
+        var saleshiftid = localStorage.getItem('saleshift');
+        var officelocationid = localStorage.getItem('office_location_id');
+        var terminalid = localStorage.getItem('terminal_id');
+
+        // Convertir a número y redondear a 2 decimales
+        var monto_recibido = parseFloat(document.getElementById("txtmonto").value);
+        var totalapagar = parseFloat(localStorage.getItem("Total_compra"));
+
+        // Redondear a 2 decimales para la comparación
+        monto_recibido = Math.round(monto_recibido * 100) / 100;
+        totalapagar = Math.round(totalapagar * 100) / 100;
+
+        var userid = localStorage.getItem('id');
+
+        if (parseFloat(monto_recibido) < parseFloat(totalapagar)) {
+            Swal.fire({
+                title: "Mensaje",
+                text: `El monto recibido debe ser mayor o igual al total a pagar`,
+                icon: "info"
+            });
+            // Volver a habilitar el botón si hay un error
+            btn_hibrido.disabled = false;
+        } else {
+            var shiftnumber = localStorage.getItem('shift_number');
+            var num_ventas = localStorage.getItem('num_ventas');
+            var numero = parseInt(num_ventas) + 1;
+
+            for (var i = 0; i < table.rows[0].cells.length; i++) {
+                header.push(table.rows[0].cells[i].innerHTML);
+            }
+
+            for (var i = 1; i < table.rows.length; i++) {
+                var row = {};
+                for (var j = 0; j < table.rows[i].cells.length; j++) {
+                    row[header[j]] = table.rows[i].cells[j].innerHTML;
+                }
+                rows.push(row);
+            }
+
+            var res = monto_recibido - totalapagar;
+            const json = JSON.stringify(rows);
+            const jsonObj = JSON.parse(json);
+
+            const nuevoJson = jsonObj.map(item => {
+                let tipo = "";
+
+                if (item.Tipo == "Adulto") {
+                    tipo = "ADULT";
+                } else if (item.Tipo == "Niño") {
+                    tipo = "CHILD";
+                } else if (item.Tipo == "Adulto mayor") {
+                    tipo = "OLDER_ADULT";
+                } else if (item.Tipo == "Estudiante") {
+                    tipo = "STUDENT";
+                }
+
+                return {
+                    "Name": item.nombre,
+                    "Origin": item.Origen,
+                    "Destination": item.Destino,
+                    "Bus": item.Bus,
+                    "PassengerName": item.Pasajero,
+                    "PassengerType": tipo,
+                    "SeatName": item.Asiento,
+                    "SoldPrice": parseFloat(item.Costo),
+                    "PayedPrice": 0.0,
+                    "OriginalPrice": parseFloat(originalprice),
+                    "Trip_ID": id,
+                    "UserId": userid
+                };
+            });
+
+            const nuevoJsonString = JSON.stringify(nuevoJson, null, 2);
+            var shift_number_to_is = shiftnumber + "-" + numero;
+            var lista_ventas = localStorage.getItem("array_ventas");
+            var lista_ventasstr = lista_ventas ? JSON.parse(lista_ventas) : [];
+            var changeamount = Math.round(parseFloat(monto_recibido) - parseFloat(totalapagar))
+            const InternetSale = {
+                "totalAmount": Math.round(parseFloat(totalapagar)),
+                "changeAmount": changeamount,
+                "PaymentType": "hybrid",
+                "payedAmount": Math.round(parseFloat(monto_recibido)),
+                "salesTerminalId": terminalid,
+                "salesmanId": ticketuserid,
+                "salesShiftId": localStorage.getItem('saleshift_id'),
+                "saleNumber": shift_number_to_is,
+                "tripseatlist": nuevoJson,
+                "Email": localStorage.getItem('correocliente'),
+                "Phonenumber": localStorage.getItem('numerocliente'),
+                "CashAmount": parte_efectivo,
+                "CardAmount": parte_tarjeta
+            };
+
+            console.log(JSON.stringify(InternetSale))
+
+            alert("OK")
+
+            fetch('https://api-taquillas.sagautobuses.com/Home/VerISHibrido', {
+            //fetch('https://localhost:5001/Home/VerISHibrido', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(InternetSale)
+            })
+                .then(response => response.text())
+                .then(data => {
+                    if (data.length == 8) {
+                        // Solo aquí incrementamos y guardamos la venta
+                        localStorage.setItem('num_ventas', numero.toString());
+                        lista_ventasstr.push(shift_number_to_is);
+                        localStorage.setItem("array_ventas", JSON.stringify(lista_ventasstr));
+                        localStorage.setItem('folio', data);
+                        var elementoEnLocalStorage = localStorage.getItem('venta_reciente');
+
+                        if (elementoEnLocalStorage !== null) {
+                            var ventatotal = parseFloat(elementoEnLocalStorage);
+                            ventatotal = ventatotal + parseFloat(totalapagar);
+                            localStorage.setItem('venta_reciente', ventatotal.toString());
+                        } else {
+                            localStorage.setItem('venta_reciente', totalapagar.toString());
+                        }
+
+                        var currentsale = actualizarCurrentSale();
+                        parte_efectivo = 0;
+                        parte_tarjeta = 0;
+                        efectivo_agregado = false;
+                        tarjeta_agregado = false;
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: `Ocurrió un error`,
+                            icon: "error"
+                        });
+                    }
+                    
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: "No se Pudo realizar el pago!",
+                        text: `mensaje de error ${error}`,
+                        icon: "error"
+                    });
+                })
+                .finally(() => {
+                    // Habilitar el botón nuevamente al finalizar la operación
+                    btn_hibrido.disabled = false;                    
+                });
+        }
+    });
 
 
-
-    const btn_tarjeta = document.getElementById('btn-tarjeta')
+    /*const btn_tarjeta = document.getElementById('btn-tarjeta')
     btn_tarjeta.addEventListener('click', () => {
 
 
@@ -2036,7 +2385,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("spantotalcard").innerHTML = totalapagar
         }
 
-    })
+    })*/
 
 
 })
@@ -2575,7 +2924,27 @@ function validarNumero(input) {
 
 }
 
+function validarNumero2(input) {
 
+    var precio_base = localStorage.getItem("Total_compra");
+
+    //input = input.replace(/[^0-9]/g, '');
+
+    var precio = parseFloat(precio_base)
+    var monto = parseFloat(input)
+
+    var res = monto - precio
+
+    if (res < 0 || isNaN(res)) {
+
+        document.getElementById('cambio').textContent = ``;
+    } else {
+
+        document.getElementById('cambio').textContent = `Cambio: ${res}`;
+    }
+    document.getElementById('cambio').style.display = "block";
+
+}
 function generarID() {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let id = '';
@@ -2991,5 +3360,73 @@ function formatearfecha(fechain) {
     return fechaFormateada
 
 
+
+}
+
+function agregarFila() {
+    let metodo = document.getElementById("metodo_pago").value;
+    let valor = parseFloat(document.getElementById("monto_pago").value);
+    if ((parte_efectivo != 0 && metodo == "card" && valor > (localStorage.getItem("Total_compra") - parte_efectivo)) || (efectivo_agregado == false && metodo == "card" && valor > localStorage.getItem("Total_compra"))) {
+        window.alert("El monto con tarjeta no puede exeder el total de la compra");
+    } else {
+        if (document.getElementById("monto_pago").value != "") {
+            if (metodo == "cash" && efectivo_agregado == true) {
+                window.alert("Este metodo ya ha sido agregado, seleccione otro.")
+            } else {
+                if (metodo == "card" && tarjeta_agregado == true) {
+                    window.alert("Este metodo ya ha sido agregado, seleccione otro.")
+                } else {
+
+
+                    let new_metodo = "";
+
+                    if (metodo == "cash") {
+                        efectivo_agregado = true;
+                        new_metodo = "efectivo";
+                        parte_efectivo = valor;
+                    } else {
+                        tarjeta_agregado = true;
+                        new_metodo = "tarjeta";
+                        parte_tarjeta = valor;
+                    }
+
+                    const tabla = document.getElementById("tabla-montos-pago").getElementsByTagName('tbody')[0];
+
+                    const fila = tabla.insertRow();
+
+                    let celdaNombre = fila.insertCell(0);
+                    celdaNombre.textContent = new_metodo;
+
+                    celdaNombre = fila.insertCell(1);
+                    celdaNombre.textContent = valor;
+
+                    const celdaAcciones = fila.insertCell(2);
+                    const botonEliminar = document.createElement("button");
+                    botonEliminar.textContent = "Eliminar";
+                    botonEliminar.classList.add("btn");
+                    botonEliminar.classList.add("btn-danger");
+
+                    botonEliminar.onclick = function () {
+
+                        if (metodo === "cash") {
+                            efectivo_agregado = false;
+                            parte_efectivo = 0;
+                        } else {
+                            tarjeta_agregado = false;
+                            parte_tarjeta = 0;
+                        }
+
+                        fila.remove();
+                    };
+
+                    celdaAcciones.appendChild(botonEliminar);
+
+                    document.getElementById("monto_pago").value = "";
+                }
+            }
+        } else {
+            window.alert("Ingresa un monto valido.");
+        }
+    }
 
 }

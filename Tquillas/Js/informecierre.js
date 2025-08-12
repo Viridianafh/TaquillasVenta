@@ -69,7 +69,7 @@ let lastCancelVenta// Variable para almacenar el precio del último CANCEL
 
 
 fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift=${saleshift_id}`)
-//fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift=${saleshift_id}`)
+//fetch(`https://localhost:5001/Home/detalleventapentaho?saleshift=${saleshift_id}`)
     .then(response => response.json())
     .then(data => {
 
@@ -94,6 +94,12 @@ fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift
         let paquetesCashMonto = 0;
         let paquetesCardMonto = 0;
 
+        let precioCash_venta = 0;
+        let precioCard_venta = 0;
+
+        let precioCash_paquete = 0;
+        let precioCard_paquete = 0;
+
         data.forEach(e => {
             let precio = Number(e.PrecioDeVenta) || 0;
 
@@ -103,7 +109,12 @@ fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift
                 if (e.Tipo_pago === "cash") {
                     totalcash += precio;
                 } else {
-                    totalcard += precio;
+                    if (e.Tipo_pago == "card") {
+                        totalcard += precio;
+                    } else {
+                        precioCash_venta += e.cashAmount;
+                        precioCard_venta += e.cardAmount;
+                    }
                 }
             } else if (e.Tipo === "CANCEL") {
                 totalCancelaciones += precio;
@@ -115,8 +126,13 @@ fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift
                     totalcash += precio;
                     paquetesCashMonto += precio;
                 } else {
-                    totalcard += precio;
-                    paquetesCardMonto += precio;
+                    if (e.Tipo_pago == "card") {
+                        totalcard += precio;
+                        paquetesCardMonto += precio;
+                    } else {
+                        precioCash_paquete += e.cashAmount;
+                        precioCard_paquete += e.cardAmount;
+                    }
                 }
             }
         });
@@ -148,9 +164,9 @@ fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift
 
         });
         document.getElementById('total-monto').textContent = totalFinal;
-        document.getElementById('total-cash').textContent = totalcash;
-        document.getElementById('total-card').textContent = totalcard;
-        
+        document.getElementById('total-cash').textContent = totalcash + precioCash_venta;
+        document.getElementById('total-card').textContent = totalcard + precioCard_venta;
+
 
         document.getElementById("taquillero").textContent = localStorage.getItem('name');
         document.getElementById("turno").textContent = localStorage.getItem('shift_number')
@@ -162,8 +178,8 @@ fetch(`https://api-taquillas.sagautobuses.com/Home/detalleventapentaho?saleshift
         document.getElementById("total-cancel").textContent = -1 * totalCancelaciones
         document.getElementById("total-venta").textContent = totalVentas
 
-        document.getElementById("total-pack-cash").textContent = paquetesCashMonto;
-        document.getElementById("total-pack-card").textContent = paquetesCardMonto;
+        document.getElementById("total-pack-cash").textContent = paquetesCashMonto + precioCash_paquete;
+        document.getElementById("total-pack-card").textContent = paquetesCardMonto + precioCard_paquete;
 
 
         document.getElementById("reporte-taquillero").textContent = localStorage.getItem('name')

@@ -691,7 +691,7 @@ function crearasientos(tipo, id) {
 
     Promise.all([
         fetch(`https://api-taquillas.sagautobuses.com/Home/Asientos?Servicelvl=${tipo}`).then(response => response.json()),
-        fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}`).then(response => response.json())
+        fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}&origen=${origen}&destino=${destino}`).then(response => response.json())
     ])
         .then(([seatData, statusData]) => {
             if (!Array.isArray(seatData)) {

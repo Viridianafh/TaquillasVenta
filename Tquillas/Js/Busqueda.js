@@ -307,18 +307,22 @@ async function Descargar(ticket, tipopago, date) {
 
 function SolicitarCodigo(ticket) {
 
-    var officename = localStorage.getItem('office_name')
+    if (localStorage.getItem("caja_abierta") == "true") {
+        var officename = localStorage.getItem('office_name')
 
-    fetch(`https://api-taquillas.sagautobuses.com/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
-    //fetch(`https://api-taquillas.sagautobuses.com/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
-        .then(res => res.json())
-        .then(data => {
-            console.log("Respuesta del servidor:", data); 
+        fetch(`https://api-taquillas.sagautobuses.com/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
+            //fetch(`https://api-taquillas.sagautobuses.com/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log("Respuesta del servidor:", data);
 
 
-            localStorage.setItem("tokenCancelacionBoleto", data.token)
-        })
-    document.getElementById('section-code').style.display = 'block'
+                localStorage.setItem("tokenCancelacionBoleto", data.token)
+            })
+        document.getElementById('section-code').style.display = 'block'
+    } else {
+        window.alert("Inicia turno para poder cancelar boletos.");
+    }    
 
 }
 
