@@ -51,8 +51,10 @@
                       <select class="form-select" id ="select_terminal_crear">
                           <option value="-">Selecciona tu terminal</option>
                       </select>
-
-                      <button id="btncreate" class="btn btn-primary" style="height: 40px; width: 50%;">Configurar</button>
+                      <div style="display:flex;align-items:center;width:100%;justify-content:center">
+                          <button id="btncreate" class="btn btn-primary" style="height: 40px; width: 50%;">Configurar</button>
+                      </div>
+                      
                 
                   </div>
 
@@ -60,7 +62,7 @@
 
               </div>
 
-               <div class="col border rounded p-2">
+               <div class="col border rounded p-2" style="display:none">
                   <h3>Cambiar configuración</h3>
 
                      <div class="card h-5 p-5 gap-2">

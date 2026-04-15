@@ -2,92 +2,39 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <header>
-        <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+         <!--<script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>-->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
         <script src="Js/islog.js"></script>
         <script src="Js/Informe.js"></script>
     </header>
 
-    <style>
-        .pdf-download {
-            font-family: Arial, sans-serif; /* Fuente legible */
-            font-size: 11px; /* Tamaño de fuente deseado */
-        }
-
-        .pdf-download .table th,
-        .pdf-download .table td {
-            font-size: 11px; /* Tamaño de fuente para celdas */
-            font-weight: 600; /* Peso de fuente */
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        @media (max-width: 768px) {
-            .table thead {
-                display: none; /* Ocultar el encabezado en pantallas pequeñas */
-            }
-
-            .table tr {
-                display: block; /* Hacer que cada fila sea un bloque */
-                margin-bottom: 1rem; /* Espacio entre las filas */
-            }
-
-            .table td {
-                display: flex; /* Usar flexbox para disposición de datos */
-                justify-content: space-between; /* Separar etiqueta y valor */
-                padding: 0.5rem; /* Añadir algo de espacio interno */
-                border: 1px solid #ddd; /* Añadir borde */
-                position: relative; /* Para usar pseudo-elementos */
-            }
-
-            .table td::before {
-                content: attr(data-label); /* Mostrar etiqueta antes del valor */
-                position: absolute; /* Posicionar absolutamente */
-                left: 0; /* Alinear a la izquierda */
-                font-weight: bold; /* Resaltar la etiqueta */
-            }
-        }
-
-        @media print {
-            body {
-                font-family: Arial, sans-serif; /* Fuente legible */
-                font-size: 11px; /* Tamaño de fuente deseado */
-                margin: 0; /* Sin márgenes en el documento impreso */
-            }
-
-            .table-responsive {
-                width: 83mm; /* Ancho fijo para la tabla */
-                overflow: visible; /* Asegura que no haya desbordamiento */
-            }
-
-            .table {
-                width: 100%; /* Ocupa todo el ancho disponible */
-                border-collapse: collapse; /* Colapsar bordes para una mejor apariencia */
-            }
-
-            .table thead {
-                display: table-header-group; /* Mantiene el encabezado visible en las páginas */
-            }
-
-            .table th,
-            .table td {
-                border: 1px solid #ddd; /* Bordes en celdas */
-                padding: 4px; /* Espacio interno */
-                text-align: left; /* Alineación de texto */
-                font-size: 11px; /* Tamaño de fuente para celdas */
-                font-weight: 600; /* Peso de fuente */
-                max-width: 8mm; /* Ancho máximo de las celdas */
-                overflow: hidden; /* Ocultar desbordamiento */
-                text-overflow: ellipsis; /* Añadir puntos suspensivos si hay desbordamiento */
-                white-space: nowrap; /* Evitar saltos de línea */
-            }
-
-            .table th {
-                background-color: #f2f2f2; /* Color de fondo para el encabezado */
-                font-weight: 600; /* Peso de fuente para encabezados */
-            }
-        }
+    <style>        
+        *{
+    font-size: 13px;
+}
+         table.sin-bordes {
+    border-collapse: collapse;   /* evita líneas dobles */
+    border-spacing: 0;           /* elimina separación entre celdas */
+    font-size: 8px;
+  }
+  table.sin-bordes, 
+  table.sin-bordes th, 
+  table.sin-bordes td {
+    border: none;                /* sin bordes */
+  }
+  table.sin-bordes th, 
+  table.sin-bordes td {
+    padding: 6px;                /* opcional: espacio interno */
+  }
+  h5{
+      margin-left:5px;
+  }
+  h6{
+        margin-left:5px;
+    }
+  p{
+    margin-left:5px;
+}
     </style>
 
     <div class="container m-3">
@@ -128,7 +75,7 @@
             </div>
         </div>
 
-        <div id="informe">
+        <!--<div id="informe">
             <h5>Resumen Precorte</h5>
             <h6>Fecha: <span id="spanfecha"></span></h6>
             <br />
@@ -153,7 +100,90 @@
             <br />
             <p>Entrega: <span id="reporte-taquillero"></span><hr /></p>
             <p>Recibe: <hr /></p>
-        </div>
+        </div>-->
+         <div id="informe">
+     <h5>Resumen cierre</h5>
+     <h6>Fecha: <span id="spanfecha"></span></h6>
+     <br />
+     <h6>Taquillero: <span id="taquillero"></span></h6>
+     <h6>Turno: <span id="turno"></span></h6>
+     <h6>Oficina: <span id="oficina"></span></h6>
+     <h6>Terminal: <span id="terminal"></span></h6>
+     <br />
+
+     <table class="sin-bordes">
+       <thead>
+         <!--<tr><th></th><th></th></tr>-->
+       </thead>
+       <tbody>
+         <tr>
+             <td><strong>Boletos<br/>generales</strong></td>  <td>Cantidad</td> <td>Importe<br/>efectivo</td> <td>Importe<br/>tarjeta</td> <td>Importe<br/>total</td>
+         </tr>
+         <tr>
+             <td><strong>Boletos<br/>vendidos</strong></td>  <td><strong><span id="cantidad_boletos_vendidos"></span></strong></td> <td><strong>$<span id ="total_venta_efectivo_boletos"></span></strong></td> <td><strong>$<span id="total_venta_tarjeta_boletos"></span></strong></td> <td><strong>$<span id="total_venta_boletos"></span></strong></td>
+         </tr>
+           <tr>
+             <td>Efectivo</td> <td><span id="cantidad_boletos_vendidos_efectivo"></span></td> <td>$<span id="venta_efectivo_boletos"></span></td> <td>$<span>0</span></td> <td>$<span id ="venta_efectivo_boletos2"></span></td>
+         </tr>
+             <tr>
+             <td>Tarjeta</td> <td><span id="cantidad_boletos_vendidos_tarjeta"></span></td> <td>$<span>0</span></td> <td>$<span id ="venta_tarjeta_boletos"></span></td> <td>$<span id ="venta_tarjeta_boletos2"></span></td>
+         </tr>
+             <tr>
+             <td>Hibrido</td> <td><span id="cantidad_boletos_vendidos_hibrido"></span></td> <td>$<span id="venta_efectivo_hibrido_boletos"></span></td> <td>$<span id="venta_tarjeta_hibrido_boletos"></span></td> <td>$<span id="venta_hibrido_boletos"></span></td>
+         </tr>
+
+             <tr>
+                 <td></td>
+             </tr>
+
+           <tr>
+             <td><strong>Boletos<br/>cancelados</strong></td> <td><strong><span id="cantidad_boletos_cancelados"></span></strong></td> <td></td> <td></td> <td><strong>$<span id="total_boletos_cancelados"></span></strong></td>
+         </tr>
+         
+            <tr>
+                <td></td>
+             </tr>
+
+           <tr>
+             <td><strong>Boletos<br/>paquetería</strong></td>  <td>Cantidad</td> <td></td> <td></td> <td>Importe</td>
+         </tr>
+         <tr>
+             <td><strong>Boletos<br/>vendidos</strong></td>  <td><strong><span id="cantidad_boletos_vendidos_paq"></span></strong></td> <td></td> <td></td> <td><strong>$<span id="total_venta_paquetes"></span></strong></td>
+         </tr>
+           <tr>
+             <td>Efectivo</td> <td><span id="cantidad_boletos_vendidos_efectivo_paq"></span></td> <td></td> <td></td> <td>$<span id="venta_efectivo_paquetes"></span></td>
+         </tr>
+             <tr>
+             <td>Tarjeta</td> <td><span id="cantidad_boletos_vendidos_tarjeta_paq"></span></td> <td></td> <td></td> <td>$<span id="venta_tarjeta_paquetes"></span></td>
+         </tr>
+           
+           <tr>
+             <td></td>
+          </tr>
+
+           <tr>
+             <td></td>
+          </tr>
+
+             <tr>
+                 <td><strong>Total<br/>efectivo</strong></td> <td id=""><strong>$<span id="venta_total_boletos_paquetes_efectivo"></span></strong></td> 
+             </tr>
+             <tr>
+                 <td><strong>Total<br/>tarjeta</strong></td> <td><strong>$<span id="venta_total_boletos_paquetes_tarjeta"></span></strong></td> 
+             </tr>
+             <tr>
+                 <td><strong>Total venta<br/>sin<br/>cancelados</strong></td> <td><strong>$<span id ="total_ventas_sin_cancelados"></span></strong></td> 
+             </tr>
+       </tbody>
+     </table>
+     
+
+     <br />
+     <p>Entrega: <span id="reporte-taquillero"></span><hr /></p>
+     <p><strong>Total cancelaciones: $<span id="reporte-cancelaciones"></span></strong><hr /></p>
+     <p><strong>Efectivo entregado: $<span id="reporte-efectivo"></span></strong><hr /></p>
+     <p>Recibe: <hr /></p>
+ </div>
 
         <script>
             const opciones = {

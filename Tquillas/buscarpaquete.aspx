@@ -28,7 +28,7 @@
 
             <input type="text" id="codcompra" class="form-control"  />
 
-            <button class="btn btn-dark" onclick="Buscar()">Buscar paquete</button>
+            <button class="btn btn-dark" id="buscar_paq" onclick="Buscar()">Buscar paquete</button>
 
         </div>
 
@@ -70,7 +70,7 @@
                 <option value="DELIVERED">entregado</option>
             </select>
 
-            <button class="btn btn-success" onclick="actualizar()">Guardar</button>
+            <button class="btn btn-success" id="guardar_paq" onclick="actualizar()">Guardar</button>
         </div>
     </section>
 

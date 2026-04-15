@@ -30,6 +30,7 @@ var parte_tarjeta = 0;
 var efectivo_agregado = false;
 var tarjeta_agregado = false;
 var data_viaje;
+var bus_specific;
 localStorage.setItem("array_checkpoints", [])
 
 
@@ -137,8 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función principal que maneja el evento click
     const btn_retirar_precorte = document.getElementById('btn-retirar-precorte');
-    btn_retirar_precorte.addEventListener('click', () => {
-
+    btn_retirar_precorte.addEventListener('click', () => { 
+        document.getElementById('btn-retirar-precorte').disabled = true;
         const saleshift = localStorage.getItem('saleshift_id');
         const monto = document.getElementById('monto-precorte').value;
         const monto_retirar = parseFloat(monto);
@@ -148,17 +149,25 @@ document.addEventListener('DOMContentLoaded', () => {
             const ventas = localStorage.getItem('array_ventas');
             const arrayventas = JSON.parse(ventas);
             console.log(arrayventas);
-
+            document.getElementById('btn-retirar-precorte').disabled = false;
        
         }
         else if (monto_retirar > monto) {
             alert("No puedes retirar esta cantidad");
-
+            document.getElementById('btn-retirar-precorte').disabled = false;
         }
 
         else {
             const venta = localStorage.getItem('venta_reciente');
-            const venta_reciente = parseFloat(venta);
+            let venta_reciente = 0;
+
+            try {
+                const valor = localStorage.getItem('venta_reciente');
+                const num = parseFloat(valor);
+                venta_reciente = isNaN(num) ? monto_retirar : num;
+            } catch (error) {
+                venta_reciente = monto_retirar;
+            }
             const sobrante = venta_reciente - monto_retirar;
 
             const CashCheckpoint = {
@@ -207,12 +216,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                             if (ventasls >= 3000) {
                                                 localStorage.setItem('venta_reciente', sobrante.toString());
                                             }
+                                            document.getElementById('btn-retirar-precorte').disabled = false;
                                         } else {
                                             Swal.fire({
                                                 title: "Error!",
                                                 text: "Hubo un error",
                                                 icon: "error"
                                             });
+                                            document.getElementById('btn-retirar-precorte').disabled = false;
                                         }
                                     })
                                     .catch(error => {
@@ -221,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             text: `Hubo un error: mensaje ${error}`,
                                             icon: "error"
                                         });
+                                        document.getElementById('btn-retirar-precorte').disabled = false;
                                     });
 
                             });
@@ -232,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         text: `Hubo un error: mensaje ${error}`,
                         icon: "error"
                     });
+                    document.getElementById('btn-retirar-precorte').disabled = false;
                 });
         }
     });
@@ -240,14 +253,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     var totalorasi = 0
-    totalStudent = 6
+    totalStudent = 8
 
 
 
     const btnIniciar = document.getElementById("button_iniciar")
     btnIniciar.addEventListener('click', () => {
 
-
+        document.getElementById("button_iniciar").disabled = true;
         localStorage.setItem('num_ventas', 0)
         iniciarturno()
 
@@ -281,7 +294,19 @@ document.addEventListener('DOMContentLoaded', () => {
     button_cerrar_caja.addEventListener('click', () => {
 
         var saleshiftid = localStorage.getItem('saleshift_id')
-        var montoprevio = localStorage.getItem('venta_reciente')
+        let montoprevio = 0;
+
+        try {
+            const valor = localStorage.getItem('venta_reciente');
+            montoprevio = parseFloat(valor);
+
+            if (isNaN(montoprevio)) {
+                montoprevio = 0;
+            }
+        } catch (error) {
+            montoprevio = 0;
+        }
+
         var monto = parseFloat(montoprevio)
 
 
@@ -361,8 +386,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("pruebas_piso1").innerHTML = ``;
         document.getElementById("pruebas_piso2").innerHTML = ``;
         document.getElementById("content_piso_2").style.display = "none";
-        fetch(`https://api-taquillas.sagautobuses.com/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
         //fetch(`https://api-taquillas.sagautobuses.com/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
+        fetch(`https://localhost:5001/Home/BuscarCorridas?origen=${Viaje.origen}&destino=${Viaje.destino}&fecha=${Viaje.fechaSalida}`, {
 
         })
             .then(response => response.json())
@@ -405,6 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     var origen = alldata[i].Origen
                     var destino = alldata[i].Destino
                     var bus = alldata[i].Bus
+                    bus_specific = bus;
                     var departingOrigen = alldata[i].origencorridabuscada
                     var departingDestino = alldata[i].llegadacorridabuscada
                     var precio = alldata[i].Precio
@@ -469,9 +495,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                <td>
                                   <button 
                                         class="btn btn-primary"     
-                                        id="comprar" 
+                                        id="comprar${i}" 
                                         value="${alldata[i].TripId}" 
-                                        onclick="Comprar('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}'   )">
+                                        onclick="Comprar('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}', '${i}', '${bus_specific}'   )">
                                         Comprar
                                   </button>
                                </td>
@@ -812,7 +838,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         countstudent = countstudent + 1
 
-        if (countstudent == totalStudent) {
+        if (countstudent > totalStudent) {
             btn_sumar_estudiante.disabled = true
         } else {
 
@@ -1013,6 +1039,9 @@ document.addEventListener('DOMContentLoaded', () => {
         efectivo_agregado = false;
         tarjeta_agregado = false;
 
+        btn_atras2.click();
+        btn_siguiente1.click();
+
     })
 
 
@@ -1117,40 +1146,80 @@ document.addEventListener('DOMContentLoaded', () => {
                     var ori = data_viaje.origen;
                     var des = data_viaje.destino;
 
-                    fetch(`https://api-taquillas.sagautobuses.com/Home/Asientos?Servicelvl=${tipo}`)
-                        .then((response) => response.json())
-                        .then((seatData) => {
+                    if (bus_specific == "") {
+                        fetch(`https://api-taquillas.sagautobuses.com/Home/Asientos?Servicelvl=${tipo}`)
+                        //fetch(`https://localhost:5001/Home/Asientos?Servicelvl=${tipo}`)
+                            .then((response) => response.json())
+                            .then((seatData) => {
 
-                            // Hacer otra solicitud fetch para obtener datos de ocupación
+                                // Hacer otra solicitud fetch para obtener datos de ocupación
 
-                            fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}&origen=${ori}&destino=${des}`)
-                            //fetch(`https://localhost:5001/Home/listarAsientosOcupados?TripId=${id}&origen=${ori}&destino=${des}`)
-                                .then((response) => response.json())
-                                .then((occupiedSeats) => {
-                                    // Llamar a la función para construir el mapa de asientos
-                                    document.getElementById("section-asientos").style.display = "block"
-                                    creartabalapasejro();
+                                fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}&origen=${ori}&destino=${des}`)
+                                //fetch(`https://localhost:5001/Home/listarAsientosOcupados?TripId=${id}&origen=${ori}&destino=${des}`)
+                                    .then((response) => response.json())
+                                    .then((occupiedSeats) => {
+                                        // Llamar a la función para construir el mapa de asientos
+                                        document.getElementById("section-asientos").style.display = "block"
+                                        creartabalapasejro();
 
 
-                                    buildSeatMap(seatData, occupiedSeats);
+                                        buildSeatMap(seatData, occupiedSeats);
+                                        //buildSeatMapGood(seatData, occupiedSeats);
 
-                                })
-                                .catch((error) => {
+                                    })
+                                    .catch((error) => {
 
-                                    Swal.fire({
-                                        title: "Error!",
-                                        text: `error al listar asientos: ${error}`,
-                                        icon: "error"
+                                        Swal.fire({
+                                            title: "Error!",
+                                            text: `error al listar asientos: ${error}`,
+                                            icon: "error"
+                                        });
                                     });
+                            })
+                            .catch((error) => {
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: `${error}`,
+                                    icon: "error"
                                 });
-                        })
-                        .catch((error) => {
-                            Swal.fire({
-                                title: "Error!",
-                                text: `${error}`,
-                                icon: "error"
                             });
-                        });
+                    } else {
+                        fetch(`https://api-taquillas.sagautobuses.com/Home/AsientosByBus?Bus=${bus_specific}`)
+                        //fetch(`https://localhost:5001/Home/AsientosByBus?Bus=${bus_specific}`)
+                            .then((response) => response.json())
+                            .then((seatData) => {
+
+                                // Hacer otra solicitud fetch para obtener datos de ocupación
+
+                                fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}&origen=${ori}&destino=${des}`)
+                                    //fetch(`https://localhost:5001/Home/listarAsientosOcupados?TripId=${id}&origen=${ori}&destino=${des}`)
+                                    .then((response) => response.json())
+                                    .then((occupiedSeats) => {
+                                        // Llamar a la función para construir el mapa de asientos
+                                        document.getElementById("section-asientos").style.display = "block"
+                                        creartabalapasejro();
+
+
+                                        buildSeatMapGood(seatData, occupiedSeats);
+
+                                    })
+                                    .catch((error) => {
+
+                                        Swal.fire({
+                                            title: "Error!",
+                                            text: `error al listar asientos: ${error}`,
+                                            icon: "error"
+                                        });
+                                    });
+                            })
+                            .catch((error) => {
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: `${error}`,
+                                    icon: "error"
+                                });
+                            });
+                    }
 
 
                     function creartabalapasejro() {
@@ -1681,7 +1750,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnpagar_tarjeta = document.getElementById('btn-pagar-tarjeta')
 
-    btnpagar_tarjeta.addEventListener('click', () => {
+    btnpagar_tarjeta.addEventListener('click', async function(){
         btnpagar_tarjeta.disabled = true
 
         var datosViajeString = localStorage.getItem("datos_viaje");
@@ -1791,7 +1860,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         alert("OK")
 
-        fetch('https://api-taquillas.sagautobuses.com/Home/VerIS', {
+        await fetch('https://api-taquillas.sagautobuses.com/Home/VerIS', {
+        //await fetch('https://localhost:5001/Home/VerIS', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -1813,11 +1883,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     efectivo_agregado = false;
                     tarjeta_agregado = false;
                 } else {
-                    Swal.fire({
-                        title: "Error!",
-                        text: `Ocurrió un error`,
-                        icon: "error"
-                    });
+                    if (data.includes("solapado")) {
+                        Swal.fire({
+                            title: "Advertencia!",
+                            text: `Alguien compro alguno de los asientos que seleccionaste más rapido`,
+                            icon: "error"
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: `Ocurrió un error`,
+                            icon: "error"
+                        });
+                    }
+                   
                 }
             })
             .catch(error => {
@@ -1998,7 +2077,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnpagar_efectivo = document.getElementById('btnpagar-efectivo');
 
-    btnpagar_efectivo.addEventListener('click', () => {
+    btnpagar_efectivo.addEventListener('click', async function() {
         // Deshabilitar el botón para evitar múltiples clics
         btnpagar_efectivo.disabled = true;
 
@@ -2108,7 +2187,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             alert("OK")
 
-            fetch('https://api-taquillas.sagautobuses.com/Home/VerIS', {
+            await fetch('https://api-taquillas.sagautobuses.com/Home/VerIS', {
+            //await fetch('https://localhost:5001/Home/VerIS', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -2139,11 +2219,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         efectivo_agregado = false;
                         tarjeta_agregado = false;
                     } else {
-                        Swal.fire({
-                            title: "Error!",
-                            text: `Ocurrió un error`,
-                            icon: "error"
-                        });
+                        if (data.includes("solapado")) {
+                            Swal.fire({
+                                title: "Advertencia!",
+                                text: `Alguien compro alguno de los asientos que seleccionaste más rapido`,
+                                icon: "error"
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error!",
+                                text: `Ocurrió un error`,
+                                icon: "error"
+                            });
+                        }
                     }
                 })
                 .catch(error => {
@@ -2162,7 +2250,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     const btn_hibrido = document.getElementById("btnpagar-hibrido");
-    btn_hibrido.addEventListener('click', () => {
+    btn_hibrido.addEventListener('click', async function(){
         btn_hibrido.disabled = true;
         var datosViajeString = localStorage.getItem("datos_viaje");
         var datosViajeObj = JSON.parse(datosViajeString);
@@ -2270,8 +2358,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             alert("OK")
 
-            fetch('https://api-taquillas.sagautobuses.com/Home/VerISHibrido', {
-            //fetch('https://localhost:5001/Home/VerISHibrido', {
+            await fetch('https://api-taquillas.sagautobuses.com/Home/VerISHibrido', {
+            //await fetch('https://localhost:5001/Home/VerISHibrido', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -2290,10 +2378,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         if (elementoEnLocalStorage !== null) {
                             var ventatotal = parseFloat(elementoEnLocalStorage);
-                            ventatotal = ventatotal + parseFloat(totalapagar);
+                            ventatotal = ventatotal + parseFloat(parte_efectivo);
                             localStorage.setItem('venta_reciente', ventatotal.toString());
                         } else {
-                            localStorage.setItem('venta_reciente', totalapagar.toString());
+                            localStorage.setItem('venta_reciente', parte_efectivo.toString());
                         }
 
                         var currentsale = actualizarCurrentSale();
@@ -2302,11 +2390,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         efectivo_agregado = false;
                         tarjeta_agregado = false;
                     } else {
-                        Swal.fire({
-                            title: "Error!",
-                            text: `Ocurrió un error`,
-                            icon: "error"
-                        });
+                        if (data.includes("solapado")) {
+                            Swal.fire({
+                                title: "Advertencia!",
+                                text: `Alguien compro alguno de los asientos que seleccionaste más rapido`,
+                                icon: "error"
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error!",
+                                text: `Ocurrió un error`,
+                                icon: "error"
+                            });
+                        }
                     }
                     
                 })
@@ -2396,10 +2492,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //fin DOMcontent loaded
 
-async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, departing_destino, precio, Arrival, Departure, RunId, totaltime, type) {
+async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, departing_destino, precio, Arrival, Departure, RunId, totaltime, type, i, bus) {
 
-
-
+    bus_specific = bus;
+    document.getElementById("comprar" + i).disabled = true;
     console.log("Iniciando agregado de datos")
 
     if (id == "") {
@@ -2493,7 +2589,9 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
 
                         var cant_students = data
 
-                        if (cant_students == 6) {
+                        countstudent = cant_students;
+
+                        if (cant_students == 8) {
 
                             document.getElementById('content-count-estudiantes').style.display = "none"
                             document.getElementById("BoletosE").innerHTML = cant_students
@@ -2524,6 +2622,7 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
             });
 
         })
+    document.getElementById("comprar" + i).disabled = false;
 }
 
 
@@ -2635,7 +2734,7 @@ function procesardatosViaje() {
 
 
 
-function iniciarturno() {
+async function iniciarturno() {
 
 
     var userId = localStorage.getItem('id');
@@ -2672,226 +2771,392 @@ function iniciarturno() {
     });
 
     var clave = "shift_number";
+    
+    try {
+        if (localStorage.getItem("caja_abierta") == "false") {
 
-    if (localStorage.getItem(clave) == null) {
+            await fetch(`https://api-taquillas.sagautobuses.com/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
+                //await fetch(`https://localhost:5001/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
+                .then(response => response.json())
+                .then(data => {
 
-        fetch(`https://api-taquillas.sagautobuses.com/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
-            .then(response => response.json())
-            .then(data => {
+                    console.log(data.shift)
+                    localStorage.setItem('shift_number', data.shift)
+                    localStorage.setItem('saleshift_id', data.saleShift)
 
-                console.log(data.shift)
-                localStorage.setItem('shift_number', data.shift)
-                localStorage.setItem('saleshift_id', data.saleShift)
-
-                // datos forage
-                const url = `https://api-taquillas.sagautobuses.com/Home/descargar?url=${data.url}`;
-
-
-                fetch(url)
-                    .then(response => {
-
-                        if (!response.ok) {
-                            throw new Error(`Error al descargar el archivo. Código de estado: ${response.status}`);
-                        }
+                    // datos forage
+                    const url = `https://api-taquillas.sagautobuses.com/Home/descargar?url=${data.url}`;
+                    //const url = `https://localhost:5001/Home/descargar?url=${data.url}`;
 
 
-                        return response.blob();
-                    })
-                    .then(blob => {
-
-                        const blobUrl = URL.createObjectURL(blob);
-
-
-                        const link = document.createElement('a');
-                        link.href = blobUrl;
-
-                        link.download = 'apertura de caja';
-
-
-                        document.body.appendChild(link);
-
-
-                        link.click();
-
-
-                        document.body.removeChild(link);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            })
-
-        Swal.fire({
-            title: "Mensaje!",
-            text: `puedes iniciar con la venta`,
-            icon: "success"
-        });
-
-        var arrayventas = []
-
-        localStorage.setItem("array_ventas", arrayventas)
-
-        localStorage.setItem('venta_reciente', 0)
-        var cajaabierta = true
-
-        localStorage.setItem("caja_abierta", cajaabierta)
-
-
-    } else {
-
-    }
-
-
-    $(document).ready(function () {
-        $('#origen').select2({
-            selectOnClose: true,
-            tags: true
-        });
-
-        $('#destino').select2({
-            selectOnClose: true,
-            tags: true
-        });
-
-
-        fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
-            //fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify('')
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                var selectOrigen = $('#origen');
-
-
-                selectOrigen.empty().append('<option value="">Seleccione un origen</option>');
-
-                data.forEach(option => {
-                    var newOption = new Option(option.name, option.id, false, false);
-                    selectOrigen.append(newOption);
-                });
-
-                selectOrigen.select2();
-
-                selectOrigen.on('select2:open', function () {
-                    setTimeout(function () {
-                        $('.select2-search__field').focus();
-                    }, 1);
-                });
-
-                selectOrigen.on('change', function () {
-                    var IDOrigen = selectOrigen.val();
-                    var Origen = selectOrigen.find("option:selected").text();
-
-                    var data = { origen: Origen };
-
-                    fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
-                        //fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
-                        method: 'POST',
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(data)
-                    })
+                    fetch(url)
                         .then(response => {
+
                             if (!response.ok) {
-                                throw new Error(`HTTP error! status: ${response.status}`);
+                                throw new Error(`Error al descargar el archivo. Código de estado: ${response.status}`);
                             }
-                            return response.json();
+
+
+                            return response.blob();
                         })
-                        .then(responseData => {
-                            var selectDestino = $('#destino');
+                        .then(blob => {
 
-                            selectDestino.empty().append('<option value="">Seleccione un destino</option>');
+                            const blobUrl = URL.createObjectURL(blob);
 
-                            responseData.forEach(option => {
-                                var newOption = new Option(option.name, option.id, false, false);
-                                selectDestino.append(newOption);
+
+                            const link = document.createElement('a');
+                            link.href = blobUrl;
+
+                            link.download = 'apertura de caja';
+
+
+                            document.body.appendChild(link);
+
+
+                            link.click();
+
+
+                            document.body.removeChild(link);
+
+                            var arrayventas = []
+
+                            localStorage.setItem("array_ventas", arrayventas)
+
+                            localStorage.setItem('venta_reciente', 0)
+                            var cajaabierta = true
+
+                            localStorage.setItem("caja_abierta", cajaabierta)
+
+                            Swal.fire({
+                                title: "Mensaje!",
+                                text: `puedes iniciar con la venta`,
+                                icon: "success"
+                            });
+                            document.getElementById("button_iniciar").disabled = false;
+
+                            //if (localStorage.getItem("caja_abierta")) {
+                            $(document).ready(function () {
+                                $('#origen').select2({
+                                    selectOnClose: true,
+                                    tags: true
+                                });
+
+                                $('#destino').select2({
+                                    selectOnClose: true,
+                                    tags: true
+                                });
+
+
+                                fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
+                                    //fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
+                                    method: 'POST',
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify('')
+                                })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error(`HTTP error! status: ${response.status}`);
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        var selectOrigen = $('#origen');
+
+
+                                        selectOrigen.empty().append('<option value="">Seleccione un origen</option>');
+
+                                        data.forEach(option => {
+                                            var newOption = new Option(option.name, option.id, false, false);
+                                            selectOrigen.append(newOption);
+                                        });
+
+                                        selectOrigen.select2();
+
+                                        selectOrigen.on('select2:open', function () {
+                                            setTimeout(function () {
+                                                $('.select2-search__field').focus();
+                                            }, 1);
+                                        });
+
+                                        selectOrigen.on('change', function () {
+                                            var IDOrigen = selectOrigen.val();
+                                            var Origen = selectOrigen.find("option:selected").text();
+
+                                            var data = { origen: Origen };
+
+                                            fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                                                //fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                                                method: 'POST',
+                                                headers: {
+                                                    "Content-Type": "application/json"
+                                                },
+                                                body: JSON.stringify(data)
+                                            })
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        throw new Error(`HTTP error! status: ${response.status}`);
+                                                    }
+                                                    return response.json();
+                                                })
+                                                .then(responseData => {
+                                                    var selectDestino = $('#destino');
+
+                                                    selectDestino.empty().append('<option value="">Seleccione un destino</option>');
+
+                                                    responseData.forEach(option => {
+                                                        var newOption = new Option(option.name, option.id, false, false);
+                                                        selectDestino.append(newOption);
+                                                    });
+
+                                                    selectDestino.select2();
+
+                                                    selectDestino.on('select2:open', function () {
+                                                        setTimeout(function () {
+                                                            $('.select2-search__field').focus();
+                                                        }, 1);
+                                                    });
+                                                })
+                                                .catch(error => {
+                                                    Swal.fire({
+                                                        title: "Error!",
+                                                        text: `${error}`,
+                                                        icon: "error"
+                                                    });
+                                                    document.getElementById("button_iniciar").disabled = false;
+                                                });
+                                        });
+                                    })
+                                    .catch(error => {
+                                        Swal.fire({
+                                            title: "Error!",
+                                            text: `${error}`,
+                                            icon: "error"
+                                        });
+                                        document.getElementById("button_iniciar").disabled = false;
+                                    });
                             });
 
-                            selectDestino.select2();
 
-                            selectDestino.on('select2:open', function () {
-                                setTimeout(function () {
-                                    $('.select2-search__field').focus();
-                                }, 1);
-                            });
+
+                            function searchDestiny() {
+
+                                var selectOrigenUs = document.getElementById('origen');
+                                var selectDestino = document.getElementById('destino');
+
+                                var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
+
+
+                                fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                                    //fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                                    method: 'POST',
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+
+                                    body: JSON.stringify(data)
+                                })
+                                    .then(response => response.json())
+                                    .then(responseData => {
+
+                                        while (selectDestino.options.length > 1) {
+                                            selectDestino.remove(1);
+                                        }
+
+                                        responseData.forEach(option => {
+                                            var newOption = document.createElement("option");
+                                            newOption.value = option.id;
+                                            newOption.text = option.name;
+                                            selectDestino.appendChild(newOption);
+                                        });
+                                    })
+                                    .catch(error => {
+                                        Swal.fire({
+                                            title: "Error!",
+                                            text: `${error}`,
+                                            icon: "error"
+                                        });
+                                        document.getElementById("button_iniciar").disabled = false;
+                                    });
+                            }
+
+
+                            document.getElementById('content-button').style.display = "none"
+                            document.getElementById('content-buttons').style.display = "flex"
+                            document.getElementById('content-buscador').style.display = "block"
+                            document.getElementById("button_iniciar").disabled = false;
+                            //}    
+
                         })
                         .catch(error => {
-                            Swal.fire({
-                                title: "Error!",
-                                text: `${error}`,
-                                icon: "error"
-                            });
+                            console.error(error);
+                            window.alert("Ha ocurrido un error al descargar el inicio de turno.");
+                            document.getElementById("button_iniciar").disabled = false;
                         });
+                })
+                .catch(error => {
+                    window.alert("Ha ocurrido un error al iniciar turno, intentelo nuevamente.")
+                    document.getElementById("button_iniciar").disabled = false;
                 });
-            })
-            .catch(error => {
-                Swal.fire({
-                    title: "Error!",
-                    text: `${error}`,
-                    icon: "error"
+
+        } else {
+            document.getElementById("button_iniciar").disabled = false;
+            $(document).ready(function () {
+                $('#origen').select2({
+                    selectOnClose: true,
+                    tags: true
                 });
+
+                $('#destino').select2({
+                    selectOnClose: true,
+                    tags: true
+                });
+
+
+                fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
+                    //fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify('')
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        var selectOrigen = $('#origen');
+
+
+                        selectOrigen.empty().append('<option value="">Seleccione un origen</option>');
+
+                        data.forEach(option => {
+                            var newOption = new Option(option.name, option.id, false, false);
+                            selectOrigen.append(newOption);
+                        });
+
+                        selectOrigen.select2();
+
+                        selectOrigen.on('select2:open', function () {
+                            setTimeout(function () {
+                                $('.select2-search__field').focus();
+                            }, 1);
+                        });
+
+                        selectOrigen.on('change', function () {
+                            var IDOrigen = selectOrigen.val();
+                            var Origen = selectOrigen.find("option:selected").text();
+
+                            var data = { origen: Origen };
+
+                            fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                                //fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                                method: 'POST',
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(data)
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error(`HTTP error! status: ${response.status}`);
+                                    }
+                                    return response.json();
+                                })
+                                .then(responseData => {
+                                    var selectDestino = $('#destino');
+
+                                    selectDestino.empty().append('<option value="">Seleccione un destino</option>');
+
+                                    responseData.forEach(option => {
+                                        var newOption = new Option(option.name, option.id, false, false);
+                                        selectDestino.append(newOption);
+                                    });
+                                    document.getElementById("button_iniciar").disabled = false;
+                                    selectDestino.select2();
+
+                                    selectDestino.on('select2:open', function () {
+                                        setTimeout(function () {
+                                            $('.select2-search__field').focus();
+                                        }, 1);
+                                    });
+                                })
+                                .catch(error => {
+                                    Swal.fire({
+                                        title: "Error!",
+                                        text: `${error}`,
+                                        icon: "error"
+                                    });
+                                    document.getElementById("button_iniciar").disabled = false;
+                                });
+                        });
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: "Error!",
+                            text: `${error}`,
+                            icon: "error"
+                        });
+                        document.getElementById("button_iniciar").disabled = false;
+                    });
             });
-    });
 
 
 
-    function searchDestiny() {
+            function searchDestiny() {
 
-        var selectOrigenUs = document.getElementById('origen');
-        var selectDestino = document.getElementById('destino');
+                var selectOrigenUs = document.getElementById('origen');
+                var selectDestino = document.getElementById('destino');
 
-        var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
+                var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
 
 
-        fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
-            //fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
+                fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                    //fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
 
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(responseData => {
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(responseData => {
+                        document.getElementById("button_iniciar").disabled = false;
+                        while (selectDestino.options.length > 1) {
+                            selectDestino.remove(1);
+                        }
 
-                while (selectDestino.options.length > 1) {
-                    selectDestino.remove(1);
-                }
+                        responseData.forEach(option => {
+                            var newOption = document.createElement("option");
+                            newOption.value = option.id;
+                            newOption.text = option.name;
+                            selectDestino.appendChild(newOption);
+                        });
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: "Error!",
+                            text: `${error}`,
+                            icon: "error"
+                        });
+                        document.getElementById("button_iniciar").disabled = false;
+                    });
+            }
 
-                responseData.forEach(option => {
-                    var newOption = document.createElement("option");
-                    newOption.value = option.id;
-                    newOption.text = option.name;
-                    selectDestino.appendChild(newOption);
-                });
-            })
-            .catch(error => {
-                Swal.fire({
-                    title: "Error!",
-                    text: `${error}`,
-                    icon: "error"
-                });
-            });
+
+            document.getElementById('content-button').style.display = "none"
+            document.getElementById('content-buttons').style.display = "flex"
+            document.getElementById('content-buscador').style.display = "block"
+            document.getElementById("button_iniciar").disabled = false;
+        }    
+    } catch (e) {
+        document.getElementById("button_iniciar").disabled = false;
     }
-
-
-    document.getElementById('content-button').style.display = "none"
-    document.getElementById('content-buttons').style.display = "flex"
-    document.getElementById('content-buscador').style.display = "block"
-
-
-
 }
 
 
@@ -3011,7 +3276,16 @@ function CerrarCajamenor() {
 
     var saleshift = localStorage.getItem('saleshift_id')
     var venta = localStorage.getItem('venta_reciente')
-    var venta_reciente = parseFloat(venta)
+    let venta_reciente;
+
+    try {
+        venta_reciente = parseFloat(venta);
+        if (isNaN(venta_reciente)) {
+            venta_reciente = 0;
+        }
+    } catch (e) {
+        venta_reciente = 0;
+    }
 
 
     const CashCheckpoint = {
@@ -3041,7 +3315,15 @@ function CerrarCajamenor() {
 
                 localStorage.setItem('cashcheckpoint', data);
                 var cashcheckpoint = localStorage.getItem('cashcheckpoint');
-                var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
+                var salesnumberArray;
+                try {
+                    salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
+                } catch (e) {
+                    salesnumberArray = [];
+                    for (let i = 1; i <= parseInt(localStorage.getItem("num_ventas")); i+=1) {
+                        salesnumberArray.push(localStorage.getItem("shift_number") + "-" + i.toString())
+                    }
+                }
 
                 let Saleshift = salesnumberArray.map(salesnumber => {
                     return {
@@ -3105,7 +3387,16 @@ function CerrarCajavacia() {
     alert("caja en 0")
     var saleshift = localStorage.getItem('saleshift_id')
     var venta = localStorage.getItem('venta_reciente')
-    var venta_reciente = parseFloat(venta)
+    let venta_reciente;
+
+    try {
+        venta_reciente = parseFloat(venta);
+        if (isNaN(venta_reciente)) {
+            venta_reciente = 0;
+        }
+    } catch (e) {
+        venta_reciente = 0;
+    }
 
 
     const CashCheckpoint = {
@@ -3346,6 +3637,7 @@ function formatearfecha(fechain) {
     let mes = fecha.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
     let anio = fecha.getFullYear();
     let horas = fecha.getHours();
+    //let horas = fecha.getHours()-1;
     let minutos = fecha.getMinutes();
     let segundos = fecha.getSeconds();
 
@@ -3429,4 +3721,143 @@ function agregarFila() {
         }
     }
 
+}
+
+function buildSeatMapGood(asientosBus, asientosOcupados) {
+    p1d1 = ``;
+    p1d2 = ``;
+    p1d3 = ``;
+    p1d4 = ``;
+    p1d5 = ``;
+
+    p2d1 = ``;
+    p2d2 = ``;
+    p2d3 = ``;
+    p2d4 = ``;
+    p2d5 = ``;
+
+    const maxColumn = Math.max(...asientosBus.map(a => a.column_numeric));
+    const maxfloor = Math.max(...asientosBus.map(a => a.floor_numeric));
+   
+    let temp = ``;
+
+    /*if (maxfloor == 2) {        
+        document.getElementById('content-floor-indicator').style.display = "flex"
+    } else {
+        document.getElementById('content-floor-indicator').style.display = "flex"        
+    }*/
+
+    for (let i = 1; i <= maxfloor; i++) {
+        for (let j = 0; j < 5; j++) {
+            for (let k = 0; k <= maxColumn; k++) {
+
+                const resultado = asientosBus.find(obj =>
+                    obj.floor_numeric === i &&
+                    obj.row === j.toString() &&
+                    obj.column_numeric === k
+                );
+
+                if (resultado) {
+                    //console.log("Sí lo encontró:", resultado);
+                    switch (resultado.type) {
+                        case "DOOR":
+                            
+                            temp += `<button class='btn btn-secondary' style='width:80px; height:80px; margin:1px;' disabled>
+                                    Puerta
+                                    </button>`;
+                                    
+                            break;
+                        case "BATHROOM":
+                            
+                            temp += `<button class='btn btn-danger' disabled style='padding:10px;width:80px;height:80px;margin:1px;background-image: url("Assets/toilet.png"); background-size: cover;'>
+                                     </button>`;
+                            
+                            break;
+                        case "BED":
+                            
+                            temp += `<input type='button' class='btn btn-outline-secondary' value='' disabled style='padding:10px 10px 10px 10px;width:80px;height:80px;margin:1px 1px 1px 1px;'/>`;
+                             
+                            break;
+                        case "SEAT_AND_TV":
+
+                            temp += cad_lib_oc(asientosOcupados, resultado);
+
+                            break;
+                        case "SEAT":
+
+                            temp += cad_lib_oc(asientosOcupados, resultado);
+
+                            break;                        
+                        default:
+
+                            temp += `<input type='button' class='btn ' id="" style="padding:10px 10px 10px 10px;width:80px;height:80px;margin:1px 1px 1px 1px;"/>`;                            
+
+                            break;
+                    }
+                } else {
+                    //console.log("No lo encontró");
+                    temp += `<input type='button' class='btn ' id="" style="padding:10px 10px 10px 10px;width:80px;height:80px;margin:1px 1px 1px 1px;"/>`;
+                }
+            }
+            if (i == 1) {
+                switch (j) {
+                    case 0:
+                        p1d1 = temp;
+                        break;
+                    case 1:
+                        p1d2 = temp;
+                        break;
+                    case 2:
+                        p1d3 = temp;
+                        break;
+                    case 3:
+                        p1d4 = temp;
+                        break;
+                    case 4:
+                        p1d5 = temp;
+                        break;
+                }
+            } else {
+                switch (j) {
+                    case 0:
+                        p2d1 = temp;
+                        break;
+                    case 1:
+                        p2d2 = temp;
+                        break;
+                    case 2:
+                        p2d3 = temp;
+                        break;
+                    case 3:
+                        p2d4 = temp;
+                        break;
+                    case 4:
+                        p2d5 = temp;
+                        break;
+                }
+            }
+            
+            temp = ``;
+        }        
+    }
+
+    p1d1 = "<div class='row'><div class='col-md-12' style='display:flex;justify-content:center'>" + p1d1 + "</div></div>";
+    p1d2 = "<div class='row'><div class='col-md-12' style='display:flex;justify-content:center'>" + p1d2 + "</div></div>";
+    p1d3 = "<div class='row'><div class='col-md-12' style='display:flex;justify-content:center'>" + p1d3 + "</div></div>";
+    p1d4 = "<div class='row'><div class='col-md-12' style='display:flex;justify-content:center'>" + p1d4 + "</div></div>";
+    p1d5 = "<div class='row'><div class='col-md-12' style='display:flex;justify-content:center'>" + p1d5 + "</div></div>";
+
+    p2d1 = "<div class='row'><div class='col-md-12' style='display:flex;justify-content:center'>" + p2d1 + "</div></div>";
+    p2d2 = "<div class='row'><div class='col-md-12' style='display:flex;justify-content:center'>" + p2d2 + "</div></div>";
+    p2d3 = "<div class='row'><div class='col-md-12' style='display:flex;justify-content:center'>" + p2d3 + "</div></div>";
+    p2d4 = "<div class='row'><div class='col-md-12' style='display:flex;justify-content:center'>" + p2d4 + "</div></div>";
+    p2d5 = "<div class='row'><div class='col-md-12' style='display:flex;justify-content:center'>" + p2d5 + "</div></div>";
+
+    //document.getElementById("pruebas_piso1").innerHTML = `<div style="display:flex;flex-direction:row">${p1d1}${p1d3}${p1d2}${p1d4}${p1d5}</div>`;
+    document.getElementById("pruebas_piso1").innerHTML = `${p1d1}${p1d2}${p1d3}${p1d4}${p1d5}`;
+    if (maxfloor == 2) {
+        //document.getElementById("pruebas_piso2").innerHTML = `<div style="display:flex;flex-direction:row">${p2d1}${p2d3}${p2d2}${p2d4}${p2d5}</div>`;
+        document.getElementById("pruebas_piso2").innerHTML = `${p2d1}${p2d2}${p2d3}${p2d4}${p2d5}`;
+        document.getElementById("content_piso_2").style.display = "flex";
+    }
 }

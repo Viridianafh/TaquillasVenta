@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
              
                 var isaleid = data.isaleid;
-                document.getElementById('show-json').disabled = false
+                //document.getElementById('show-json').disabled = false
                 window.location.href = "detallepaquete.aspx?isaleid=" + isaleid;
             })
             .catch(error => {
@@ -584,7 +584,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn_retirar_precorte = document.getElementById('btn-retirar-precorte')
     btn_retirar_precorte.addEventListener('click', () => {
 
-
+        document.getElementById('btn-retirar-precorte').disabled = true;
 
         var saleshift = localStorage.getItem('saleshift_id')
         var monto = document.getElementById('monto-precorte').value
@@ -610,7 +610,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             var venta = localStorage.getItem('venta_reciente')
-            var venta_reciente = parseFloat(venta)
+
+            let venta_reciente = 0;
+
+            try {
+                const valor = localStorage.getItem('venta_reciente');
+                const num = parseFloat(valor);
+                venta_reciente = isNaN(num) ? monto_retirar : num;
+            } catch (error) {
+                venta_reciente = monto_retirar;
+            }
 
             var sobrante = venta_reciente - monto_retirar
 
@@ -659,7 +668,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         var cashcheckpoint = localStorage.getItem('cashcheckpoint');
 
-                        var salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
+                        var salesnumberArray;
+                        try {
+                            salesnumberArray = JSON.parse(localStorage.getItem('array_ventas')) || [];
+                        } catch (e) {
+                            salesnumberArray = [];
+                            for (let i = 1; i <= parseInt(localStorage.getItem("num_ventas")); i += 1) {
+                                salesnumberArray.push(localStorage.getItem("shift_number") + "-" + i.toString())
+                            }
+                        }
 
                         let Saleshift = salesnumberArray.map(salesnumber => {
                             return {
@@ -692,7 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         text: `se abre de nevo la caja`,
                                         icon: "success"
                                     });
-
+                                    document.getElementById('btn-retirar-precorte').disabled = false;
 
                                     location.href = "informePrecorte.aspx"
 
@@ -707,7 +724,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 } else {
 
-
+                                    document.getElementById('btn-retirar-precorte').disabled = false;
                                     Swal.fire({
                                         title: "Error!",
                                         text: `Hubo un error`,
@@ -715,9 +732,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                     });
 
                                 }
+                                
 
                             }).catch(error => {
-
+                                document.getElementById('btn-retirar-precorte').disabled = false;
                                 Swal.fire({
                                     title: "Error!",
                                     text: `Hubo un error: mensaje ${error}`,
@@ -727,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             })
                     }
                 }).catch(error => {
-
+                    document.getElementById('btn-retirar-precorte').disabled = false;
                     Swal.fire({
                         title: "Error!",
                         text: `Hubo un error: mensaje ${error}`,
@@ -750,7 +768,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnIniciar = document.getElementById("button_iniciar")
     btnIniciar.addEventListener('click', () => {
 
-
+        document.getElementById("button_iniciar").disabled = true;
         localStorage.setItem('num_ventas', 0)
         iniciarturno()
 
@@ -784,7 +802,19 @@ document.addEventListener('DOMContentLoaded', () => {
     button_cerrar_caja.addEventListener('click', () => {
 
         var saleshiftid = localStorage.getItem('saleshift_id')
-        var montoprevio = localStorage.getItem('venta_reciente')
+        let montoprevio = 0;
+
+        try {
+            const valor = localStorage.getItem('venta_reciente');
+            montoprevio = parseFloat(valor);
+
+            if (isNaN(montoprevio)) {
+                montoprevio = 0;
+            }
+        } catch (error) {
+            montoprevio = 0;
+        }
+
         var monto = parseFloat(montoprevio)
 
 
@@ -956,9 +986,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                <td>
                                   <button 
                                         class="btn btn-primary"     
-                                        id="comprar" 
+                                        id="comprar${i}" 
                                         value="${alldata[i].TripId}" 
-                                        onclick="Comprar('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}'   )">
+                                        onclick="Comprar('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}', '${i}'   )">
                                         Comprar
                                   </button>
                                </td>
@@ -1038,8 +1068,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //fin DOMcontent loaded
 
-async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, departing_destino, precio, Arrival, Departure, RunId, totaltime, type) {
-
+async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen, departing_destino, precio, Arrival, Departure, RunId, totaltime, type, i) {
+    document.getElementById("comprar" + i).disabled = true;
 
 
     console.log("Iniciando agregado de datos")
@@ -1084,7 +1114,7 @@ async function Comprar(id, corrida, tipo, origen, destino, bus, departin_origen,
     document.getElementById('direccion-destinatario').value = destino
 
 
-
+    document.getElementById("comprar" + i).disabled = false;
 }
 
 function limpiarTablaViaje() {
@@ -1220,7 +1250,7 @@ function iniciarturno() {
     var clave = "shift_number";
 
 
-    if (localStorage.getItem(clave) == null) {
+    if (localStorage.getItem("caja_abierta") == "false") {
 
 
         var terminal = "";
@@ -1281,7 +1311,7 @@ function iniciarturno() {
         var clave = "shift_number";
 
 
-        if (localStorage.getItem(clave) == null) {
+        if (localStorage.getItem("caja_abierta") == "false") {
 
 
             var terminal = "";
@@ -1309,223 +1339,176 @@ function iniciarturno() {
             var clave = "shift_number";
 
 
-            if (localStorage.getItem(clave) == null) {
+            if (localStorage.getItem("caja_abierta") == "false") {
+
+
+                try {
+                    fetch(`https://api-taquillas.sagautobuses.com/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
+                        //fetch(`https://localhost:5001/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
+                        .then(response => response.json())
+                        .then(data => {
+
+
+                            console.log(data.shift)
+                            localStorage.setItem('shift_number', data.shift)
+                            localStorage.setItem('saleshift_id', data.saleShift)
 
 
 
-                fetch(`https://api-taquillas.sagautobuses.com/Home/iniciar turno?iduser=${userId}&user_name=${userName}&locationid=${officeidd}&terminal=${terminalidd}&office_name=${officee}&terminal_name=${terminall}`)
-                    .then(response => response.json())
-                    .then(data => {
+                            const url = `https://api-taquillas.sagautobuses.com/Home/descargar?url=${data.url}`;
+                            //const url = `https://localhost:5001/Home/descargar?url=${data.url}`;
 
 
-                        console.log(data.shift)
-                        localStorage.setItem('shift_number', data.shift)
-                        localStorage.setItem('saleshift_id', data.saleShift)
+                            fetch(url)
+                                .then(response => {
+
+                                    if (!response.ok) {
+                                        throw new Error(`Error al descargar el archivo. Código de estado: ${response.status}`);
+                                    }
 
 
+                                    return response.blob();
+                                })
+                                .then(blob => {
 
-                        const url = `https://api-taquillas.sagautobuses.com/Home/descargar?url=${data.url}`;
-
-
-                        fetch(url)
-                            .then(response => {
-
-                                if (!response.ok) {
-                                    throw new Error(`Error al descargar el archivo. Código de estado: ${response.status}`);
-                                }
+                                    const blobUrl = URL.createObjectURL(blob);
 
 
-                                return response.blob();
-                            })
-                            .then(blob => {
+                                    const link = document.createElement('a');
+                                    link.href = blobUrl;
 
-                                const blobUrl = URL.createObjectURL(blob);
-
-
-                                const link = document.createElement('a');
-                                link.href = blobUrl;
-
-                                link.download = 'apertura de caja';
+                                    link.download = 'apertura de caja';
 
 
-                                document.body.appendChild(link);
+                                    document.body.appendChild(link);
 
 
-                                link.click();
+                                    link.click();
 
 
-                                document.body.removeChild(link);
-                            })
-                            .catch(error => {
-                                console.error(error);
+                                    document.body.removeChild(link);
 
-                            });
+                                    function searchDestiny() {
 
-                    })
+                                        var selectOrigenUs = document.getElementById('origen');
+                                        var selectDestino = document.getElementById('destino');
 
-                Swal.fire({
-                    title: "Mensaje!",
-                    text: `puedes iniciar con la venta`,
-                    icon: "success"
-                });
+                                        var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
 
-                var arrayventas = []
 
-                localStorage.setItem("array_ventas", arrayventas)
+                                        fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                                            method: 'POST',
+                                            headers: {
+                                                "Content-Type": "application/json"
+                                            },
 
-                localStorage.setItem('venta_reciente', 0)
+                                            body: JSON.stringify(data)
+                                        })
+                                            .then(response => response.json())
+                                            .then(responseData => {
+
+                                                while (selectDestino.options.length > 1) {
+                                                    selectDestino.remove(1);
+                                                }
+
+                                                responseData.forEach(option => {
+                                                    var newOption = document.createElement("option");
+                                                    newOption.value = option.id;
+                                                    newOption.text = option.name;
+                                                    selectDestino.appendChild(newOption);
+                                                });
+                                            })
+                                            .catch(error => {
+                                                Swal.fire({
+                                                    title: "Error!",
+                                                    text: `${error}`,
+                                                    icon: "error"
+                                                });
+                                            });
+                                    }
+
+
+                                    document.getElementById('content-button').style.display = "none"
+                                    document.getElementById('content-buttons').style.display = "flex"
+                                    document.getElementById('content-buscador').style.display = "block"
+
+                                    var arrayventas = []
+
+                                    localStorage.setItem("array_ventas", arrayventas)
+
+                                    localStorage.setItem('venta_reciente', 0)
+                                    localStorage.setItem('caja_abierta', true)
+                                    document.getElementById("button_iniciar").disabled = false;
+                                    Swal.fire({
+                                        title: "Mensaje!",
+                                        text: `puedes iniciar con la venta`,
+                                        icon: "success"
+                                    }); 
+                                })
+                                .catch(error => {
+                                    console.error(error);
+                                    document.getElementById("button_iniciar").disabled = false;
+                                });
+
+                        })
+                } catch (e) {
+                    document.getElementById("button_iniciar").disabled = false;
+                }                
+
+                              
 
             } else {
+                function searchDestiny() {
 
-            }
+                    var selectOrigenUs = document.getElementById('origen');
+                    var selectDestino = document.getElementById('destino');
 
-
-
-
-
-
+                    var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
 
 
-            function searchDestiny() {
+                    fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
 
-                var selectOrigenUs = document.getElementById('origen');
-                var selectDestino = document.getElementById('destino');
-
-                var data = { origen: selectOrigenUs.options[selectOrigenUs.selectedIndex].text };
-
-
-                fetch('https://api-taquillas.sagautobuses.com/Home/Destino', {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify(data)
-                })
-                    .then(response => response.json())
-                    .then(responseData => {
-
-                        while (selectDestino.options.length > 1) {
-                            selectDestino.remove(1);
-                        }
-
-                        responseData.forEach(option => {
-                            var newOption = document.createElement("option");
-                            newOption.value = option.id;
-                            newOption.text = option.name;
-                            selectDestino.appendChild(newOption);
-                        });
+                        body: JSON.stringify(data)
                     })
-                    .catch(error => {
-                        Swal.fire({
-                            title: "Error!",
-                            text: `${error}`,
-                            icon: "error"
+                        .then(response => response.json())
+                        .then(responseData => {
+
+                            while (selectDestino.options.length > 1) {
+                                selectDestino.remove(1);
+                            }
+
+                            responseData.forEach(option => {
+                                var newOption = document.createElement("option");
+                                newOption.value = option.id;
+                                newOption.text = option.name;
+                                selectDestino.appendChild(newOption);
+                            });
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: "Error!",
+                                text: `${error}`,
+                                icon: "error"
+                            });
                         });
-                    });
-            }
+                }
 
 
-            document.getElementById('content-button').style.display = "none"
-            document.getElementById('content-buttons').style.display = "flex"
-            document.getElementById('content-buscador').style.display = "block"
+                document.getElementById('content-button').style.display = "none"
+                document.getElementById('content-buttons').style.display = "flex"
+                document.getElementById('content-buscador').style.display = "block"
+                document.getElementById("button_iniciar").disabled = false;
+            }            
 
-
-
-        }
-
-
-
-
-        function convertirAMayusculas(input) {
-            input.value = input.value.toUpperCase();
-        }
-
-
-        function validarNumero(input) {
-
-            input.value = input.value.replace(/[^0-9]/g, '');
-        }
-
-
-        function generarID() {
-            const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let id = '';
-
-            for (let i = 0; i < 8; i++) {
-                const indice = Math.floor(Math.random() * caracteres.length);
-                id += caracteres.charAt(indice);
-            }
-
-            return id;
-        }
-
-
-
-
-
-        function actualizarCurrentSale() {
-
-            var ventareciente = localStorage.getItem('num_ventas')
-            var shiftnumber = localStorage.getItem('shift_number')
-            var userid = localStorage.getItem('id')
-
-
-            fetch(`https://api-taquillas.sagautobuses.com/Home/ActualizarSaleShift?userid=${userid}&shiftNumber=${shiftnumber}&currentSale=${ventareciente}`, {
-
-                method: 'PATCH',
-                headers: {
-                    'Accept': 'text/plain',
-                    'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
-                },
-                body: JSON.stringify({})
-            })
-                .then(response => response.text())
-                .then(data => {
-
-                    if (data == "OK") {
-
-
-                        Swal.fire({
-                            title: "pago realizado!",
-                            text: `se ha capturado exitosamente`,
-                            icon: "success"
-                        });
-
-
-                        window.location.href = 'Boletos.aspx'
-
-                    } else {
-
-                        Swal.fire({
-                            title: "Error",
-                            text: `Hubo un error al guardar "venta reciente" en el registro de datos`,
-                            icon: "error"
-                        });
-                    }
-
-                })
-
-
-
-        }
-
-
-
-
-
-        function limpiarTabla() {
-            var tabla = document.getElementById('tabla-viajes');
-
-            // Eliminar todas las filas excepto la primera (encabezados)
-            while (tabla.rows.length > 1) {
-                tabla.deleteRow(1);
-            }
-        }
+        }        
 
 
     } else {
-
+        document.getElementById("button_iniciar").disabled = false;
         fetch('https://api-taquillas.sagautobuses.com/Home/Origen', {
             method: 'POST',
             headers: {
@@ -1651,7 +1634,91 @@ function iniciarturno() {
     }
 }
 
+function convertirAMayusculas(input) {
+    input.value = input.value.toUpperCase();
+}
 
+
+function validarNumero(input) {
+
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
+
+function generarID() {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let id = '';
+
+    for (let i = 0; i < 8; i++) {
+        const indice = Math.floor(Math.random() * caracteres.length);
+        id += caracteres.charAt(indice);
+    }
+
+    return id;
+}
+
+
+
+
+
+function actualizarCurrentSale() {
+
+    var ventareciente = localStorage.getItem('num_ventas')
+    var shiftnumber = localStorage.getItem('shift_number')
+    var userid = localStorage.getItem('id')
+
+
+    fetch(`https://api-taquillas.sagautobuses.com/Home/ActualizarSaleShift?userid=${userid}&shiftNumber=${shiftnumber}&currentSale=${ventareciente}`, {
+
+        method: 'PATCH',
+        headers: {
+            'Accept': 'text/plain',
+            'Content-Type': 'application/json',  // Puedes cambiarlo según las necesidades de la API
+        },
+        body: JSON.stringify({})
+    })
+        .then(response => response.text())
+        .then(data => {
+
+            if (data == "OK") {
+
+
+                Swal.fire({
+                    title: "pago realizado!",
+                    text: `se ha capturado exitosamente`,
+                    icon: "success"
+                });
+
+
+                window.location.href = 'Boletos.aspx'
+
+            } else {
+
+                Swal.fire({
+                    title: "Error",
+                    text: `Hubo un error al guardar "venta reciente" en el registro de datos`,
+                    icon: "error"
+                });
+            }
+
+        })
+
+
+
+}
+
+
+
+
+
+function limpiarTabla() {
+    var tabla = document.getElementById('tabla-viajes');
+
+    // Eliminar todas las filas excepto la primera (encabezados)
+    while (tabla.rows.length > 1) {
+        tabla.deleteRow(1);
+    }
+}
 
 function CerrarCajamenor() {
 

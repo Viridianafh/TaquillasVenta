@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <td>${e.TicketId}</td>
                     <td>${e.SeatName}</td>
                     <td>${e.SoldPrice}</td>
-                    <td><button class="btn btn-dark" id="btn-download" onclick="Descargar('${e.TicketId}', '${e.PassengerName}', '${e.Origin}', '${e.Destination}', '${datosCombinados.departingOrigen}', '${datosCombinados.bus}', '${passengerTypeText}', '${e.SeatName}', ${e.SoldPrice},true);"> <ion-icon name="download-outline"></ion-icon>Descargar</button></td>
+                    <td><button class="btn btn-dark" id="btn-download-${cont}" onclick="Descargar('${e.TicketId}', '${e.PassengerName}', '${e.Origin}', '${e.Destination}', '${datosCombinados.departingOrigen}', '${datosCombinados.bus}', '${passengerTypeText}', '${e.SeatName}', ${e.SoldPrice},true, '${cont}');"> <ion-icon name="download-outline"></ion-icon>Descargar</button></td>
                 `;
 
                 tbodyrsumeefectiivo.appendChild(tr);
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     nombre_pdf_comb += ", ";
                 }
                 // Esperar a que la función Descargar termine antes de continuar
-                await Descargar(e.TicketId, e.PassengerName, e.Origin, e.Destination, datosCombinados.departingOrigen, datosCombinados.bus, passengerTypeText, e.SeatName, e.SoldPrice, false);
+                await Descargar(e.TicketId, e.PassengerName, e.Origin, e.Destination, datosCombinados.departingOrigen, datosCombinados.bus, passengerTypeText, e.SeatName, e.SoldPrice, false, cont);
             }
             combinarPDFs(pdfDocs, nombre_pdf_comb);
         });
@@ -109,15 +109,17 @@ function generateQRCode(text) {
     });
 }
 
-async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus, tipo, asiento, precio, imprimir) {
+async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus, tipo, asiento, precio, imprimir, cont) {
+    document.getElementById("btn-download-" + cont).disabled = true;
     try {
-        document.getElementById('btn-download').textContent = "Descargando...";
+        document.getElementById('btn-download-' + cont).textContent = "Descargando...";
 
         const url = '/Assets/formticket.pdf';
         const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
         const taquillero = localStorage.getItem('name');
+        let parts_taq = taquillero.split(" ");
         var datosViajeString = localStorage.getItem("datos_viaje");
         var datosViajeObj = JSON.parse(datosViajeString);
         const precio_base = datosViajeObj.precio;
@@ -151,7 +153,7 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         let horas2 = fechass.getHours();
         let minutos2 = fechass.getMinutes();
         let segundos2 = fechass.getSeconds();
-
+        
         // Formateamos los valores a dos dígitos (añadiendo ceros si es necesario)
         dia2 = dia2 < 10 ? '0' + dia2 : dia2;
         mes2 = mes2 < 10 ? '0' + mes2 : mes2;
@@ -160,10 +162,23 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         segundos2 = segundos2 < 10 ? '0' + segundos2 : segundos2;
         let fechaFormateadades = `${dia2}/${mes2}/${anio2} ${horas2}:${minutos2}:${segundos2}`;
 
+        /*if (corrida == "7010C") {
+            horas = fechas.getHours() + 1;
+            horas2 = fechass.getHours() + 1;
+            fechaFormateadaori = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+            fechaFormateadades = `${dia2}/${mes2}/${anio2} ${horas2}:${minutos2}:${segundos2}`;
+        }*/
+
         const fechaActual = new Date();
         const fechaFormateada = fechaActual.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
         const form = pdfDoc.getForm();
+
+        //const precioSinIVA = precio_base / (1 + 16 / 100);
+        const precioSinIVA = precio / (1 + 16 / 100);
+
+        // Calcular el IVA
+        const iva = precio - precioSinIVA;
 
         // Establecer los valores de los campos de texto
         form.getTextField('passenger_name').setText(pasajero);
@@ -173,16 +188,15 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         form.getTextField('Destino').setText(destino);
         form.getTextField('departure_origen').setText(fechaFormateadaori);
         form.getTextField('fecha').setText(`Fecha venta: ${fechaFormateada}`);
-        form.getTextField('saleman_name').setText(taquillero);
-        form.getTextField('subtotal').setText(precio_base);
+        //form.getTextField('saleman_name').setText(taquillero);
+        form.getTextField('saleman_name').setText(`${parts_taq[0]} ${parts_taq[1]}`);
+        form.getTextField('subtotal').setText(precioSinIVA.toFixed(2));
         form.getTextField('departure_destino').setText(fechaFormateadades);
         form.getTextField('total').setText(String(precio));
         form.getTextField('product').setText(corrida);
-        form.getTextField('passenger_type').setText(tipo);
-        const precioSinIVA = precio_base / (1 + 16 / 100);
+        form.getTextField('passenger_type').setText(tipo);        
 
-        // Calcular el IVA
-        const iva = precio_base - precioSinIVA;
+        
 
         form.getTextField('IVA').setText(String(iva.toFixed(2)));
 
@@ -249,16 +263,17 @@ async function Descargar(folio, pasajero, origen, destino, departingOrigen, bus,
         }
         document.body.removeChild(link);
 
-        document.getElementById('btn-download').textContent = "Volver a Descargar";
+        document.getElementById('btn-download-' + cont).textContent = "Volver a Descargar";
 
         // Abrir el PDF en una nueva pestaña
         setTimeout(() => {
             //window.open(urlObject, '_blank');
         }, 1000);
-
+        document.getElementById("btn-download-" + cont).disabled = false;
     } catch (error) {
         console.error("Error al descargar el PDF:", error);
-        document.getElementById('btn-download').textContent = "Error al descargar";
+        document.getElementById("btn-download-" + cont).disabled = false;
+        document.getElementById('btn-download-' + cont).textContent = "Error al descargar";
     }
 }
 

@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Definir la URL de la API con el parámetro isaleid
     const apiUrl = `https://api-taquillas.sagautobuses.com/Home/detalleventa?isaleid=${isaleid}`;
+    //const apiUrl = `https://localhost:5001/Home/detalleventa?isaleid=${isaleid}`;
 
     // Realizar la solicitud fetch
     fetch(apiUrl)
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('section-tabla-boletos').style.display = 'block'
 
             var tabla = document.getElementById('table-descarga-boletos').getElementsByTagName('tbody')[0]
-
+            let i = 0;
             data.forEach(e => {
 
                 const tr = document.createElement('tr')
@@ -51,11 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${e.Remitente}</td>
                 <td>${e.Destinatario}</td>
                 <td>${e.IdGuia}</td>
-                  <td><button class="btn btn-primary" onclick="Descargarguia( '${e.Descripcion}',  '${e.Origen}', '${e.Destino}', '${e.Folio}', '${e.Total}', '${e.Corrida}', '${e.IdGuia}', '${e.IdSale}', '${e.Remitente}',  '${e.Destinatario}'  )">Descargar</button></td>
-                <td><button class="btn btn-dark" onclick="Descargar( '${e.Descripcion}', '${e.Origen}', '${e.Destino}', '${e.Folio}', '${e.Total}', '${e.Corrida}')">Descargar</button></td>
+                  <td><button class="btn btn-primary" id = '${e.IdGuia}-${i}Guia' onclick="Descargarguia( '${e.Descripcion}',  '${e.Origen}', '${e.Destino}', '${e.Folio}', '${e.Total}', '${e.Corrida}', '${e.IdGuia}', '${e.IdSale}', '${e.Remitente}',  '${e.Destinatario}', '${i}' )">Descargar</button></td>
+                <td><button class="btn btn-dark" id = '${e.IdGuia}-${i}Boleto' onclick="Descargar( '${e.Descripcion}', '${e.Origen}', '${e.Destino}', '${e.IdGuia}', '${e.Total}', '${e.Corrida}', '${e.date_created}', '${i}')">Descargar</button></td>
             
                 `;
-                tabla.appendChild(tr)
+                tabla.appendChild(tr);
+                i++;
             })
 
         })
@@ -91,7 +93,8 @@ function generateQRCode(text) {
         }
     });
 }
-async function Descargarguia(Descripcion, Origen, Destino, Folio, Total, Corrida, IdGuia, IdSale, Remitente, Destinatario) {
+async function Descargarguia(Descripcion, Origen, Destino, Folio, Total, Corrida, IdGuia, IdSale, Remitente, Destinatario, i) {
+    document.getElementById(IdGuia + "-" + i + "Guia").disabled = true;
     try {
 
 
@@ -181,7 +184,9 @@ async function Descargarguia(Descripcion, Origen, Destino, Folio, Total, Corrida
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        document.getElementById(IdGuia + "-" + i + "Guia").disabled = false;
     } catch (error) {
+        document.getElementById(IdGuia + "-" + i + "Guia").disabled = false;
         console.error('Error:', error);
     }
 }
@@ -202,6 +207,7 @@ function formatearfecha(fechain) {
     let mes = fecha.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
     let anio = fecha.getFullYear();
     let horas = fecha.getHours();
+    //let horas = fecha.getHours()-1;
     let minutos = fecha.getMinutes();
     let segundos = fecha.getSeconds();
 
@@ -216,7 +222,8 @@ function formatearfecha(fechain) {
     return fechaFormateada
 }
 
-async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
+async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida, date_created, i) {
+    document.getElementById(Folio + "-" + i + "Boleto").disabled = true;
     try {
         // Descargar el formulario PDF
         const url = '/Assets/ticketpaquete.pdf';
@@ -263,6 +270,7 @@ async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
         form.getTextField('telreceptor').setText(phoneDestinatario);
         form.getTextField('fechasalida').setText(formatearfecha(salida));
         form.getTextField('fechallegada').setText(formatearfecha(llegada));
+        form.getTextField('fechaventa').setText(formatearfecha(convertirAISO(date_created)));
 
         form.getTextField('fechallegada').setText(formatearfecha(llegada));
         form.getTextField('total').setText(Total);
@@ -274,7 +282,7 @@ async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
 
         form.getTextField('IVA').setText(iva.toFixed(2));
         // Hacer los campos de solo lectur
-        ['folio', 'IVA', 'origen', 'destino', 'corrida', 'total', 'taquillero', 'description', 'nombreemisor', 'telemisor', 'nombrereceptor', 'telreceptor', 'fechasalida', 'fechallegada'].forEach(field => form.getTextField(field).enableReadOnly());
+        ['folio', 'IVA', 'origen', 'destino', 'corrida', 'total', 'taquillero', 'description', 'nombreemisor', 'telemisor', 'nombrereceptor', 'telreceptor', 'fechasalida', 'fechallegada', 'fechaventa'].forEach(field => form.getTextField(field).enableReadOnly());
 
         // Generar el código QR con el mensaje "hola"
         const qrCodeDataURL = await generateQRCode(Folio);
@@ -316,9 +324,32 @@ async function Descargar(Descripcion, Origen, Destino, Folio, Total, Corrida) {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        document.getElementById(Folio + "-" + i + "Boleto").disabled = false;
     } catch (error) {
         console.error('Error:', error);
+        document.getElementById(Folio + "-" + i + "Boleto").disabled = false;
     }
 }
 
 
+function convertirAISO(fechaStr) {
+    // ejemplo de entrada: "25/11/2025 10:56:17 p. m."
+    const [fecha, hora, periodo1, periodo2] = fechaStr.split(" ");
+    //const [dia, mes, anio] = fecha.split("/").map(Number);
+    const [mes, dia, anio] = fecha.split("/").map(Number);
+
+    let [h, m, s] = hora.split(":").map(Number);
+
+    const esPM = (periodo1 + " " + periodo2).toLowerCase().includes("p. m.");
+
+    // Convertir a formato 24h
+    if (esPM && h !== 12) h += 12;
+    if (!esPM && h === 12) h = 0;
+
+    // Crear fecha
+    const fechaISO = new Date(anio, mes - 1, dia, h, m, s)
+        .toISOString()
+        .slice(0, 19);
+
+    return fechaISO;
+}

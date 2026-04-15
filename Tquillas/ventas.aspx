@@ -490,7 +490,8 @@
                  <button class="btn btn-success" id="btnpagar-hibrido" style="width: 320px;display:none">Pagar</button>
              </div>   
 
-            <h4 id="cambio"></h4>
+             <h4 id="cambio"></h4>
+            
         </div>
 
         <!-- Columna de Promoción -->

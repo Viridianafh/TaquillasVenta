@@ -2,8 +2,8 @@
 var corrida = ""
 var tipo = ""
 var type = ""
-var origen = ""
-var destino = ""
+var origenn = ""
+var destinon = ""
 var bus = ""
 var departingOrigen = ""
 var departingDestino = ""
@@ -16,6 +16,13 @@ var numseat = ""
 var seatcount = 1
 var seatcounter = 0
 var isaleid = ""
+var data_ticket;
+var salidas;
+var llegadas;
+var trip_id_cambio = "";
+var boletoc = "";
+var short = "";
+var cambio_simple = false;
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -40,7 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    document.getElementById('btn-buscar').addEventListener('click', async () => {
+    document.getElementById('btn-buscar').addEventListener('click', async () => {        
+        //document.getElementById("")
+
+        document.getElementById('btn-buscar').disabled = true;
 
         document.getElementById('spanTexto').style.display = 'none'
         document.getElementById('spanTexto2').style.display = 'none'
@@ -52,22 +62,38 @@ document.addEventListener('DOMContentLoaded', () => {
         // Verifica si el campo de entrada está vacío
         if (ticket.trim() === '') {
             alert("Debes ingresar un boleto");
+            document.getElementById('btn-buscar').disabled = false;
             return; // Detiene la ejecución si el campo está vacío
         }
 
         // Cambia el texto del botón y deshabilítalo mientras se realiza la búsqueda
         document.getElementById('btn-buscar').textContent = "Buscando...";
-        document.getElementById('btn-buscar').disabled = true;
+       // document.getElementById('btn-buscar').disabled = true;
 
         try {
             // Llama a la función para buscar el boleto
             const data1 = await BuscarBoletoUno(ticket);
             if (data1.length > 0) {
+                document.getElementById("ces_dere").style.display = "block";
                 document.getElementById('procederCambio').disabled = false
                 document.getElementById('bus-container').style.display = 'none'
                 var contentcards = document.getElementById("content-cards")
                 var floor1 = document.getElementById('floor-1')
                 var floor2 = document.getElementById('floor-2')
+                short = data1[0].short_id;
+
+                data_ticket = {
+                    SeatName: data1[0].asiento,
+                    PassengerName: data1[0].pasajero,
+                    PassengerType: data1[0].tipo,
+                    SoldPrice: Math.round(parseFloat(data1[0].sold_price)),
+                    Origin: data1[0].origen,
+                    Destination: data1[0].destino,
+                    Salida: data1[0].salida,
+                    llegada: data1[0].llegada,
+                    product: data1[0].product,
+                    TicketId: data1[0].ticket
+                }
 
                 seatcount = 1
                 seatcounter = 0
@@ -114,6 +140,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('btn-buscar').disabled = false;
             document.getElementById('btn-buscar').textContent = "Buscar";
         }
+
+        boletoc = document.getElementById("boletoanterior").value;
+        document.getElementById("fecha").value = "";
+        document.getElementById("input-nombre-pasajero").value = "";
+        document.getElementById("input-CURP").value = "";
+        document.getElementById("input-telefono").value = "";
+        document.getElementById("input-motivoCambio").value = "";
     });
 
 
@@ -122,68 +155,89 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btn_siguiente1 = document.getElementById('btn-siguiente1')
         .addEventListener('click', () => {
-
+            document.getElementById('btn-siguiente1').disabled = true;
+            if (document.getElementById("input-telefono").value == "") {
+                window.alert("Ingrese un número de telefono.");
+                document.getElementById('btn-siguiente1').disabled = false;
+                return;
+            }
+            if (document.getElementById("input-motivoCambio").value == "") {
+                window.alert("Ingrese un motivo de cambio.");
+                document.getElementById('btn-siguiente1').disabled = false;
+                return;
+            }
+            if (document.getElementById("input-nombre-pasajero").value == "") {
+                window.alert("Ingresa el nombre del pasajero.");
+                document.getElementById('btn-siguiente1').disabled = false;
+                return;
+            }
             descuento = 0.70
-            document.getElementById('section-pasajero').style.display = 'none'
-            document.getElementById('bus-container').style.display = 'block'
 
-            var Nombre = document.getElementById('input-nombre-pasajero').value
-            localStorage.setItem("nombrepasajero_cambio", Nombre)
+            var precionuevo = parseFloat(localStorage.getItem('precionuevo'))
 
             var tipopasajero = document.getElementById('select-pasajero').value
             localStorage.setItem("tipopasajero_cambio", tipopasajero)
 
-            var dataid = localStorage.getItem("tripid_cambio")
-
-            var precionuevo = parseFloat(localStorage.getItem('precionuevo'))
-
-            var origencambio = localStorage.getItem('origen_cambio')
-            var destinocambio = localStorage.getItem('destino_cambio')
-
+            let valido_curp = true;
 
             switch (tipopasajero) {
                 case 'ADULT':
-                    precionuevo = precionuevo
+                    precionuevo = precionuevo;
                     break;
                 case 'CHILD':
-                    precionuevo = precionuevo * descuento
+                    precionuevo = Math.ceil(precionuevo * descuento);
+                    valido_curp = validarEdadestudiante(document.getElementById("input-CURP"));
                     break;
                 case 'STUDENT':
-                    precionuevo = precionuevo * descuento
+                    precionuevo = Math.ceil(precionuevo * descuento);
                     break;
                 case 'OLDER_ADULT':
-                    precionuevo = precionuevo * descuento
+                    precionuevo = Math.ceil(precionuevo * descuento);
+                    valido_curp = validarEdadadulta(document.getElementById("input-CURP"));
                     break;
 
+            }            
+
+            if (valido_curp) {
+                
+                document.getElementById('section-pasajero').style.display = 'none'
+                document.getElementById('bus-container').style.display = 'block'
+
+                var Nombre = document.getElementById('input-nombre-pasajero').value
+                localStorage.setItem("nombrepasajero_cambio", Nombre)
+
+                var dataid = localStorage.getItem("tripid_cambio")                
+
+                var origencambio = localStorage.getItem('origen_cambio')
+                var destinocambio = localStorage.getItem('destino_cambio')                
+
+                localStorage.setItem('precionuevo', precionuevo)
+
+                let tabla = document.getElementById('table-ticket-nuevo');
+
+                // Crea una nueva fila
+                let nuevaFila = tabla.insertRow(); // Agrega una nueva fila al final de la tabla
+
+                // Crea celdas para la nueva fila
+                let celdaNombre = nuevaFila.insertCell(0);
+                let celdaOrigen = nuevaFila.insertCell(1);
+                let celdaDestino = nuevaFila.insertCell(2);
+                let celdaAsiento = nuevaFila.insertCell(3);
+                let celdaPrecio = nuevaFila.insertCell(4); // Columna de Precio
+                let celdafecha = nuevaFila.insertCell(5);
+                let celdaTicket = nuevaFila.insertCell(6);
+
+                celdaNombre.innerHTML = `<p id="seatname">${Nombre}</p>`; // Cambia esto según sea necesario
+                celdaOrigen.innerHTML = origencambio; // Cambia esto según sea necesario
+                celdaDestino.innerHTML = destinocambio; // Cambia esto según sea necesario
+                celdaAsiento.innerHTML = `<p id="seatrow"></p>`; // Cambia esto según sea necesario
+                celdaPrecio.innerHTML = precionuevo.toFixed(2); // Asigna el valor del precio
+                celdafecha.innerHTML = formatearfecha2(localStorage.getItem('salida_nuevo'));
+                celdaTicket.innerHTML = `<p id="ticketrow"></p>`; // 
+
+                crearasientos(tipo, dataid)
             }
-
-
-            localStorage.setItem('precionuevo', precionuevo)
-
-            let tabla = document.getElementById('table-ticket-nuevo');
-
-            // Crea una nueva fila
-            let nuevaFila = tabla.insertRow(); // Agrega una nueva fila al final de la tabla
-
-            // Crea celdas para la nueva fila
-            let celdaNombre = nuevaFila.insertCell(0);
-            let celdaOrigen = nuevaFila.insertCell(1);
-            let celdaDestino = nuevaFila.insertCell(2);
-            let celdaAsiento = nuevaFila.insertCell(3);
-            let celdaPrecio = nuevaFila.insertCell(4); // Columna de Precio
-            let celdafecha = nuevaFila.insertCell(5); 
-            let celdaTicket = nuevaFila.insertCell(6);
-
-            celdaNombre.innerHTML = `<p id="seatname">${Nombre}</p>`; // Cambia esto según sea necesario
-            celdaOrigen.innerHTML = origencambio; // Cambia esto según sea necesario
-            celdaDestino.innerHTML = destinocambio; // Cambia esto según sea necesario
-            celdaAsiento.innerHTML = `<p id="seatrow"></p>`; // Cambia esto según sea necesario
-            celdaPrecio.innerHTML = precionuevo.toFixed(2); // Asigna el valor del precio
-            celdafecha.innerHTML = formatearfecha( localStorage.getItem('salida_nuevo')); 
-            celdaTicket.innerHTML = `<p id="ticketrow"></p>`; // 
-
-            crearasientos(tipo, dataid)
-
+            document.getElementById('btn-siguiente1').disabled = false;
         })
 
 
@@ -198,7 +252,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('cancelarCambio').disabled = false
 
         data.map(e => {
-
+            trip_id_cambio = e.trip_id;
+            asiento_anterior = e.asiento;
             localStorage.setItem("precio_anteriorcambio", e.precio)
             localStorage.setItem("asiento_anterior_cambio", e.asiento)
             localStorage.setItem('isale_cambio', e.isaleid)
@@ -243,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${e.destino}</td>
                     <td>${e.asiento}</td>
                     <td>${e.precio}</td>
-                    <td>${formatearfecha(e.date_created)}</td >
+                    <td>${formatearfecha(e.departure_date)}</td >
                     <td>${e.ticket}</td>
     
                     `;
@@ -259,20 +314,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var btn_buscar = document.getElementById("btn-buscar-viaje")
         .addEventListener('click', () => {
+            document.getElementById("btn-buscar-viaje").disabled = true;
             var origen = document.getElementById('origen').value
             var destino = document.getElementById('destino').value
             var fecha = document.getElementById('fecha').value
-
-            buscarviajes(origen, destino, fecha)
+            origenn = origen;
+            destinon = destino;
+            buscarviajes(origen, destino, fecha)            
         })
 
 
 
 
 
-    function buscarviajes(origen, destino, fechaSalida) {
-
-
+    function buscarviajes(origen, destino, fechaSalida) {       
 
         fetch(`https://api-taquillas.sagautobuses.com/Home/BuscarCorridas?origen=${origen}&destino=${destino}&fecha=${fechaSalida}`, {
 
@@ -359,19 +414,20 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h6 class="card-subtitle mb-2 text-muted">precio: $ ${precio}</h6>
                             <p class="card-text">corrida: ${corrida}</p>
                             <p class="card-text">tipo: ${tipos}</p>
-                            <button class="btn btn-primary" onClick=" enviardata('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}', '${isaleid}')">escoger</button>
+                            <button class="btn btn-primary" id="enviardata${i}" onClick=" enviardata('${id}', '${corrida}', '${tipo}', '${origen}', '${destino}','${bus}','${departingOrigen}','${departingDestino}','${precio}',  '${Arrival}', '${Departure}', '${RunId}', ${totaltime}, '${type}', '${isaleid}', '${i}')">escoger</button>
                         </div>
                     </div> 
 
-                    `
-
+                    `                   
 
                     addedTripIds[id] = true;
 
                 }
+                document.getElementById("btn-buscar-viaje").disabled = false;
             })
 
             .catch(error => {
+                document.getElementById("btn-buscar-viaje").disabled = false;
                 Swal.fire({
                     title: "Error!",
                     text: `${error}`,
@@ -391,9 +447,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-async function enviardata(id, corrida, tipo, origen, destino, bus, departingOrigen, departingDestino, precio, Arrival, Departure, RunId, totaltime, type,) {
+async function enviardata(id, corrida, tipo, origen, destino, bus, departingOrigen, departingDestino, precio, Arrival, Departure, RunId, totaltime, type,isale,i) {
     document.getElementById("section-viaje").style.display = 'none';
-
+    document.getElementById("enviardata" + i).disabled = true;
+    salidas = departingOrigen;
+    llegadas = departingDestino;
     if (id == "") {
 
         id = await gettripid(RunId, type, Departure, Arrival, totaltime)
@@ -423,7 +481,7 @@ async function enviardata(id, corrida, tipo, origen, destino, bus, departingOrig
     var table = await document.getElementById('table-ticket-nuevo').getElementsByTagName('tbody')[0]
     var tr = await document.createElement('tr')
     tr.innerHTML = ``
-
+    document.getElementById("enviardata" + i).disabled = false;
 }
 
 
@@ -534,7 +592,8 @@ async function gettripid(RunId, type, Departure, Arrival, totaltime) {
 
 async function BuscarBoletoUno(ticket) {
     try {
-        const response = await fetch(`https://api-taquillas.sagautobuses.com/Home/GetDataTicket?ticket=${ticket}`);
+        //const response = await fetch(`https://api-taquillas.sagautobuses.com/Home/GetDataTicket?ticket=${ticket}`);
+        const response = await fetch(`https://localhost:5001/Home/GetDataTicket?ticket=${ticket}`);
 
         if (!response.ok) {
             throw new Error('Error al obtener los datos');
@@ -560,7 +619,35 @@ function formatearfecha(fechain) {
     let dia = fecha.getDate();
     let mes = fecha.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
     let anio = fecha.getFullYear();
+    let horas = fecha.getHours() +1;
+    //let horas = fecha.getHours();
+    let minutos = fecha.getMinutes();
+    let segundos = fecha.getSeconds();
+
+    // Formateamos los valores a dos dígitos (añadiendo ceros si es necesario)
+    dia = dia < 10 ? '0' + dia : dia;
+    mes = mes < 10 ? '0' + mes : mes;
+    horas = horas < 10 ? '0' + horas : horas;
+    minutos = minutos < 10 ? '0' + minutos : minutos;
+    segundos = segundos < 10 ? '0' + segundos : segundos;
+    let fechaFormateada = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+
+    return fechaFormateada
+}
+
+function formatearfecha2(fechain) {
+
+
+
+
+    let fecha = new Date(fechain);
+
+    // Extraemos el día, mes, año, horas, minutos y segundos
+    let dia = fecha.getDate();
+    let mes = fecha.getMonth() + 1; // Los meses en JavaScript empiezan en 0 (enero = 0)
+    let anio = fecha.getFullYear();
     let horas = fecha.getHours();
+    //let horas = fecha.getHours()-1;
     let minutos = fecha.getMinutes();
     let segundos = fecha.getSeconds();
 
@@ -691,7 +778,7 @@ function crearasientos(tipo, id) {
 
     Promise.all([
         fetch(`https://api-taquillas.sagautobuses.com/Home/Asientos?Servicelvl=${tipo}`).then(response => response.json()),
-        fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}&origen=${origen}&destino=${destino}`).then(response => response.json())
+        fetch(`https://api-taquillas.sagautobuses.com/Home/listarAsientosOcupados?TripId=${id}&origen=${origenn}&destino=${destinon}`).then(response => response.json())
     ])
         .then(([seatData, statusData]) => {
             if (!Array.isArray(seatData)) {
@@ -720,9 +807,16 @@ function crearasientos(tipo, id) {
 
         } else {
             const seatStatus = statusData.find(status => status.asiento == seat.name);
-            if (seatStatus && seatStatus.status === 'OCCUPIED') {
-                seatElement.classList.add('btn-danger');
-
+            var trip_cambio = localStorage.getItem("tripid_cambio");
+            if (seatStatus && seatStatus.status === 'OCCUPIED' || seatStatus && seatStatus.status === 'USED' || seatStatus && seatStatus.status === 'RESERVED') {
+                if (trip_id_cambio == trip_cambio && seatStatus.asiento == asiento_anterior) {
+                    cambio_simple = true;
+                    seatElement.classList.add('btn-primary');
+                } else {
+                    seatElement.classList.add('btn-danger');
+                    seatElement.disabled = true;
+                }
+                
 
             } else {
                 seatElement.classList.add('btn-primary');
@@ -781,7 +875,7 @@ function crearasientos(tipo, id) {
         const floor1 = document.getElementById('floor-1');
         const floor2 = document.getElementById('floor-2');
         seatData.forEach(seat => {
-            if (seat.type == "BATHROOM" || seat.type == "DOOR") {
+            if (seat.type == "BATHROOM" || seat.type == "DOOR" || seat.type =="WHEEL") {
 
             } else {
                 const seatElement = createSeatElement(seat, statusdata);
@@ -837,13 +931,16 @@ function ProcederBoleto() {
         var destino = localStorage.getItem('destino_cambio')
         var ticketsito = localStorage.getItem('tickett_cam')
 
+        
+
         //  alert(`${nombre}` + `${tipopasajero}` + ` ${dataid}` + ` ${asiento_anterior}` + ` ${asiento_cambio}` + ` ${precio_anterior}`)
 
         var Boletocambio = {
 
             "oldticket": ticketsito,
             "cancelUserId": user,
-            "saleshift": localStorage.getItem('saleshift_id')
+            "saleshift": localStorage.getItem('saleshift_id'),
+            "motivo_cancel": document.getElementById("input-motivoCambio").value
 
         }
 
@@ -933,7 +1030,8 @@ function ProcederBoleto() {
                 "saleNumber": shift_number_to_is,
                 "short_id": generarID(),
                 "tripseatlist": [tripseats],
-                "Email": "devs@sag.com"
+                "Email": "devs@sag.com",
+                "Phonenumber": document.getElementById("input-telefono").value
             }
 
 
@@ -968,18 +1066,31 @@ function ProcederBoleto() {
                 "saleNumber": shift_number_to_is,
                 "short_id": generarID(),
                 "tripseatlist": [tripseats],
-                "Email": "devs@sag.com"
+                "Email": "devs@sag.com",
+                "Phonenumber": document.getElementById("input-telefono").value
             }
 
 
         }
 
-
+        data_ticket = {
+            SeatName: asiento_cambio,
+            PassengerName: nombre,
+            PassengerType: tipopasajero,
+            SoldPrice: Math.round(parseFloat(localStorage.getItem('precionuevo'))),
+            Origin:origenn,
+            Destination: destinon,
+            Salida: salidas,
+            llegada: llegadas,
+            product: corrida,
+            TicketId: ""
+        }
 
 
         console.log(JSON.stringify(InternetSale))
         // Realizar la solicitud PATCH usando fetch
         fetch('https://api-taquillas.sagautobuses.com/Home/cambiarBoleto', options)
+        //fetch('https://localhost:5001/Home/cambiarBoleto', options)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Hubo un problema con la solicitud: ' + response.status);
@@ -1023,7 +1134,14 @@ function ProcederBoleto() {
                         var parseprecionuevo = parseFloat(precionuevo)
                         var ventareciente = localStorage.getItem('venta_reciente')
                         var parseventa = parseFloat(ventareciente)
-                        var suma = parseventa + parseprecionuevo
+
+                        var suma;
+                        if (parseprecionuevo > precio_anteriorcambo) {
+                            suma = parseventa + (parseprecionuevo - precio_anteriorcambo);
+                        } else {
+                            suma = parseventa;
+                        }
+
                         localStorage.setItem('venta_reciente', suma)
 
                         document.getElementById('spanTexto').style.display = 'block'
@@ -1033,10 +1151,12 @@ function ProcederBoleto() {
                         Descargar(data)
                     })
                     .catch(error => {
+                        
                         alert(error)
                     })
             })
             .catch(error => {
+                document.getElementById('procederCambio').disabled = false;
                 console.error('Error al realizar la solicitud PATCH:', error);
                 // Aquí puedes manejar errores de la solicitud
 
@@ -1150,6 +1270,7 @@ async function Descargar(ticket) {
 
         // Obtener datos del boleto
         const response = await fetch(`https://api-taquillas.sagautobuses.com/Home/ConsultarBoletosCambio?folio=${ticket}`);
+        //const response = await fetch(`https://localhost:5001/Home/ConsultarBoletosCambio?folio=${ticket}`);
         const data = await response.json();
         console.log("Datos del boleto:", data);
 
@@ -1157,7 +1278,9 @@ async function Descargar(ticket) {
             throw new Error("No se encontraron datos para el boleto");
         }
 
-        const boleto = data[0]; // Usamos el primer elemento del array
+        var boleto = data[0]; // Usamos el primer elemento del array
+        data_ticket.TicketId = boleto.TicketId;
+        boleto = data_ticket;
 
         // Cargar el PDF base
         const url = '/Assets/formticketB.pdf';
@@ -1165,11 +1288,19 @@ async function Descargar(ticket) {
         const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
         const taquillero = localStorage.getItem('name');
+        let parts_taq = taquillero.split(" ");
         const fechaFormateada = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
         console.log("Fecha formateada:", fechaFormateada);
 
         // Rellenar el formulario
         const form = pdfDoc.getForm();
+
+        //const precioSinIVA = boleto.PayedPrice / (1 + 16 / 100);
+        const precioSinIVA = boleto.SoldPrice / (1 + 16 / 100);
+
+        // Calcular el IVA
+        //const iva = boleto.PayedPrice - precioSinIVA;
+        const iva = boleto.SoldPrice - precioSinIVA;
 
         // Establecer los valores de los campos de texto
         form.getTextField('passenger_name').setText(boleto.PassengerName);
@@ -1177,20 +1308,20 @@ async function Descargar(ticket) {
         form.getTextField('ticket_id').setText(boleto.TicketId);
         form.getTextField('seat').setText(boleto.SeatName);
         form.getTextField('Destino').setText(boleto.Destination);
-        form.getTextField('departure_origen').setText(boleto.Salida);
+        //form.getTextField('departure_origen').setText(formatearfecha(boleto.Salida));
+        form.getTextField('departure_origen').setText(formatearFechaTexto(boleto.Salida));
         form.getTextField('fecha').setText(`fecha venta: ${fechaFormateada}`);
-        form.getTextField('saleman_name').setText(`Taquiller@: ${taquillero}`);
+        //form.getTextField('saleman_name').setText(`Taquiller@: ${taquillero}`);
+        form.getTextField('saleman_name').setText(`Taquiller@: ${parts_taq[0]} ${parts_taq[1]}`);
 
-        form.getTextField('subtotal').setText(String(boleto.PayedPrice));
-        form.getTextField('departure_destino').setText(boleto.llegada);
+        form.getTextField('subtotal').setText(String(precioSinIVA.toFixed(2)));
+        //form.getTextField('departure_destino').setText(formatearfecha(boleto.llegada));
+        form.getTextField('departure_destino').setText(formatearFechaTexto(boleto.llegada));
         form.getTextField('total').setText(String(boleto.SoldPrice));
         form.getTextField('product').setText(boleto.product);
         form.getTextField('product').setText(boleto.product);
 
-        const precioSinIVA = boleto.PayedPrice / (1 + 16 / 100);
-
-        // Calcular el IVA
-        const iva = boleto.PayedPrice - precioSinIVA;
+        
 
 
 
@@ -1327,4 +1458,174 @@ function generateQRCode(text) {
             reject(error);
         }
     });
+}
+
+function formatearFechaTexto(fechaStr) {
+    
+    const [fecha, hora] = fechaStr.split("T"); 
+    const [anio, mes, dia] = fecha.split("-");
+
+    return `${dia}/${mes}/${anio} ${hora}`;
+}
+
+let tipo_pass_select = document.getElementById("select-pasajero");
+tipo_pass_select.addEventListener("change", function () {
+    document.getElementById("input-CURP").value = "";
+    switch (tipo_pass_select.value) {
+        case "ADULT":
+            document.getElementById("valida_curp").style.display = "none";            
+            break;
+        default:
+            document.getElementById("valida_curp").style.display = "block";           
+            break;
+    }
+});
+
+function validarEdadadulta(input) {
+    const curp = input.value.trim().toUpperCase();
+    const curpRegex = /^[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[0-9A-Z]{2}$/;
+
+    // Validar formato CURP
+    if (!curpRegex.test(curp)) {
+        window.alert("CURP Inválido: formato incorrecto");
+        //document.getElementById('btn-siguiente1').disabled = true
+        return false;
+    }
+
+    // Extraer y validar fecha de nacimiento
+    const fechaNacimientoStr = curp.slice(4, 10);
+    let anio = parseInt(fechaNacimientoStr.slice(0, 2), 10);
+    const mes = parseInt(fechaNacimientoStr.slice(2, 4), 10) - 1;
+    const dia = parseInt(fechaNacimientoStr.slice(4, 6), 10);
+
+    // Determinar el siglo
+    const anioActual = new Date().getFullYear();
+    const siglo = anio > (anioActual - 2000) ? 1900 : 2000;
+    anio = siglo + anio;
+
+    const fechaNacimiento = new Date(anio, mes, dia);
+
+    // Verificar que la fecha es válida
+    if (isNaN(fechaNacimiento.getTime()) || fechaNacimiento > new Date()) {        
+        window.alert("CURP Inválido: fecha de nacimiento incorrecta");
+        //document.getElementById('btn-siguiente1').disabled = true
+        return false;
+    }
+
+    // Calcular la edad
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+    const m = hoy.getMonth() - fechaNacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+        edad--;
+    }
+
+    // Validar CURP
+    if (edad >= 0 && edad <= 120) {                
+        window.alert(edad >= 60 ? "CURP Válido (adulto mayor) " : "CURP inválido (no para inapam)");
+        //document.getElementById('btn-siguiente1').disabled = false
+        return edad >= 60 ? true : false;
+    } else {        
+        window.alert("CURP Inválido: edad fuera de rango");
+        return false;
+    }
+}
+
+function validarEdadestudiante(input) {
+    const curp = input.value.trim().toUpperCase();
+    const curpRegex = /^[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[0-9A-Z]{2}$/;
+
+    // Validar formato CURP
+    if (!curpRegex.test(curp)) {        
+        window.alert("CURP Inválido: formato incorrecto");
+        //document.getElementById('btn-siguiente1').disabled = true
+        return false;
+    }
+
+    // Extraer y validar fecha de nacimiento
+    const fechaNacimientoStr = curp.slice(4, 10);
+    let anio = parseInt(fechaNacimientoStr.slice(0, 2), 10);
+    const mes = parseInt(fechaNacimientoStr.slice(2, 4), 10) - 1;
+    const dia = parseInt(fechaNacimientoStr.slice(4, 6), 10);
+
+    // Determinar el siglo
+    const anioActual = new Date().getFullYear();
+    const siglo = anio > (anioActual - 2000) ? 1900 : 2000;
+    anio = siglo + anio;
+
+    const fechaNacimiento = new Date(anio, mes, dia);
+
+    // Verificar que la fecha es válida
+    if (isNaN(fechaNacimiento.getTime()) || fechaNacimiento > new Date()) {        
+        window.alert("CURP Inválido: fecha de nacimiento incorrecta");
+        //document.getElementById('btn-siguiente1').disabled = true
+        return false;
+    }
+
+    // Calcular la edad
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+    const m = hoy.getMonth() - fechaNacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+        edad--;
+    }
+
+    // Validar CURP
+    if (edad >= 0 && edad <= 120) {        
+        window.alert(edad < 12 ? "CURP Válido (Menor de edad)" : "CURP inválido (excede la edad de 12 años)");
+        //document.getElementById('btn-siguiente1').disabled = false
+        return edad < 12 ? true : false;
+    } else {        
+        window.alert("CURP Inválido: edad fuera de rango");
+        //document.getElementById('btn-siguiente1').disabled = true
+        return false;
+    }
+}
+
+var derechos = document.getElementById("derechos");
+derechos.addEventListener("click", function () {
+    if (derechos.checked == true) {
+        document.getElementById("cesion_derechos").style.display = "block";
+        document.getElementById("section-viaje").style.display = "none";
+        document.getElementById("procederCambio").style.display = "none";
+        document.getElementById("cancelarCambio").style.display = "none";
+    } else {
+        document.getElementById("cesion_derechos").style.display = "none";
+        document.getElementById("section-viaje").style.display = "block";
+        document.getElementById("procederCambio").style.display = "block";
+        document.getElementById("cancelarCambio").style.display = "block";
+    }
+    
+});
+
+async function cederboleto() {
+    let nombre = document.getElementById("nuevoNombre").value;
+    let ticket = document.getElementById("boletoanterior").value;
+    try {
+        //const response = await fetch(`https://api-taquillas.sagautobuses.com/Home/CederBoleto?nombre=${nombre}&ticket=${ticket}`);
+        const response = await fetch(
+            `https://localhost:5001/Home/CederBoleto?nombre=${encodeURIComponent(nombre)}&ticket=${encodeURIComponent(ticket)}`,
+            {
+                method: 'PATCH'
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+
+        const data = await response.text();
+
+        if (data.includes("CORRECTO")) {
+            data_ticket.PassengerName = nombre;
+            Descargar(short);
+            window.alert("Cesión de derechos realizada correctamente.");
+        } else {
+            window.alert("ERROR: No se hizo la cesión correctamente.");
+        }
+
+
+    } catch (error) {
+        console.error('Hubo un error:', error);
+    }
 }

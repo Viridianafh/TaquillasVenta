@@ -5,7 +5,7 @@
     button_Buscar.addEventListener('click', () => {
 
 
-
+        document.getElementById('button_Buscar').disabled = true;
 
 
         button_Buscar.textContent = ""
@@ -47,8 +47,8 @@
             <td>${pageData[i].Destino}</td>
             <td>${pageData[i].Departure}</td>
             <td>
-                <button class="btn btn-dark" id="btn-showlist"
-                    onclick="verlista('${pageData[i].Id}', '${pageData[i].Bus}', '${pageData[i].Corrida}', '${pageData[i].Departure}', '${pageData[i].origen_viaje}', '${pageData[i].Destino}')">Ver Lista
+                <button class="btn btn-dark" id="btn-showlist-${i}"
+                    onclick="verlista('${pageData[i].Id}', '${pageData[i].Bus}', '${pageData[i].Corrida}', '${pageData[i].Departure}', '${pageData[i].origen_viaje}', '${pageData[i].Destino}','btn-showlist-${i}')">Ver Lista
                 </button>
             </td>
         `;
@@ -118,6 +118,7 @@
                 button_Buscar.textContent = "Buscar";
                 button_Buscar.classList.remove('btn-success');
                 button_Buscar.classList.add('btn-primary');
+                document.getElementById('button_Buscar').disabled = false;
             })
             .catch(error => {
                 Swal.fire({
@@ -130,6 +131,7 @@
                 button_Buscar.textContent = "Buscar";
                 button_Buscar.classList.remove('btn-success');
                 button_Buscar.classList.add('btn-primary');
+                document.getElementById('button_Buscar').disabled = false;
             });
 
         // Añadir evento al campo de búsqueda
@@ -284,8 +286,8 @@ function ocultarColumna6() {
 
 
                 
-    function verlista(tripid, bus, corrida, departure, orige, destino) {
-
+function verlista(tripid, bus, corrida, departure, orige, destino, id_button) {
+    document.getElementById(id_button).disabled = true;
 
         limpiarTabla()
         limpiarTabla2()
@@ -403,10 +405,12 @@ function ocultarColumna6() {
                 document.getElementById('spanDes').textContent = destino
 
      
+                document.getElementById(id_button).disabled = false;
 
             })
             .catch(error => {
 
+                document.getElementById(id_button).disabled = false;
 
                 Swal.fire({
                     title: 'Error al traer los datos!',

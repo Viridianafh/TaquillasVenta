@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     fetch(`https://api-taquillas.sagautobuses.com/Home/gettripstops?tripid=${trip}`)
+    //fetch(`https://localhost:5001/Home/gettripstops?tripid=${trip}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -104,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error al obtener o procesar los datos:', error));
 
     document.getElementById('botonDescargar').addEventListener('click', () => {
+        document.getElementById('botonDescargar').disabled = true;
         const opciones = {
             margin: [5, 5, 5, 5],
             filename: 'Guia.pdf',
@@ -121,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const contenidoDiv = document.getElementById('guia');
         html2pdf().from(contenidoDiv).set(opciones).save();
+        document.getElementById('botonDescargar').disabled = false;
     });
 
 

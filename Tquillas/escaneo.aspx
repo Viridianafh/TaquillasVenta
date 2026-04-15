@@ -31,7 +31,7 @@
             <input type="text" class="form-control" id="input-ticket" />
 
             <br />
-            <button class="btn btn-dark" id="btn-buscar-ticket">Buscar</button>
+            <button class="btn btn-dark" id="btn-buscar-ticket">Escanear</button>
 
         </div>
 

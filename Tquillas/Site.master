@@ -106,18 +106,18 @@
     
                         <div class="header__info flex  bg-dark">
                             <ul class="flex flex-column mb-3 ">
-                              <li> <a class="btn btn-dark" href="dash.aspx"  role="button" style="text-decoration:none"> Inicio </a></li>
+                              <li id="dash"> <a class="btn btn-dark" href="dash.aspx"  role="button" style="text-decoration:none"> Inicio </a></li>
 
-                                 <li> <a class="btn btn-dark" href="Busqueda.aspx"  role="button" style="text-decoration:none"> Buscar boletos </a></li>
-                                    <li> <a class="btn btn-dark" href="escaneo.aspx"  role="button" style="text-decoration:none"> Escaneo de boletos </a></li>
-                                 <li> <a class="btn btn-dark" href="listadeabordar.aspx" role="button" style="text-decoration:none" >Lista de abordar</a></li>
-                                <li> <a class="btn btn-dark" href="ventas.aspx" role="button" style="text-decoration:none" >Venta de boletos</a></li>
+                                 <li id="busqueda"> <a class="btn btn-dark" href="Busqueda.aspx"  role="button" style="text-decoration:none"> Buscar boletos </a></li>
+                                    <li id="escaneo"> <a class="btn btn-dark" href="escaneo.aspx"  role="button" style="text-decoration:none"> Escaneo de boletos </a></li>
+                                 <li id="listaAbordar"> <a class="btn btn-dark" href="listadeabordar.aspx" role="button" style="text-decoration:none" >Lista de abordar</a></li>
+                                <li id="ventas"> <a class="btn btn-dark" href="ventas.aspx" role="button" style="text-decoration:none" >Venta de boletos</a></li>
                                 <center>
-                                <li> <a class="btn btn-dark" href="index.aspx"  role="button" style="text-decoration:none"> Terminal</a></li>
-                                <li> <a class="btn btn-dark" href="guias.aspx"  role="button" style="text-decoration:none"> Guías de viaje</a></li>
-                                <li> <a class="btn btn-dark" href="Cambio.aspx"  role="button" style="text-decoration:none">Cambiar boleto</a></li>
+                                <li id="index"> <a class="btn btn-dark" href="index.aspx"  role="button" style="text-decoration:none"> Terminal</a></li>
+                                <li id="guias"> <a class="btn btn-dark" href="guias.aspx"  role="button" style="text-decoration:none"> Guías de viaje</a></li>
+                                <li id="cambioModulo"> <a class="btn btn-dark" href="Cambio.aspx"  role="button" style="text-decoration:none">Cambiar boleto</a></li>
 
-                                <li><div class="salir">
+                                <li id="salir"><div class="salir">
                                     <button  class="btn btn-dark" id="btn_logout" >
                                         Salir 
                                        <center>

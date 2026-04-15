@@ -3,6 +3,7 @@
 
 
 function Buscar() {
+    document.getElementById("buscar_paq").disabled = true;
     var data = document.getElementById('codcompra').value;
 
     fetch(`https://api-taquillas.sagautobuses.com/Home/BuscarPaquete?ticket=${data}`)
@@ -25,14 +26,16 @@ function Buscar() {
                         `;
                 tabla.appendChild(tr);
             });
+            document.getElementById("buscar_paq").disabled = false;
         })
         .catch(error => {
+            document.getElementById("buscar_paq").disabled = false;
             alert("Hubo un error o no se encontró el boleto");
         });
 }
 
 function actualizar() {
-
+    document.getElementById("guardar_paq").disabled = true;
     var status = document.getElementById('select-status-packagee').value
     var data = document.getElementById('codcompra').value;
 
@@ -45,8 +48,10 @@ function actualizar() {
             } else {
                 alert("Error al actualizar el estado");
             }
+            document.getElementById("guardar_paq").disabled = false;
         })
         .catch(error => {
+            document.getElementById("guardar_paq").disabled = false;
             alert("Hubo un error en la solicitud");
         });
     }

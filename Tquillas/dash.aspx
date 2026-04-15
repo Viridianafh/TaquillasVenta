@@ -115,7 +115,23 @@
                     <div class="card-footer"><a href="listadepaquete.aspx">Ver</a></div>
                 </div>
 
-               
+               <!--<div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
+                    <div><ion-icon name="swap-horizontal-outline" style="font-size: 80px;"></ion-icon></div>
+                    <div class="card-body">
+                        <h5 class="card-title">Cambio de paquete</h5>
+                        <p class="card-text">Cambia el viaje en el que sale un paquete</p>
+                    </div>
+                    <div class="card-footer"><a href="cambiopaqueteria.aspx">Ver</a></div>
+                </div>-->
+
+                  <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
+                    <div><ion-icon name="list-outline" style="font-size: 80px;"></ion-icon></div>
+                    <div class="card-body">
+                        <h5 class="card-title">Cancelación de viaje</h5>
+                        <p class="card-text">Cambia el estatus de un viaje a cancelado</p>
+                    </div>
+                    <div class="card-footer"><a href="cancelarviaje.aspx">Ver</a></div>
+                </div>
 
               
             </div>

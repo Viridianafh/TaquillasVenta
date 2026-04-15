@@ -5,7 +5,7 @@
     <header>
         <link href="css/cambio.css" rel="stylesheet" />
         <script src="Js/islog.js"></script>
-        <script src="Js/cambio.js"></script>
+        
         <script src="Js/terminalcheck.js"></script>
     </header>
   
@@ -17,15 +17,19 @@
             
         <label> Ticket del boleto anterior </label>
         <input type="text" id="boletoanterior" class="form-control" />
-
-      
-
+            <div id="ces_dere" style="display:none">
+                <label>Solo cesión de derechos</label>
+                <input type="checkbox" name="name" value="" id="derechos"/>
+            </div>    
+        
+                
         <button class="btn btn-dark m-2" id="btn-buscar">Buscar</button>
 
         </div>
 
        
     </section>
+    
     <section>
 
         <div class="container">
@@ -59,7 +63,11 @@
 
             </div>
             
-
+                         <div id="cesion_derechos" style="display:none">
+    <label>Nuevo nombre:</label>
+    <input type="text" name="name" value="" id="nuevoNombre" style="width:350px"/>
+    <button class="btn-danger btn m-2" type="button" onclick="cederboleto()">Ceder boleto</button>
+</div>
         </div>
  
              <div class="col">
@@ -160,6 +168,17 @@
                 <option id="option-inapam" value="OLDER_ADULT">Inapam</option>
                 
             </select>
+
+            <div id="valida_curp" style="display:none">
+                <label>CURP:</label>
+                <input type="text" class="form-control" id="input-CURP" oninput="Toupper()" style="width:220px;" />
+            </div>
+
+            <label>Número de telefono:</label>
+            <input type="text" class="form-control" id="input-telefono" oninput="Toupper()" style="width:220px;" />
+
+            <label>Motivo del cambio:</label>
+            <input type="text" class="form-control" id="input-motivoCambio" oninput="Toupper()" style="width:420px;" />
             
             <button class="btn btn-primary mt-2" id="btn-siguiente1" >Siguiente</button>
       ()
@@ -193,4 +212,5 @@
 
     <h1 id="spanTexto2"></h1>
     <h4 id="spanTexto"></h4>
+    <script src="Js/cambio.js"></script>
 </asp:Content>

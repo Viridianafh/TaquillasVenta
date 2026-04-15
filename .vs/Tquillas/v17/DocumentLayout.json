@@ -1,26 +1,54 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\",
+  "WorkspaceRootPath": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\tquillas\\ventas.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\ventas.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas|c:\\users\\luis martin r.p\\documents\\memoria usb\\front 13 descargas buneo\\taquillasventa\\tquillas\\js\\guias.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\guias.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\tquillas\\js\\ventas.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\ventas.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas|c:\\users\\luis martin r.p\\documents\\memoria usb\\front 13 descargas buneo\\taquillasventa\\tquillas\\dash.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\dash.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas|c:\\users\\d.software_004\\documents\\versiones venta taquilla\\13\\taquillasventa\\tquillas\\js\\cambio.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\cambio.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\tquillas\\dash.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\dash.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\tquillas\\js\\busqueda.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|",
-      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\busqueda.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|"
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\tquillas\\cambio.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\cambio.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\tquillas\\js\\informecierre.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\informecierre.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\tquillas\\js\\cambio.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\cambio.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\tquillas\\js\\busqueda.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\busqueda.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\tquillas\\busqueda.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\busqueda.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\tquillas\\js\\ventas.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\ventas.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\tquillas\\cancelarviaje.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\cancelarviaje.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\tquillas\\cambiopaqueteria.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\cambiopaqueteria.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\tquillas\\js\\cancelarviaje.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\js\\cancelarviaje.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\tquillas\\buscarpaquete.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{46ECAF0D-6046-4EC9-A96D-1443DACA9448}|C:\\Users\\D.SOFTWARE_004\\Downloads\\13\\TaquillasVenta\\Tquillas|solutionrelative:tquillas\\buscarpaquete.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,107 +58,153 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 1,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "cambio.js",
-              "DocumentMoniker": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas\\Js\\cambio.js",
-              "RelativeDocumentMoniker": "Tquillas\\Js\\cambio.js",
-              "ToolTip": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas\\Js\\cambio.js",
-              "RelativeToolTip": "Tquillas\\Js\\cambio.js",
-              "ViewState": "AgIAAKgCAAAAAAAAAAAAALUCAABLAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-08-07T16:52:10.065Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Busqueda.js",
-              "DocumentMoniker": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas\\Js\\Busqueda.js",
-              "RelativeDocumentMoniker": "Tquillas\\Js\\Busqueda.js",
-              "ToolTip": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas\\Js\\Busqueda.js",
-              "RelativeToolTip": "Tquillas\\Js\\Busqueda.js",
-              "ViewState": "AgIAACwBAAAAAAAAAAAAAF8BAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-08-05T18:16:18.426Z",
+              "DocumentIndex": 1,
+              "Title": "dash.aspx",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\dash.aspx",
+              "RelativeDocumentMoniker": "Tquillas\\dash.aspx",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\dash.aspx",
+              "RelativeToolTip": "Tquillas\\dash.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-04-07T23:05:18.482Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ventas.aspx",
-              "DocumentMoniker": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas\\ventas.aspx",
-              "RelativeDocumentMoniker": "Tquillas\\ventas.aspx",
-              "ToolTip": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas\\ventas.aspx",
-              "RelativeToolTip": "Tquillas\\ventas.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-08-05T18:13:21.328Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ventas.js",
-              "DocumentMoniker": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas\\Js\\ventas.js",
-              "RelativeDocumentMoniker": "Tquillas\\Js\\ventas.js",
-              "ToolTip": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas\\Js\\ventas.js",
-              "RelativeToolTip": "Tquillas\\Js\\ventas.js",
-              "ViewState": "AgIAAOEGAAAAAAAAAAAqwAAHAAA7AAAAAAAAAA==",
+              "Title": "guias.js",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Js\\guias.js",
+              "RelativeDocumentMoniker": "Tquillas\\Js\\guias.js",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Js\\guias.js",
+              "RelativeToolTip": "Tquillas\\Js\\guias.js",
+              "ViewState": "AgIAAHMBAAAAAAAAAAAqwO4BAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-08-05T00:25:30.231Z",
+              "WhenOpened": "2026-04-07T21:53:11.713Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "informecierre.js",
-              "DocumentMoniker": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas\\Js\\informecierre.js",
-              "RelativeDocumentMoniker": "Tquillas\\Js\\informecierre.js",
-              "ToolTip": "C:\\Users\\D.SOFTWARE_004\\Documents\\Versiones venta taquilla\\13\\TaquillasVenta\\Tquillas\\Js\\informecierre.js",
-              "RelativeToolTip": "Tquillas\\Js\\informecierre.js",
-              "ViewState": "AgIAAJoAAAAAAAAAAAAswEYAAAAAAAAAAAAAAA==",
+              "Title": "cambio.js",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Js\\cambio.js",
+              "RelativeDocumentMoniker": "Tquillas\\Js\\cambio.js",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Js\\cambio.js",
+              "RelativeToolTip": "Tquillas\\Js\\cambio.js",
+              "ViewState": "AgIAAD4CAAAAAAAAAAAUwF4CAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-08-05T00:23:05.675Z"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 1115,
-          "SelectedChildIndex": -1,
-          "Children": [
+              "WhenOpened": "2026-01-02T21:34:45.511Z"
+            },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 2130,
-          "SelectedChildIndex": -1,
-          "Children": [
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Busqueda.js",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Js\\Busqueda.js",
+              "RelativeDocumentMoniker": "Tquillas\\Js\\Busqueda.js",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Js\\Busqueda.js",
+              "RelativeToolTip": "Tquillas\\Js\\Busqueda.js",
+              "ViewState": "AgIAAIAAAAAAAAAAAAAAADsBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-01-09T22:01:36.302Z"
+            },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Cambio.aspx",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Cambio.aspx",
+              "RelativeDocumentMoniker": "Tquillas\\Cambio.aspx",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Cambio.aspx",
+              "RelativeToolTip": "Tquillas\\Cambio.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-01-02T21:37:02.438Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ventas.js",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Js\\ventas.js",
+              "RelativeDocumentMoniker": "Tquillas\\Js\\ventas.js",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Js\\ventas.js",
+              "RelativeToolTip": "Tquillas\\Js\\ventas.js",
+              "ViewState": "AgIAAH0EAAAAAAAAAAAAACAAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-15T21:12:11.272Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "cancelarviaje.js",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Js\\cancelarviaje.js",
+              "RelativeDocumentMoniker": "Tquillas\\Js\\cancelarviaje.js",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Js\\cancelarviaje.js",
+              "RelativeToolTip": "Tquillas\\Js\\cancelarviaje.js",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAgwGQAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-12-26T21:56:42.272Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "cancelarviaje.aspx",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\cancelarviaje.aspx",
+              "RelativeDocumentMoniker": "Tquillas\\cancelarviaje.aspx",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\cancelarviaje.aspx",
+              "RelativeToolTip": "Tquillas\\cancelarviaje.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2025-12-26T21:57:07.74Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "dash.aspx",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\dash.aspx",
+              "RelativeDocumentMoniker": "Tquillas\\dash.aspx",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\dash.aspx",
+              "RelativeToolTip": "Tquillas\\dash.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2025-12-16T04:47:54.391Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "cambiopaqueteria.aspx",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\cambiopaqueteria.aspx",
+              "RelativeDocumentMoniker": "Tquillas\\cambiopaqueteria.aspx",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\cambiopaqueteria.aspx",
+              "RelativeToolTip": "Tquillas\\cambiopaqueteria.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2025-12-15T21:05:46.104Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Busqueda.aspx",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Busqueda.aspx",
+              "RelativeDocumentMoniker": "Tquillas\\Busqueda.aspx",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\Busqueda.aspx",
+              "RelativeToolTip": "Tquillas\\Busqueda.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2025-11-27T22:35:33.02Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "buscarpaquete.aspx",
+              "DocumentMoniker": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\buscarpaquete.aspx",
+              "RelativeDocumentMoniker": "Tquillas\\buscarpaquete.aspx",
+              "ToolTip": "C:\\Users\\Luis Martin R.P\\Documents\\memoria usb\\front 13 descargas buneo\\TaquillasVenta\\Tquillas\\buscarpaquete.aspx",
+              "RelativeToolTip": "Tquillas\\buscarpaquete.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2025-11-27T22:31:32.201Z"
             }
           ]
         }

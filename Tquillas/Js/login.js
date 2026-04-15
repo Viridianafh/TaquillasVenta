@@ -104,6 +104,7 @@ button_login.addEventListener('click', () => {
 
                 // Guardar datos en localStorage
                 localStorage.setItem("id", id);
+                localStorage.setItem("caja_abierta", false);
                 localStorage.setItem("name", name + " " + last_name + " " + second_last_name);
                 localStorage.setItem("last_name", last_name);
                 localStorage.setItem("second_last_name", second_last_name);

@@ -106,9 +106,30 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         `
 
+        card2.innerHTML =
+            `
+        
+              <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
+             <div>
+                  <div>
+                       <ion-icon name="documents-outline"  style="font-size: 80px;"></ion-icon>
+                    </div>
+                    </div>
+                <div class="card-body">
+              <h5 class="card-title">Guías de viaje</h5>
+<p class="card-text">Generar e imprimir las guías de viaje</p>
 
+                </div>
+               <div class="card-footer"><a href="guias.aspx">Ver</a></div>
+            </div>
+            
+            `
         contentcards.appendChild(card)
+        contentcards.appendChild(card2)
+        
 
+
+    } else {
         card2.innerHTML =
             `
         
@@ -128,11 +149,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             
             `
         contentcards.appendChild(card2)
-
-
-    } else {
-
-      
+        document.getElementById("index").style.display = "none";
+        //document.getElementById("guias").style.display = "none";
 
     }
     

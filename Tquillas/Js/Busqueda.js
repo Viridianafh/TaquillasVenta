@@ -5,7 +5,8 @@
     const btn_buscar = document.getElementById('btn-buscar')
     btn_buscar.addEventListener('click', () => {
 
-        btn_buscar.textContent = "Buscando..."
+        btn_buscar.textContent = "Buscando...";
+        btn_buscar.disabled = true;
 
         limpiarTabla()
 
@@ -71,13 +72,13 @@
                             <td>${data[i].seat_name}</td>
                             <td>${data[i].status}</td>
                             <td>
-                            <button class="btn btn-dark" id="btn-download" onclick="Descargar('${data[i].ticket_id}', '${data[i].payment_provider}', '${data[i].date_created}');"> <ion-icon name="download-outline"></ion-icon>Descargar</button>
+                            <button class="btn btn-dark" id="btn-download-${i}" onclick="Descargar('${data[i].ticket_id}', '${data[i].payment_provider}', '${formatearfecha(restarSeisHoras(data[i].date_created))}', '${i}');"> <ion-icon name="download-outline"></ion-icon>Descargar</button>
                              
                                   <td>
                             ${data[i].status !== 'USED' ? `
-          <button class="btn btn-danger mt-2" id="btn-cancel" onclick="SolicitarCodigo('${data[i].ticket_id}');">
-            Cancelar Boleto
-          </button> </td>` : ''}
+                              <button class="btn btn-danger mt-2" id="btn-cancel-${i}" onclick="SolicitarCodigo('${data[i].ticket_id}','${i}');">
+                                Cancelar Boleto
+                              </button> </td>` : ''}
                         
                             
                             
@@ -89,12 +90,12 @@
                     }
 
                 }
-
+                btn_buscar.disabled = false;
 
             })
             .catch(error => {
 
-
+                btn_buscar.disabled = false;
                 Swal.fire({
                     title: "Error!",
                     text: `Ocurrio un error al consultar los datos: mensaje de error(${error})`,
@@ -149,9 +150,10 @@ function generateQRCode(text) {
     });
 }
 
-async function Descargar(ticket, tipopago, date) {
+async function Descargar(ticket, tipopago, date,i) {
     try {
-        document.getElementById('btn-download').textContent = "Descargando...";
+        document.getElementById('btn-download-' + i).disabled = true;
+        document.getElementById('btn-download-'+i).textContent = "Descargando...";
 
 
         // Obtener datos del boleto
@@ -165,12 +167,14 @@ async function Descargar(ticket, tipopago, date) {
         const boleto = data[0]; // Usamos el primer elemento del array
 
         const taquilleroResponse = await fetch(`https://api-taquillas.sagautobuses.com/Home/buscartaquilleroporticket?id=${boleto.TicketId}`);
+        //const taquilleroResponse = await fetch(`https://localhost:5001/Home/buscartaquilleroporticket?id=${boleto.TicketId}`);
         if (!taquilleroResponse.ok) {
             throw new Error('Error en la solicitud para obtener el nombre del taquillero');
         }
         const taquilleroData = await taquilleroResponse.json();
         var nametaquillero = "";
-        taquilleroData.forEach(e => { nametaquillero = e.name.length == 0 ? "INTERNET" : e.name; });
+        //taquilleroData.forEach(e => { nametaquillero = e.name.length == 0 ? "INTERNET" : e.name; });
+        taquilleroData.forEach(e => { nametaquillero = e.n.length == 0 ? "INTERNET" : e.n; });
 
 
         // Cargar el PDF base
@@ -184,6 +188,13 @@ async function Descargar(ticket, tipopago, date) {
         // Rellenar el formulario
         const form = pdfDoc.getForm();
 
+        //const precioSinIVA = boleto.PayedPrice / (1 + 16 / 100);
+        const precioSinIVA = boleto.SoldPrice / (1 + 16 / 100);
+
+        // Calcular el IVA
+        //const iva = boleto.PayedPrice - precioSinIVA;
+        const iva = boleto.SoldPrice - precioSinIVA;
+
         // Establecer los valores de los campos de texto
         form.getTextField('passenger_name').setText(boleto.PassengerName);
         form.getTextField('origen').setText(boleto.Origin);
@@ -194,16 +205,13 @@ async function Descargar(ticket, tipopago, date) {
         form.getTextField('fecha').setText(`Fecha venta: ${date}`);
         form.getTextField('saleman_name').setText(tipopago == 'BOOTH' ? `Vendido por: ${nametaquillero}` : `Mediante: ${tipopago}`);
 
-        form.getTextField('subtotal').setText(String(boleto.PayedPrice));
+        form.getTextField('subtotal').setText(String(precioSinIVA.toFixed(2)));
         form.getTextField('departure_destino').setText(formatearfecha(boleto.llegada));
 
         form.getTextField('total').setText(String(boleto.SoldPrice));
 
 
-        const precioSinIVA = boleto.PayedPrice / (1 + 16 / 100);
-
-        // Calcular el IVA
-        const iva = boleto.PayedPrice - precioSinIVA;
+       
 
 
 
@@ -292,7 +300,8 @@ async function Descargar(ticket, tipopago, date) {
         link.click();
         document.body.removeChild(link);
 
-        document.getElementById('btn-download').textContent = "Volver a Descargar";
+        document.getElementById('btn-download-' + i).textContent = "Volver a Descargar";
+        document.getElementById('btn-download-' + i).disabled = false;
 
         // Abrir el PDF en una nueva pestaña
         setTimeout(() => {
@@ -301,75 +310,87 @@ async function Descargar(ticket, tipopago, date) {
 
     } catch (error) {
         console.error("Error al descargar el PDF:", error);
-        document.getElementById('btn-download').textContent = "Error al descargar";
+        document.getElementById('btn-download-' + i).textContent = "Error al descargar";
+        document.getElementById('btn-download-' + i).disabled = false;
     }
 }
 
-function SolicitarCodigo(ticket) {
-
+function SolicitarCodigo(ticket,i) {
+   
+    document.getElementById('btn-cancel-' + i).disabled = true;
     if (localStorage.getItem("caja_abierta") == "true") {
         var officename = localStorage.getItem('office_name')
 
         fetch(`https://api-taquillas.sagautobuses.com/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
-            //fetch(`https://api-taquillas.sagautobuses.com/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
+            //fetch(`https://localhost:5001/Home/GenerarTokenCancelacion?oflname=${officename}&ticket_id=${ticket}`)
             .then(res => res.json())
             .then(data => {
-                console.log("Respuesta del servidor:", data);
+                //console.log("Respuesta del servidor:", data);
 
 
-                localStorage.setItem("tokenCancelacionBoleto", data.token)
+                localStorage.setItem("tokenCancelacionBoleto", data.token);
+                document.getElementById('btn-cancel-' + i).disabled = false;
+            })
+            .catch(e => {
+                document.getElementById('btn-cancel-' + i).disabled = false;
             })
         document.getElementById('section-code').style.display = 'block'
     } else {
         window.alert("Inicia turno para poder cancelar boletos.");
+        document.getElementById('btn-cancel-' + i).disabled = false;
     }    
 
 }
 
 function ProcederCancelacion() {
+    document.getElementById("cancelar_bol").disabled = true;
+    if (document.getElementById("motivo_cancel").value == "") {
+        window.alert("Debe ingresar un motivo de cancelación.");
+        document.getElementById("cancelar_bol").disabled = false;
+    } else {
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: 'Esta acción no podrá deshacerse',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Acción cuando se hace clic en "Sí"
+                validardata()
+            } else {
+                // Acción cuando se hace clic en "No"
+                document.getElementById("cancelar_bol").disabled = false;
+            }
+        })
 
-    Swal.fire({
-        title: '¿Está seguro?',
-        text: 'Esta acción no podrá deshacerse',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Acción cuando se hace clic en "Sí"
-            validardata()
-        } else {
-            // Acción cuando se hace clic en "No"
 
+        function validardata() {
+            var code = document.getElementById('code').value
+            var key = localStorage.getItem('tokenCancelacionBoleto')
+
+            fetch(`https://api-taquillas.sagautobuses.com/Home/ValidarTokenCancelacion?code=${code}&key=${key} `)
+                .then(res => res.text())
+                .then(data => {
+                    if (data == "Ok") {
+
+                        cancelarBoleto()
+
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Ocurrio un error",
+                            text: 'intenta de nuevo',
+                            icon: "error"
+                        });
+                    }
+                    document.getElementById("cancelar_bol").disabled = false;
+                })
         }
-    })
-
-
-    function validardata() {
-        var code = document.getElementById('code').value
-        var key = localStorage.getItem('tokenCancelacionBoleto')
-
-        fetch(`https://api-taquillas.sagautobuses.com/Home/ValidarTokenCancelacion?code=${code}&key=${key} `)
-            .then(res => res.text())
-            .then(data => {
-                if (data == "Ok") {
-
-                    cancelarBoleto()
-
-                }
-                else {
-                    Swal.fire({
-                        title: "Ocurrio un error",
-                        text: 'intenta de nuevo',
-                        icon: "error"
-                    });
-                }
-            })
-    }
-
+    }    
 }
 
 
@@ -384,12 +405,14 @@ function cancelarBoleto() {
 
         "oldticket": boleto,
         "cancelUserId": userid,
-        "saleshift": localStorage.getItem('saleshift_id')
+        "saleshift": localStorage.getItem('saleshift_id'),
+        "motivo_cancel": document.getElementById("motivo_cancel").value
 
     }
 
 
     fetch('https://api-taquillas.sagautobuses.com/Home/CancelarBoleto', {
+    //fetch('https://localhost:5001/Home/CancelarBoleto', {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -432,9 +455,15 @@ function formatearfecha(fechain) {
     let dia = fecha.getDate();
     let mes = fecha.getMonth() + 1;
     let anio = fecha.getFullYear();
-    let horas = fecha.getHours();
+    let horas = fecha.getHours() + 1;
+    //let horas = fecha.getHours();
     let minutos = fecha.getMinutes();
-    let segundos = fecha.getSeconds();
+    let segundos = fecha.getSeconds();   
+
+    if (horas >= 24) {
+        horas = 0;
+        dia = parseInt(dia) + 1; // avanza al día siguiente
+    }
 
     dia = dia < 10 ? '0' + dia : dia;
     mes = mes < 10 ? '0' + mes : mes;
@@ -458,7 +487,8 @@ function limpiarTabla() {
 // Agrego la función para restar 6 horas a una fecha
 function restarSeisHoras(fechaStr) {
     const fecha = new Date(fechaStr);
-    fecha.setHours(fecha.getHours() - 6);
+    fecha.setHours(fecha.getHours() - 7);
+    //fecha.setHours(fecha.getHours() - 6);
     return fecha;
 }
 

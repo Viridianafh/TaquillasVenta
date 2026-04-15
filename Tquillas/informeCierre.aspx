@@ -3,7 +3,8 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <header>
-        <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+        <!--<script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
         <script src="Js/islog.js"></script>
         <script src="Js/informecierre.js"></script>
         
@@ -14,6 +15,72 @@
             *{
                 font-size: 13px;
             }
+             table.sin-bordes {
+                border-collapse: collapse;   /* evita líneas dobles */
+                border-spacing: 0;           /* elimina separación entre celdas */
+                font-size: 8px;
+              }
+              table.sin-bordes, 
+              table.sin-bordes th, 
+              table.sin-bordes td {
+                border: none;                /* sin bordes */
+              }
+              table.sin-bordes th, 
+              table.sin-bordes td {
+                padding: 6px;                /* opcional: espacio interno */
+              }
+              h5{
+                  margin-left:5px;
+              }
+              h6{
+                    margin-left:5px;
+                }
+              p{
+                margin-left:5px;
+            }
+
+              /* Fondo semitransparente */
+  .modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+  }
+
+  /* Contenido del modal */
+  .modal-content {
+    background: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+  }
+  .loader {
+    border: 3px solid #f3f3f3; /* fondo del círculo */
+    border-top: 3px solid #3498db; /* color de la animación */
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Opcional: centrarlo */
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
         </style>
 
     <div class="container m-3">
@@ -27,12 +94,7 @@
         <h2>Informe cierre caja <span id="usuario"></span></h2>
         <p><strong> <span id="dates"></span></strong> </p>
         <p><span id="shift_number"></span></p>
-        <br>
-
-        <div class="container" id="content">
-        <h2>Informe precorte de caja <span id="usuario"></span></h2>
-        <p><strong> <span id="dates"></span></strong> </p>
-        <br>
+        <br>        
 
         <div class="container">
         
@@ -61,7 +123,7 @@
             </div>
         </div>
 
-        <div id="informe">
+        <!--<div id="informe">
             <h5>Resumen cierre</h5>
             <h6>Fecha: <span id="spanfecha"></span></h6>
             <br />
@@ -94,11 +156,101 @@
             <br />
             <p>Entrega: <span id="reporte-taquillero"></span><hr /></p>
             <p>Recibe: <hr /></p>
-        </div>
+        </div>-->
 
+            <div id="informe">
+                <h5>Resumen cierre</h5>
+                <h6>Fecha: <span id="spanfecha"></span></h6>
+                <br />
+                <h6>Taquillero: <span id="taquillero"></span></h6>
+                <h6>Turno: <span id="turno"></span></h6>
+                <h6>Oficina: <span id="oficina"></span></h6>
+                <h6>Terminal: <span id="terminal"></span></h6>
+                <br />
 
+                <table class="sin-bordes">
+                  <thead>
+                    <!--<tr><th></th><th></th></tr>-->
+                  </thead>
+                  <tbody>
+                    <tr>
+                        <td><strong>Boletos<br/>generales</strong></td>  <td>Cantidad</td> <td>Importe<br/>efectivo</td> <td>Importe<br/>tarjeta</td> <td>Importe<br/>total</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Boletos<br/>vendidos</strong></td>  <td><strong><span id="cantidad_boletos_vendidos"></span></strong></td> <td><strong>$<span id ="total_venta_efectivo_boletos"></span></strong></td> <td><strong>$<span id="total_venta_tarjeta_boletos"></span></strong></td> <td><strong>$<span id="total_venta_boletos"></span></strong></td>
+                    </tr>
+                      <tr>
+                        <td>Efectivo</td> <td><span id="cantidad_boletos_vendidos_efectivo"></span></td> <td>$<span id="venta_efectivo_boletos"></span></td> <td>$<span>0</span></td> <td>$<span id ="venta_efectivo_boletos2"></span></td>
+                    </tr>
+                        <tr>
+                        <td>Tarjeta</td> <td><span id="cantidad_boletos_vendidos_tarjeta"></span></td> <td>$<span>0</span></td> <td>$<span id ="venta_tarjeta_boletos"></span></td> <td>$<span id ="venta_tarjeta_boletos2"></span></td>
+                    </tr>
+                        <tr>
+                        <td>Hibrido</td> <td><span id="cantidad_boletos_vendidos_hibrido"></span></td> <td>$<span id="venta_efectivo_hibrido_boletos"></span></td> <td>$<span id="venta_tarjeta_hibrido_boletos"></span></td> <td>$<span id="venta_hibrido_boletos"></span></td>
+                    </tr>
 
+                        <tr>
+                            <td></td>
+                        </tr>
 
+                      <tr>
+                        <td><strong>Boletos<br/>cancelados</strong></td> <td><strong><span id="cantidad_boletos_cancelados"></span></strong></td> <td></td> <td></td> <td><strong>$<span id="total_boletos_cancelados"></span></strong></td>
+                    </tr>
+                    
+                       <tr>
+                           <td></td>
+                        </tr>
+
+                      <tr>
+                        <td><strong>Boletos<br/>paquetería</strong></td>  <td>Cantidad</td> <td></td> <td></td> <td>Importe</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Boletos<br/>vendidos</strong></td>  <td><strong><span id="cantidad_boletos_vendidos_paq"></span></strong></td> <td></td> <td></td> <td><strong>$<span id="total_venta_paquetes"></span></strong></td>
+                    </tr>
+                      <tr>
+                        <td>Efectivo</td> <td><span id="cantidad_boletos_vendidos_efectivo_paq"></span></td> <td></td> <td></td> <td>$<span id="venta_efectivo_paquetes"></span></td>
+                    </tr>
+                        <tr>
+                        <td>Tarjeta</td> <td><span id="cantidad_boletos_vendidos_tarjeta_paq"></span></td> <td></td> <td></td> <td>$<span id="venta_tarjeta_paquetes"></span></td>
+                    </tr>
+                      
+                      <tr>
+                        <td></td>
+                     </tr>
+
+                      <tr>
+                        <td></td>
+                     </tr>
+
+                        <tr>
+                            <td><strong>Total venta<br/>efectivo</strong></td> <td id=""><strong>$<span id="venta_total_boletos_paquetes_efectivo"></span></strong></td> 
+                        </tr>
+                        <tr>
+                            <td><strong>Total venta<br/>tarjeta</strong></td> <td><strong>$<span id="venta_total_boletos_paquetes_tarjeta"></span></strong></td> 
+                        </tr>
+                        <tr>
+                            <td><strong>Total venta<br/>sin<br/>cancelados</strong></td> <td><strong>$<span id ="total_ventas_sin_cancelados"></span></strong></td> 
+                        </tr>
+                  </tbody>
+                </table>
+                
+
+                <br />
+                <p>Entrega: <span id="reporte-taquillero"></span><hr /></p>
+                <p><strong>Total cancelaciones: $<span id="reporte-cancelaciones"></span></strong><hr /></p>
+                <p><strong>Efectivo entregado: $<span id="reporte-efectivo"></span></strong><hr /></p>
+                <p>Recibe: <hr /></p>
+            </div>
+
+        <div id="myModal" class="modal">
+  <div class="modal-content">
+    <h3>Cargando datos de cierre.</h3>
+    <p>Espere mientras se obtiene la información necesaria.</p>
+      <div class="center">
+  <div class="loader"></div>
+</div>
+  </div>
+</div>
 
         <script>
             const opciones = {

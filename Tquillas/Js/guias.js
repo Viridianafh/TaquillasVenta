@@ -67,13 +67,14 @@
 
 
         fetch(`https://api-taquillas.sagautobuses.com/Home/ObtenerIniciosGuias?origen=${data}&fecha=${formattedDate}`)
+        //fetch(`https://localhost:5001/Home/ObtenerIniciosGuias?origen=${data}&fecha=${formattedDate}`)
             .then(response => response.json())
             .then(data => {
 
 
                 var tabla = document.getElementById('tabla-begins').getElementsByTagName('tbody')[0]
                 tabla.innerHTML = '';
-
+                let i = 0;
                 data.forEach(e => {
 
                     var tr = document.createElement('tr')
@@ -109,18 +110,18 @@
                         <td> ${formattedDate} </td>
                         <td>
 
-                        <button style="display: ${e.guiagenerada == "False" ? 'bloc': 'none'}" class="btn btn-dark" onclick="generarguia('${e.route_id}', '${e.run_id}', '${e.trip_id}', '${e.bus_id}', '${e.origenid}', '${e.destinoid}', '${e.anticipo}', '${e.corrida}', '${e.origen}', '${e.destino}', '${e.operador1}', '${e.operador2}', '${e.bus}', '${e.salida}')">
+                        <button style="display: ${e.guiagenerada == "False" ? 'bloc' : 'none'}" class="btn btn-dark" id="generar${i}" onclick="generarguia('${e.route_id}', '${e.run_id}', '${e.trip_id}', '${e.bus_id}', '${e.origenid}', '${e.destinoid}', '${e.anticipo}', '${e.corrida}', '${e.origen}', '${e.destino}', '${e.operador1}', '${e.operador2}', '${e.bus}', '${e.salida}', '${e.driver1_id}', '${e.driver2_id}', '${i}')">
                          generar guia
                         </button>
 
-                        <button style="display: ${e.guiagenerada == "True" ? 'bloc' : 'none'}" class="btn btn-dark" onclick="verguia('${e.route_id}', '${e.run_id}', '${e.trip_id}', '${e.bus_id}', '${e.origenid}', '${e.destinoid}', '${e.anticipo}', '${e.corrida}', '${e.origen}', '${e.destino}', '${e.operador1}', '${e.operador2}', '${e.bus}', '${e.salida}')">
+                        <button style="display: ${e.guiagenerada == "True" ? 'bloc' : 'none'}" class="btn btn-dark" id="ver${i}" onclick="verguia('${e.route_id}', '${e.run_id}', '${e.trip_id}', '${e.bus_id}', '${e.origenid}', '${e.destinoid}', '${e.anticipo}', '${e.corrida}', '${e.origen}', '${e.destino}', '${e.operador1}', '${e.operador2}', '${e.bus}', '${e.salida}', '${i}')">
                              ver guia
                         </button>
                       </td>
                 
                 `
                     tabla.appendChild(tr)
-
+                    i++;
 
                 })
 
@@ -138,8 +139,8 @@
 
 
 
-function verguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, anticipo, corrida, origen, destino, operador1, operador2, bus, salida) {
-
+function verguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, anticipo, corrida, origen, destino, operador1, operador2, bus, salida, i) {
+    document.getElementById("ver" + i).disabled = true;
     localStorage.setItem("route_id_guia", route_id)
     localStorage.setItem("run_id_guia", run_id)
     localStorage.setItem("trip_id-guia", trip_id)
@@ -155,14 +156,19 @@ function verguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, anticip
     localStorage.setItem("bus_guia", bus)
     localStorage.setItem("salida_guia", salida)
     localStorage.setItem("totalanticipo_guia", anticipo)
+    document.getElementById("ver" + i).disabled = false;
 
     window.location.href ='guiagenerada.aspx'
 
 }
+let d_1;
+let d_2;
 
+function generarguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, anticipo, corrida, origen, destino, operador1, operador2, bus, salida,driver1_id,driver2_id,i) {
+    document.getElementById("generar" + i).disabled = true;
 
-function generarguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, anticipo, corrida, origen, destino, operador1, operador2, bus, salida) {
-
+    d_1 = driver1_id;
+    d_2 = driver2_id;
 
     localStorage.setItem("route_id_guia", route_id)
     localStorage.setItem("run_id_guia", run_id)
@@ -182,11 +188,12 @@ function generarguia(route_id, run_id, trip_id, bus_id, origenid, destinoid, ant
 
 
     llamarlistaabordar(trip_id);
-    llamarparadas(route_id)
-    llamaranticipo()
+    llamarparadas(route_id);
+    llamaranticipo();    
 
     document.getElementById('section-busqueda-guide').style.display = "none";
     document.getElementById('section-guides-actions').style.display = "block";
+    document.getElementById("generar" + i).disabled = false;
 }
 
 
@@ -253,20 +260,31 @@ function llamaranticipo() {
     // Recuperar el total del anticipo almacenado en localStorage
     var anticip = parseFloat(localStorage.getItem('anticipo_guia')) || 0;
     document.getElementById('contentanticipo').textContent = anticip.toFixed(2);
-
+    localStorage.setItem("arrayanticipos", JSON.stringify([{
+        valor: anticip,
+        descripcion: "Anticipo SAG"
+    }]));
+    document.getElementById('totalanticipo').textContent = anticip.toString();
     // Función para actualizar el total del anticipo y el JSON de anticipos
     function updateTotalAnticipo() {
-        let totalAnticipo = 0;
+        let totalAnticipo = 0;       
+
         const anticipos = [];
+        anticipos.push({
+            valor: anticip,
+            descripcion: "Anticipo SAG"
+        });
+        totalAnticipo = anticipos[0].valor;
+
         document.querySelectorAll('.anticipo-div').forEach((div, index) => {
-            const descripcion = div.querySelector('input[name="descripcion"]').value;
+            const descripcion = div.querySelector('input[name="descripcion"]').value + " SAG";
             const valorAnticipo = parseFloat(div.querySelector('input[name="anticipo"]').value) || 0;
             totalAnticipo += valorAnticipo;
             anticipos.push({ descripcion, valor: valorAnticipo });
         });
 
         localStorage.setItem("totalanticipo_guia", totalAnticipo.toFixed(2));
-        document.getElementById('totalanticipo').textContent = (totalAnticipo + anticip).toFixed(2);
+        document.getElementById('totalanticipo').textContent = (totalAnticipo).toFixed(2);
 
         // Mostrar el JSON de anticipos
         document.getElementById('json-output').textContent = JSON.stringify(anticipos, null, 2);
@@ -316,7 +334,7 @@ function llamaranticipo() {
         contentcontrols.appendChild(newDiv);
 
         // Actualizar el total del anticipo después de agregar un nuevo input
-        updateTotalAnticipo();
+        //updateTotalAnticipo();
     });
 
 
@@ -327,10 +345,52 @@ function llamaranticipo() {
 
 }
 
+async function agregaranticipo() {
+    document.getElementById("btn-save").disabled = true;
+    var anticipo = localStorage.getItem("arrayanticipos");
+    var totalanticipo = document.getElementById('totalanticipo').textContent;
+    var anticipototal = parseFloat(totalanticipo);
+    localStorage.setItem("anticipototal", anticipototal);
+    console.log(anticipo);
+
+    var longitudanticipo = anticipo ? JSON.parse(anticipo) : null;
+
+    let list;
+
+    if (!anticipo || Object.keys(longitudanticipo).length === 0) {
+        alert("no hay anticipo");
+        list = [{
+            valor: 0,
+            descripcion: "Anticipo"
+        }];
+    } else {
+        list = longitudanticipo;
+    }
+
+    try {
+        const response = await fetch('https://api-taquillas.sagautobuses.com/Home/agregar_anticipo', {
+        //const response = await fetch('https://localhost:5001/Home/agregar_anticipo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(list)
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        var jp_id = await ligarAnticipoPayment(data);        
+        await InsertarTripStopControl();
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 
 
 
-function agregaranticipo() {
+/*async function agregaranticipo() {
 
 
     var anticipo = localStorage.getItem("arrayanticipos");
@@ -345,13 +405,35 @@ function agregaranticipo() {
 
         if (Object.keys(longitudanticipo).length === 0) {
 
-            alert("No hay Anticipo")
-            actualizaranticipo()
-            InsertarTripStopControl()
+            alert("no hay anticipó")
+            var list = [{
+                valor: 0,
+                descripcion: "Anticipo"
+            }];
+            /*actualizaranticipo();
+            InsertarTripStopControl();
+            //fetch('https://api-taquillas.sagautobuses.com/Home/agregar_anticipo', {
+            fetch('https://localhost:5001/Home/agregar_anticipo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+
+                },
+                body: list
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    var jp_id = await ligarAnticipoPayment(data[0].id);
+                    await actualizaranticipo(jp_id);
+                    await InsertarTripStopControl(); 
+                })
+                .catch(error => console.error('Error:', error));
 
         } else {
 
-            fetch('https://api-taquillas.sagautobuses.com/Home/agregar_anticipo', {
+            //fetch('https://api-taquillas.sagautobuses.com/Home/agregar_anticipo', {
+            fetch('https://localhost:5001/Home/agregar_anticipo', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -362,8 +444,9 @@ function agregaranticipo() {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
-                    actualizaranticipo()
-                    InsertarTripStopControl()
+                    var jp_id = await ligarAnticipoPayment(data[0].id);
+                    await actualizaranticipo(jp_id);
+                    await InsertarTripStopControl(); 
                 })
                 .catch(error => console.error('Error:', error));
 
@@ -371,21 +454,70 @@ function agregaranticipo() {
 
     } else {
         alert("no hay anticipó")
-        actualizaranticipo()
-        InsertarTripStopControl()
+        var list = [{
+            valor: 0,
+            descripcion: "Anticipo"
+        }];
+        /*actualizaranticipo();
+        InsertarTripStopControl();
+        //fetch('https://api-taquillas.sagautobuses.com/Home/agregar_anticipo', {
+        fetch('https://localhost:5001/Home/agregar_anticipo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: list
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                var jp_id = await ligarAnticipoPayment(data[0].id);
+                await actualizaranticipo(jp_id);
+                await InsertarTripStopControl(); 
+            })
+            .catch(error => console.error('Error:', error));
     }
 
 
 
 
+}*/
+
+async function ligarAnticipoPayment(id_anticipo) {
+    await fetch("https://api-taquillas.sagautobuses.com/Home/CreatePayemntAdvance", {
+    //await fetch("https://localhost:5001/Home/CreatePayemntAdvance", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(id_anticipo)
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            actualizaranticipo(data);
+            return data;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
 }
-
-
-function actualizaranticipo() {
+function actualizaranticipo(jp_id) {
+    
+    jp_id = jp_id.replace(/"/g, '');
+    if (d_1 === null || d_1 === undefined || d_1 === "") {
+        d_1 = "";
+    }
+    if (d_2 === null || d_2 === undefined || d_2 === "") {
+        d_2 = "a";
+    }
 
 
     var idguia = localStorage.getItem("trip_id-guia");
-    fetch(`https://api-taquillas.sagautobuses.com/Home/ActualizarGuia?tripId=${idguia}`, {
+    fetch(`https://api-taquillas.sagautobuses.com/Home/ActualizarGuia?tripId=${idguia}&jp_id=${jp_id}&driver1=${d_1}&driver2=${d_2}`, {
+    //fetch(`https://localhost:5001/Home/ActualizarGuia?tripId=${idguia}&jp_id=${jp_id}&driver1=${d_1}&driver2=${d_2}`, {
         method: 'PATCH', 
         headers: {
             'Authorization': 'Bearer your-token-here' 
@@ -413,6 +545,7 @@ function InsertarTripStopControl(){
 
 
     fetch(`https://api-taquillas.sagautobuses.com/Home/InsertarTripStopControl?tripid=${tripid}&salida=${salida_guia}`, {
+    //fetch(`https://localhost:5001/Home/InsertarTripStopControl?tripid=${tripid}&salida=${salida_guia}`, {
          
             method: 'POST',
             headers: {
@@ -422,8 +555,9 @@ function InsertarTripStopControl(){
         .then(res => res.json())
         .then(data => {
             console.log(data)
+            document.getElementById("btn-save").disabled = false;
             window.location.href = 'guiagenerada.aspx'
         })
-
+    document.getElementById("btn-save").disabled = false;
 
 }

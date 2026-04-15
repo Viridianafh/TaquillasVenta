@@ -5,7 +5,7 @@
     button_Buscar.addEventListener('click', () => {
 
 
-
+        document.getElementById('button_Buscar').disabled = true;
 
 
         button_Buscar.textContent = ""
@@ -47,8 +47,8 @@
             <td>${pageData[i].Destino}</td>
             <td>${pageData[i].Departure}</td>
             <td>
-                <button class="btn btn-dark" id="btn-showlist"
-                    onclick="verlista('${pageData[i].Id}', '${pageData[i].Bus}', '${pageData[i].Corrida}', '${pageData[i].Departure}' )">Ver Lista
+                <button class="btn btn-dark" id="btn-showlist${i}"
+                    onclick="verlista('${pageData[i].Id}', '${pageData[i].Bus}', '${pageData[i].Corrida}', '${pageData[i].Departure}','btn-showlist${i}' )">Ver Lista
                 </button>
             </td>
         `;
@@ -118,6 +118,7 @@
                 button_Buscar.textContent = "Buscar";
                 button_Buscar.classList.remove('btn-success');
                 button_Buscar.classList.add('btn-primary');
+                document.getElementById('button_Buscar').disabled = false;
             })
             .catch(error => {
                 Swal.fire({
@@ -130,6 +131,7 @@
                 button_Buscar.textContent = "Buscar";
                 button_Buscar.classList.remove('btn-success');
                 button_Buscar.classList.add('btn-primary');
+                document.getElementById('button_Buscar').disabled = false;
             });
 
         // Añadir evento al campo de búsqueda
@@ -272,7 +274,8 @@ function ocultarColumna6() {
 
 
                 
-    function verlista(tripid, bus, corrida, departure) {
+function verlista(tripid, bus, corrida, departure, button_id) {
+    document.getElementById(button_id).disabled = true;
         var countabordan = 0;
 
         limpiarTabla()
@@ -364,6 +367,7 @@ function ocultarColumna6() {
 
                 document.getElementById('section-buscarlista').style.display = "none";
                 document.getElementById('section-lista').style.display = "block";
+                document.getElementById(button_id).disabled = false;
             })
 
             .catch(error => {
@@ -375,7 +379,9 @@ function ocultarColumna6() {
                     icon: 'error',
                     confirmButtonText: 'OK'
                 })
+                document.getElementById(button_id).disabled = false;
             })
+    
     }
 
 

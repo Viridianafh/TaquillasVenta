@@ -69,7 +69,11 @@
 
         <input type="type" class="form-control" id="code" />
 
-        <button class="btn btn-dark" onclick="ProcederCancelacion()" >Confirmar cancelación</button>
+         <label>Ingresa el motivo de cancelación: </label>
+
+        <input type="type" class="form-control" id="motivo_cancel" />
+
+        <button class="btn btn-dark" id="cancelar_bol" onclick="ProcederCancelacion()" >Confirmar cancelación</button>
 
     </section>
 

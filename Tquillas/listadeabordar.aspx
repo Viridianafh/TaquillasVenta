@@ -48,10 +48,10 @@
 
                 
             <div id="pagination" class="my-3"></div> <!-- Contenedor de paginación -->
-<div class="search-container">
-    <input type="text" class="form-control" id="searchInput" placeholder="Buscar...">
-</div>
-            </div>
+                <div class="search-container">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Buscar...">
+                </div>
+            </div>            
 
 
 
